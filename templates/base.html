@@ -1,0 +1,43 @@
+{% load static %}<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% include "includes/seo_meta.html" %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body data-page="{% block page_key %}home{% endblock %}"{% if request.GET.view == "wireframe" %} class="wireframe"{% endif %}>
+  <a class="skip-link" href="#main">Перейти до основного змісту</a>
+
+  {% if debug %}
+  {# Прототип-тулбар лишається тільки на dev/staging. У проді DEBUG=False → блок не рендериться. #}
+  <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
+    <span>Прототип</span>
+    <a class="mode-link mode-design" href="?view=design">Дизайн</a>
+    <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
+    <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
+  </div>
+  {% endif %}
+
+  {% include "includes/header.html" %}
+
+  {% if debug %}
+  {# Той самий банер, що й у прототипі: "Демонстраційний макет...". Прибрати перед реальним релізом — #}
+  {# або замінити текст на щось на кшталт SiteSettings.footer_notice, якщо родина попросить лишити застереження. #}
+  <div class="demo-strip">
+    <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
+  </div>
+  {% endif %}
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "includes/footer.html" %}
+
+  <div class="toast" role="status" aria-live="polite"></div>
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

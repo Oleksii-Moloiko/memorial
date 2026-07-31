@@ -1,0 +1,28 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand brand-footer" href="{% url 'pages:home' %}">
+        <span class="brand-mark" aria-hidden="true">{{ site_settings.brand_letter|default:"П" }}</span>
+        <span class="brand-copy">
+          <strong>{{ site_settings.site_name|default:"ПАМ’ЯТЬ" }}</strong>
+          <small>{{ site_settings.subtitle|default:"Олександр Мельник" }}</small>
+        </span>
+      </a>
+      <p>{{ site_settings.footer_text|default:"Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких." }}</p>
+    </div>
+    <div class="footer-nav" aria-label="Навігація в підвалі">
+      <a href="{% url 'pages:home' %}">Головна</a> ·
+      <a href="{% url 'pages:life' %}">Життя</a> ·
+      <a href="{% url 'pages:service' %}">Подвиг і служба</a> ·
+      <a href="{% url 'pages:photos' %}">Фото</a> ·
+      <a href="{% url 'pages:videos' %}">Відео</a> ·
+      <a href="{% url 'pages:media' %}">У ЗМІ</a> ·
+      <a href="{% url 'pages:memories' %}">Спогади</a>
+      {# без "Контакти" — узгоджено раніше #}
+    </div>
+    <div class="footer-meta">
+      <p>© {% now "Y" %} {{ site_settings.copyright_holder|default:"Родина Олександра Мельника" }}</p>
+      <p>Матеріали публікуються лише за згодою.</p>
+    </div>
+  </div>
+</footer>

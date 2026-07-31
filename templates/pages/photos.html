@@ -1,0 +1,107 @@
+    <!doctype html>
+    <html lang="uk">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Демонстраційний макет меморіального сайту">
+      <title>Фото — Пам’ять про Олександра Мельника</title>
+      <link rel="stylesheet" href="assets/styles.css">
+    </head>
+    <body data-page="photos">
+      <a class="skip-link" href="#main">Перейти до основного змісту</a>
+
+      <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
+        <span>Прототип</span>
+        <a class="mode-link mode-design" href="?view=design">Дизайн</a>
+        <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
+        <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
+      </div>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="index.html" data-preserve-query aria-label="На головну">
+            <span class="brand-mark" aria-hidden="true">П</span>
+            <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
+          </a>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
+          </button>
+          <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
+            <a href="index.html" data-preserve-query>Головна</a>
+<a href="life.html" data-preserve-query>Життя</a>
+<a href="service.html" data-preserve-query>Подвиг і служба</a>
+<a href="photos.html" data-preserve-query class="active" aria-current="page">Фото</a>
+<a href="videos.html" data-preserve-query>Відео</a>
+<a href="media.html" data-preserve-query>У ЗМІ</a>
+<a href="memories.html" data-preserve-query>Спогади</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="demo-strip">
+        <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
+      </div>
+
+      <main id="main">
+
+<section class="page-hero section-paper">
+  <div class="container page-hero-grid grid-guide">
+    <div><p class="eyebrow">Фотоархів</p><h1>Фото</h1></div>
+    <p class="page-lead">Основний архів світлин, згрупований за періодами життя. Кожне фото має підпис і підтверджений дозвіл на публікацію.</p>
+  </div>
+</section>
+<section class="section section-paper gallery-page">
+  <div class="container">
+    <div class="filter-bar" role="group" aria-label="Фільтр категорій фото">
+      <button class="filter-chip active" data-filter="all">Усі фото <span>12</span></button>
+      <button class="filter-chip" data-filter="family">Сім’я та дитинство <span>3</span></button>
+      <button class="filter-chip" data-filter="study">Навчання <span>3</span></button>
+      <button class="filter-chip" data-filter="service">Служба та побратими <span>3</span></button>
+      <button class="filter-chip" data-filter="memory">Вшанування <span>3</span></button>
+    </div>
+    <div class="gallery-grid">
+      <figure class="gallery-card span-tall" data-category="family"><button class="gallery-open media-placeholder tone-a" data-caption="З мамою та сестрою, випускний, 2011 рік"><span>Фото 01</span></button><figcaption>З мамою та сестрою, випускний, 2011 рік</figcaption></figure>
+      <figure class="gallery-card" data-category="family"><button class="gallery-open media-placeholder tone-b" data-caption="Сімейна світлина, [рік]"><span>Фото 02</span></button><figcaption>Сімейна світлина, [рік]</figcaption></figure>
+      <figure class="gallery-card" data-category="study"><button class="gallery-open media-placeholder tone-c" data-caption="Під час навчання, [рік]"><span>Фото 03</span></button><figcaption>Під час навчання, [рік]</figcaption></figure>
+      <figure class="gallery-card span-wide" data-category="study"><button class="gallery-open media-placeholder tone-d" data-caption="З однокурсниками, [рік]"><span>Фото 04</span></button><figcaption>З однокурсниками, [рік]</figcaption></figure>
+      <figure class="gallery-card" data-category="study"><button class="gallery-open media-placeholder tone-e" data-caption="Навчання, [місце й дата]"><span>Фото 05</span></button><figcaption>Навчання, [місце й дата]</figcaption></figure>
+      <figure class="gallery-card span-tall" data-category="service"><button class="gallery-open media-placeholder tone-f" data-caption="З побратимами, літо 2023"><span>Фото 06</span></button><figcaption>З побратимами, літо 2023</figcaption></figure>
+      <figure class="gallery-card" data-category="service"><button class="gallery-open media-placeholder tone-a" data-caption="Під час служби, [рік]"><span>Фото 07</span></button><figcaption>Під час служби, [рік]</figcaption></figure>
+      <figure class="gallery-card" data-category="service"><button class="gallery-open media-placeholder tone-b" data-caption="Нагородження, [дата]"><span>Фото 08</span></button><figcaption>Нагородження, [дата]</figcaption></figure>
+      <figure class="gallery-card span-wide" data-category="memory"><button class="gallery-open media-placeholder tone-c" data-caption="Вшанування у рідному місті, [дата]"><span>Фото 09</span></button><figcaption>Вшанування у рідному місті, [дата]</figcaption></figure>
+      <figure class="gallery-card" data-category="memory"><button class="gallery-open media-placeholder tone-d" data-caption="Пам’ятний захід, [дата]"><span>Фото 10</span></button><figcaption>Пам’ятний захід, [дата]</figcaption></figure>
+      <figure class="gallery-card" data-category="family"><button class="gallery-open media-placeholder tone-e" data-caption="Дитинство, [рік]"><span>Фото 11</span></button><figcaption>Дитинство, [рік]</figcaption></figure>
+      <figure class="gallery-card" data-category="memory"><button class="gallery-open media-placeholder tone-f" data-caption="Квіти пам’яті, [дата]"><span>Фото 12</span></button><figcaption>Квіти пам’яті, [дата]</figcaption></figure>
+    </div>
+    <div class="consent-note"><strong>Для запуску:</strong> рекомендовано 15–30 фото, не менше приблизно 1200 px по довшій стороні. Оригінали зберігаються у родини; біля кожного файла фіксується дозвіл на публікацію.</div>
+  </div>
+</section>
+<dialog class="gallery-dialog">
+  <button class="dialog-close" aria-label="Закрити">×</button>
+  <div class="dialog-image media-placeholder"><span>Збільшене фото</span></div>
+  <p class="dialog-caption"></p>
+</dialog>
+
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-grid">
+          <div>
+            <a class="brand brand-footer" href="index.html" data-preserve-query>
+              <span class="brand-mark" aria-hidden="true">П</span>
+              <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
+            </a>
+            <p>Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.</p>
+          </div>
+          <div class="footer-nav" aria-label="Навігація в підвалі"><a href="index.html" data-preserve-query>Головна</a> · <a href="life.html" data-preserve-query>Життя</a> · <a href="service.html" data-preserve-query>Подвиг і служба</a> · <a href="photos.html" data-preserve-query>Фото</a> · <a href="videos.html" data-preserve-query>Відео</a> · <a href="media.html" data-preserve-query>У ЗМІ</a> · <a href="memories.html" data-preserve-query>Спогади</a></div>
+          <div class="footer-meta">
+            <p>© <span data-year></span> Родина Олександра Мельника</p>
+            <p>Матеріали публікуються лише за згодою.</p>
+          </div>
+        </div>
+      </footer>
+
+      <div class="toast" role="status" aria-live="polite"></div>
+      <script src="assets/app.js"></script>
+    </body>
+    </html>

@@ -1,0 +1,83 @@
+    <!doctype html>
+    <html lang="uk">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Демонстраційний макет меморіального сайту">
+      <title>Дизайн-концепт — Пам’ять про Олександра Мельника</title>
+      <link rel="stylesheet" href="assets/styles.css">
+    </head>
+    <body data-page="styleguide">
+      <a class="skip-link" href="#main">Перейти до основного змісту</a>
+
+      <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
+        <span>Прототип</span>
+        <a class="mode-link mode-design" href="?view=design">Дизайн</a>
+        <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
+        <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
+      </div>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="index.html" data-preserve-query aria-label="На головну">
+            <span class="brand-mark" aria-hidden="true">П</span>
+            <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
+          </a>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+            <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
+          </button>
+          <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
+            <a href="index.html" data-preserve-query>Головна</a>
+<a href="life.html" data-preserve-query>Життя</a>
+<a href="service.html" data-preserve-query>Подвиг і служба</a>
+<a href="photos.html" data-preserve-query>Фото</a>
+<a href="videos.html" data-preserve-query>Відео</a>
+<a href="media.html" data-preserve-query>У ЗМІ</a>
+<a href="memories.html" data-preserve-query>Спогади</a>
+          </nav>
+        </div>
+      </header>
+
+      <div class="demo-strip">
+        <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
+      </div>
+
+      <main id="main">
+
+<section class="page-hero section-dark">
+  <div class="container page-hero-grid grid-guide">
+    <div><p class="eyebrow">UI specification</p><h1>Дизайн-<br>концепт</h1></div>
+    <p class="page-lead">Стримана меморіальна стилістика: теплий паперовий фон, майже чорний текст, приглушені оливкові й бронзові акценти, виразна антиква для заголовків.</p>
+  </div>
+</section>
+<section class="section section-paper">
+  <div class="container style-section"><div class="section-heading"><p class="eyebrow">01 · Кольори</p><h2>Палітра</h2></div><div class="swatch-grid"><div class="swatch ink"><span>#202623</span><strong>Ink</strong></div><div class="swatch paper"><span>#F5F1E8</span><strong>Paper</strong></div><div class="swatch stone"><span>#D9D4C8</span><strong>Stone</strong></div><div class="swatch olive"><span>#6F786B</span><strong>Olive</strong></div><div class="swatch bronze"><span>#AF8C55</span><strong>Bronze</strong></div></div></div>
+</section>
+<section class="section section-stone"><div class="container style-section"><div class="section-heading"><p class="eyebrow">02 · Типографіка</p><h2>Шрифти</h2></div><div class="type-spec"><div><span>Заголовки · Noto Serif</span><h2>Пам’ять живе в історіях</h2></div><div><span>Інтерфейс і текст · Inter</span><p>Чіткий, доступний набір тексту для довгого читання, підписів, меню й кнопок.</p></div></div></div></section>
+<section class="section section-paper"><div class="container style-section"><div class="section-heading"><p class="eyebrow">03 · Компоненти</p><h2>Кнопки та поля</h2></div><div class="component-demo"><div class="button-row"><button class="button button-primary">Основна дія</button><button class="button button-secondary">Другорядна</button><button class="button button-outline">Контурна</button><button class="button button-ghost">На темному фоні</button></div><div class="field-demo"><label>Підпис поля<input placeholder="Текст-підказка"></label><label>Вибір<select><option>Оберіть значення</option></select></label></div></div></div></section>
+<section class="section section-dark"><div class="container style-section"><div class="section-heading"><p class="eyebrow">04 · Сітка</p><h2>12 колонок · 1200 px</h2></div><div class="grid-demo" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><p class="grid-note">Поля: 64 px на desktop, 24 px на tablet, 20 px на mobile. Базовий крок відступів — 8 px.</p></div></section>
+<section class="section section-paper"><div class="container style-section"><div class="section-heading"><p class="eyebrow">05 · Принципи</p><h2>Доступність і тон</h2></div><div class="principle-grid"><article><span>AA</span><h3>Контраст</h3><p>Основний текст і кнопки розраховані на виразний контраст.</p></article><article><span>⌨</span><h3>Клавіатура</h3><p>Помітні стани фокусу, skip-link і логічний порядок переходів.</p></article><article><span>CC</span><h3>Медіа</h3><p>Підписи до фото, описи до відео й місце для субтитрів.</p></article><article><span>∞</span><h3>Стриманість</h3><p>Без декоративного шуму, надмірної символіки та ефектів.</p></article></div></div></section>
+
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-grid">
+          <div>
+            <a class="brand brand-footer" href="index.html" data-preserve-query>
+              <span class="brand-mark" aria-hidden="true">П</span>
+              <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
+            </a>
+            <p>Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.</p>
+          </div>
+          <div class="footer-nav" aria-label="Навігація в підвалі"><a href="index.html" data-preserve-query>Головна</a> · <a href="life.html" data-preserve-query>Життя</a> · <a href="service.html" data-preserve-query>Подвиг і служба</a> · <a href="photos.html" data-preserve-query>Фото</a> · <a href="videos.html" data-preserve-query>Відео</a> · <a href="media.html" data-preserve-query>У ЗМІ</a> · <a href="memories.html" data-preserve-query>Спогади</a></div>
+          <div class="footer-meta">
+            <p>© <span data-year></span> Родина Олександра Мельника</p>
+            <p>Матеріали публікуються лише за згодою.</p>
+          </div>
+        </div>
+      </footer>
+
+      <div class="toast" role="status" aria-live="polite"></div>
+      <script src="assets/app.js"></script>
+    </body>
+    </html>

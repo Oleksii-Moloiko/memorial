@@ -1,0 +1,32 @@
+{# Потребує увімкненого context_processors 'django.template.context_processors.request' в settings.TEMPLATES #}
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{% url 'pages:home' %}" aria-label="На головну">
+      <span class="brand-mark" aria-hidden="true">{{ site_settings.brand_letter|default:"П" }}</span>
+      <span class="brand-copy">
+        <strong>{{ site_settings.site_name|default:"ПАМ’ЯТЬ" }}</strong>
+        <small>{{ site_settings.subtitle|default:"Олександр Мельник" }}</small>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
+    </button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
+      {% url 'pages:home' as home_url %}
+      <a href="{{ home_url }}" {% if request.path == home_url %}class="active" aria-current="page"{% endif %}>Головна</a>
+      {% url 'pages:life' as life_url %}
+      <a href="{{ life_url }}" {% if request.path == life_url %}class="active" aria-current="page"{% endif %}>Життя</a>
+      {% url 'pages:service' as service_url %}
+      <a href="{{ service_url }}" {% if request.path == service_url %}class="active" aria-current="page"{% endif %}>Подвиг і служба</a>
+      {% url 'pages:photos' as photos_url %}
+      <a href="{{ photos_url }}" {% if request.path == photos_url %}class="active" aria-current="page"{% endif %}>Фото</a>
+      {% url 'pages:videos' as videos_url %}
+      <a href="{{ videos_url }}" {% if request.path == videos_url %}class="active" aria-current="page"{% endif %}>Відео</a>
+      {% url 'pages:media' as media_url %}
+      <a href="{{ media_url }}" {% if request.path == media_url %}class="active" aria-current="page"{% endif %}>У ЗМІ</a>
+      {% url 'pages:memories' as memories_url %}
+      <a href="{{ memories_url }}" {% if request.path == memories_url %}class="active" aria-current="page"{% endif %}>Спогади</a>
+      {# Пункт "Контакти" видалено разом зі сторінкою contacts.html — не повертати без окремого рішення #}
+    </nav>
+  </div>
+</header>
