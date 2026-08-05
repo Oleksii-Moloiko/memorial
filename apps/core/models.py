@@ -14,9 +14,7 @@ class SiteSettings(models.Model):
         max_length=200,
         default="Memorial",
     )
-    brand_letter = models.CharField(
-        "Літера логотипа", max_length=4, blank=True
-    )
+    brand_letter = models.CharField("Літера логотипа", max_length=4, blank=True)
     site_name = models.CharField("Назва в шапці", max_length=100, blank=True)
     subtitle = models.CharField("Підзаголовок у шапці", max_length=200, blank=True)
     footer_text = models.TextField("Текст у футері", blank=True)

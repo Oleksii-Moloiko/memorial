@@ -15,17 +15,45 @@
   <div class="container media-layout">
     <aside class="media-sidebar">
       <p class="eyebrow">Фільтр</p>
-      <button class="media-filter active" data-media-filter="all">Усі матеріали <span>5</span></button>
-      <button class="media-filter" data-media-filter="official">Офіційні <span>2</span></button>
-      <button class="media-filter" data-media-filter="press">ЗМІ <span>3</span></button>
+      <button class="media-filter active" data-media-filter="all">Усі матеріали <span>{{ mentions|length }}</span></button>
+      <button class="media-filter" data-media-filter="official">Офіційні <span>{{ mentions|length }}</span></button>
+      <button class="media-filter" data-media-filter="press">ЗМІ <span>{{ mentions|length }}</span></button>
       <div class="link-check"><strong>Перевірка посилань</strong><p>Рекомендовано 1–2 рази на рік.</p><span>Остання: [дата]</span></div>
     </aside>
     <div class="article-list">
-      <article class="article-row" data-media-category="press"><div class="article-date"><time>10.11.2023</time><span>Місцеве онлайн-видання</span></div><div><h2>«Прилуки прощаються з героєм»</h2><p>Перше вшанування в рідному місті.</p></div><a class="button button-outline demo-action" href="#">Читати повністю ↗</a></article>
-      <article class="article-row" data-media-category="official"><div class="article-date"><time>[дата]</time><span>president.gov.ua</span></div><div><h2>Указ Президента України № …</h2><p>Офіційний документ про нагородження.</p></div><a class="button button-outline demo-action" href="#">Відкрити джерело ↗</a></article>
-      <article class="article-row" data-media-category="press"><div class="article-date"><time>[дата]</time><span>[Назва видання]</span></div><div><h2>[Заголовок матеріалу як на сайті видання]</h2><p>[Одне речення — чому цей матеріал важливий.]</p></div><a class="button button-outline demo-action" href="#">Читати повністю ↗</a></article>
-      <article class="article-row" data-media-category="press"><div class="article-date"><time>[дата]</time><span>[Назва видання]</span></div><div><h2>[Інтерв’ю або репортаж]</h2><p>[Коротке пояснення змісту.]</p></div><a class="button button-outline demo-action" href="#">Читати повністю ↗</a></article>
-      <article class="article-row" data-media-category="official"><div class="article-date"><time>[дата]</time><span>[Офіційне джерело]</span></div><div><h2>[Назва документа або сторінки]</h2><p>[Чому джерело важливе для історії.]</p></div><a class="button button-outline demo-action" href="#">Відкрити джерело ↗</a></article>
+      {% for mention in mentions %}
+        <article class="article-row">
+          <div class="article-date">
+            <time>
+              {% if mention.published_date %}
+                {{ mention.published_date|date:"d.m.Y" }}
+              {% else %}
+                Дата не вказана
+              {% endif %}
+            </time>
+
+            <span>{{ mention.source_name }}</span>
+          </div>
+
+          <div>
+            <h2>{{ mention.source_name }}</h2>
+          </div>
+
+          <a
+            class="button button-outline"
+            href="{{ mention.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Відкрити джерело ↗
+          </a>
+        </article>
+      {% empty %}
+        <div class="empty-state">
+          <h2>Матеріалів поки немає</h2>
+          <p>Перевірені публікації та офіційні джерела з’являться тут пізніше.</p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>

@@ -4,27 +4,57 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Biography',
+            name="Biography",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(max_length=255, verbose_name='ПІБ')),
-                ('birth_date', models.DateField(blank=True, null=True, verbose_name='Дата народження')),
-                ('death_date', models.DateField(blank=True, null=True, verbose_name='Дата смерті')),
-                ('portrait', models.ImageField(blank=True, null=True, upload_to='biography/', verbose_name='Портрет')),
-                ('summary', models.TextField(blank=True, verbose_name='Короткий опис (для головної)')),
-                ('full_text', models.TextField(blank=True, verbose_name='Повний життєпис')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("full_name", models.CharField(max_length=255, verbose_name="ПІБ")),
+                (
+                    "birth_date",
+                    models.DateField(
+                        blank=True, null=True, verbose_name="Дата народження"
+                    ),
+                ),
+                (
+                    "death_date",
+                    models.DateField(blank=True, null=True, verbose_name="Дата смерті"),
+                ),
+                (
+                    "portrait",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="biography/",
+                        verbose_name="Портрет",
+                    ),
+                ),
+                (
+                    "summary",
+                    models.TextField(
+                        blank=True, verbose_name="Короткий опис (для головної)"
+                    ),
+                ),
+                (
+                    "full_text",
+                    models.TextField(blank=True, verbose_name="Повний життєпис"),
+                ),
             ],
             options={
-                'verbose_name': 'Життєпис',
-                'verbose_name_plural': 'Життєпис',
+                "verbose_name": "Життєпис",
+                "verbose_name_plural": "Життєпис",
             },
         ),
     ]

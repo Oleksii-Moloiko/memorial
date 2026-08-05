@@ -8,7 +8,18 @@ class SeoPage(models.Model):
     у apps.pages.urls (home, life, service, photos, videos, media, memories).
     """
 
-    page_key = models.SlugField("Ключ сторінки", unique=True)
+    class PageKey(models.TextChoices):
+        HOME = "home", "Головна"
+        LIFE = "life", "Життя"
+        SERVICE = "service", "Подвиг і служба"
+        PHOTOS = "photos", "Фото"
+        VIDEOS = "videos", "Відео"
+        MEDIA = "media", "У ЗМІ"
+        MEMORIES = "memories", "Спогади"
+
+    page_key = models.CharField(
+        "Сторінка", max_length=20, choices=PageKey.choices, unique=True
+    )
     title = models.CharField("Title", max_length=255, blank=True)
     description = models.CharField("Meta description", max_length=320, blank=True)
     og_image = models.ImageField(
@@ -20,4 +31,4 @@ class SeoPage(models.Model):
         verbose_name_plural = "SEO сторінок"
 
     def __str__(self):
-        return self.page_key
+        return self.get_page_key_display()

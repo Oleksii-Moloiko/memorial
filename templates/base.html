@@ -28,8 +28,24 @@
 
     {% include "includes/header.html" %}
 
-    {% if site_settings.demo_strip_enabled|default:True %}
-    <div class="demo-strip"><div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div></div>
+    {% if site_settings.demo_strip_enabled %}
+      <div class="demo-strip">
+        <div class="container">
+          <strong>Демонстраційний макет.</strong>
+          Усі персональні дані та матеріали умовні й мають бути замінені
+          після перевірки родиною.
+        </div>
+      </div>
+    {% endif %}
+
+    {% if messages %}
+      <div class="container form-messages" aria-live="polite">
+        {% for message in messages %}
+          <div class="form-message form-message-{{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
     {% endif %}
 
     <main id="main-content">

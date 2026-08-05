@@ -8,25 +8,75 @@
 
 <section class="hero section-dark">
   <div class="container hero-grid grid-guide">
-    {% if biography.portrait %}
-      <img class="hero-portrait" src="{{ biography.portrait.url }}" alt="{{ biography.full_name }}">
+    {% if biography and biography.portrait %}
+      <img
+        class="hero-portrait"
+        src="{{ biography.portrait.url }}"
+        alt="Портрет {{ biography.full_name }}"
+      >
     {% else %}
-      <div class="hero-portrait media-placeholder portrait-placeholder" role="img" aria-label="Місце для головного портрета">
-        <span>Головне фото родини</span>
+      <div
+        class="hero-portrait media-placeholder portrait-placeholder"
+        role="img"
+        aria-label="Місце для головного портрета"
+      >
+        <span>Головне фото ще не додано</span>
       </div>
     {% endif %}
     <div class="hero-copy">
       <p class="eyebrow">Світла пам’ять</p>
-      <h1>{{ biography.full_name|linebreaksbr }}</h1>
-      <p class="hero-role">{{ biography.rank }}</p>
-      <p class="hero-dates">{{ biography.birth_date|date:"d F Y" }} — {{ biography.death_date|date:"d F Y" }}</p>
-      {% if biography.award_title %}
-      <div class="award-line"><span aria-hidden="true">✦</span> {{ biography.award_title }}</div>
+
+      {% if biography %}
+        <h1>{{ biography.full_name|linebreaksbr }}</h1>
+
+        {% if biography.rank %}
+          <p class="hero-role">{{ biography.rank }}</p>
+        {% endif %}
+
+        {% if biography.birth_date or biography.death_date %}
+          <p class="hero-dates">
+            {% if biography.birth_date %}
+              {{ biography.birth_date|date:"d.m.Y" }}
+            {% endif %}
+
+            {% if biography.birth_date and biography.death_date %}
+              —
+            {% endif %}
+
+            {% if biography.death_date %}
+              {{ biography.death_date|date:"d.m.Y" }}
+            {% endif %}
+          </p>
+        {% endif %}
+
+        {% if biography.award_title %}
+          <div class="award-line">
+            <span aria-hidden="true">✦</span>
+            {{ biography.award_title }}
+          </div>
+        {% endif %}
+
+        {% if biography.intro_text %}
+          <p class="hero-intro">
+            {{ biography.intro_text }}
+          </p>
+        {% endif %}
+      {% else %}
+        <h1>Сторінка пам’яті</h1>
+
+        <p class="hero-intro">
+          Інформація ще готується до публікації.
+        </p>
       {% endif %}
-      <p class="hero-intro">{{ biography.intro_text }}</p>
+
       <div class="button-row">
-        <a class="button button-primary" href="{% url 'pages:life' %}">Прочитати історію</a>
-        <a class="button button-ghost" href="{% url 'pages:photos' %}">Переглянути фото</a>
+        <a class="button button-primary" href="{% url 'pages:life' %}">
+          Прочитати історію
+        </a>
+
+        <a class="button button-ghost" href="{% url 'pages:photos' %}">
+          Переглянути фото
+        </a>
       </div>
     </div>
   </div>
@@ -49,9 +99,16 @@
     </div>
     <div class="timeline-preview">
       {% for event in timeline_preview %}
-      <article><time>{{ event.date }}</time><h3>{{ event.title }}</h3><p>{{ event.description }}</p></article>
+        <article>
+          <time>{{ event.date_label }}</time>
+          <h3>{{ event.title }}</h3>
+
+          {% if event.description %}
+            <p>{{ event.description }}</p>
+          {% endif %}
+        </article>
       {% empty %}
-      <p>Хронологію ще додають.</p>
+        <p>Хронологію ще додають.</p>
       {% endfor %}
     </div>
     <a class="text-link" href="{% url 'pages:life' %}">Повна хронологія <span aria-hidden="true">→</span></a>

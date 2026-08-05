@@ -1,12 +1,12 @@
-from .base import *  # noqa: F403
+from .base import *
 
 DEBUG = False
 
 # У проді ALLOWED_HOSTS обов'язково задається через .env — не підставляємо дефолтів.
-if not ALLOWED_HOSTS:  # noqa: F405
+if not ALLOWED_HOSTS:
     raise ValueError("ALLOWED_HOSTS має бути явно заданий у .env для production")
 
-SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)  # noqa: F405
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000

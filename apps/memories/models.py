@@ -9,12 +9,18 @@ class Memory(models.Model):
 
     author_name = models.CharField("Імʼя", max_length=255)
     author_role = models.CharField(
-        "Хто автор", max_length=255, blank=True,
+        "Хто автор",
+        max_length=255,
+        blank=True,
         help_text="Наприклад: «побратим, позивний «Сокіл»»",
     )
-    text = models.TextField("Текст спогаду")
+    text = models.TextField(
+        "Текст спогаду",
+        max_length=500,
+    )
     featured = models.BooleanField(
-        "Показувати на головній", default=False,
+        "Показувати на головній",
+        default=False,
         help_text="Лише один спогад варто позначати як featured",
     )
     status = models.CharField(

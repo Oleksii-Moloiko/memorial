@@ -2,33 +2,165 @@
 
 {% block page_key %}videos{% endblock %}
 
-{% block title %}Відео — Пам’ять про Олександра Мельника{% endblock %}
+{% block title %}
+  Відео — Пам’ять про Олександра Мельника
+{% endblock %}
 
 {% block content %}
+
 <section class="page-hero section-dark">
   <div class="container page-hero-grid grid-guide">
-    <div><p class="eyebrow">Архівні записи</p><h1>Відео</h1></div>
-    <p class="page-lead">Інтерв’ю, сімейні записи та матеріали вшанування. Під кожним роликом — короткий текстовий опис для доступності.</p>
+    <div>
+      <p class="eyebrow">Архівні записи</p>
+      <h1>Відео</h1>
+    </div>
+
+    <p class="page-lead">
+      Сімейні записи, інтерв’ю, матеріали зі служби
+      та відео вшанування.
+    </p>
   </div>
 </section>
-<section class="section section-paper">
-  <div class="container">
-    <article class="featured-video">
-      <button class="featured-video-media media-placeholder demo-action" aria-label="Відтворити демонстраційне відео"><span class="play-large">▶</span><span>Вбудоване відео 16:9</span></button>
-      <div class="featured-video-copy"><p class="eyebrow">Рекомендоване відео</p><h2>Інтерв’ю після навчань, 2022</h2><p>Коротко про рішення повернутися до ЗСУ після 24 лютого. Джерело та дозвіл на публікацію мають бути підтверджені.</p><dl class="media-meta"><div><dt>Джерело</dt><dd>YouTube / файл</dd></div><div><dt>Дата запису</dt><dd>2022</dd></div><div><dt>Тривалість</dt><dd>[хв:с]</dd></div></dl></div>
-    </article>
-  </div>
-</section>
+
+{% if featured_video %}
+  <section class="section section-paper">
+    <div class="container">
+      <article class="featured-video">
+
+        <div class="featured-video-media">
+          <video
+            controls
+            preload="metadata"
+            {% if featured_video.thumbnail %}
+              poster="{{ featured_video.thumbnail.url }}"
+            {% endif %}
+          >
+            <source
+              src="{{ featured_video.video_file.url }}"
+            >
+
+            Ваш браузер не підтримує відео.
+          </video>
+        </div>
+
+        <div class="featured-video-copy">
+          <p class="eyebrow">
+            Рекомендоване відео
+          </p>
+
+          <h2>{{ featured_video.title }}</h2>
+
+          {% if featured_video.description %}
+            <p>{{ featured_video.description }}</p>
+          {% endif %}
+
+          <dl class="media-meta">
+            {% if featured_video.recorded_at %}
+              <div>
+                <dt>Дата запису</dt>
+                <dd>{{ featured_video.recorded_at }}</dd>
+              </div>
+            {% endif %}
+
+            {% if featured_video.category %}
+              <div>
+                <dt>Категорія</dt>
+                <dd>
+                  {{ featured_video.get_category_display }}
+                </dd>
+              </div>
+            {% endif %}
+
+            {% if featured_video.duration %}
+              <div>
+                <dt>Тривалість</dt>
+                <dd>{{ featured_video.duration }}</dd>
+              </div>
+            {% endif %}
+          </dl>
+
+          {% if featured_video.transcript %}
+            <details class="video-transcript">
+              <summary>
+                Текстовий опис відео
+              </summary>
+
+              <div>
+                {{ featured_video.transcript|linebreaks }}
+              </div>
+            </details>
+          {% endif %}
+        </div>
+
+      </article>
+    </div>
+  </section>
+{% endif %}
+
 <section class="section section-stone">
   <div class="container">
-    <div class="section-heading split-heading"><div><p class="eyebrow">Усі записи</p><h2>Відеоархів</h2></div><p>Картки підтримують YouTube, Vimeo або локальний відеофайл.</p></div>
-    <div class="video-grid">
-      <article class="video-card"><button class="video-thumb media-placeholder tone-a demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">2022 · Інтерв’ю</p><h3>Після навчань</h3><p>Короткий опис змісту відео в одному-двох реченнях.</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-b demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">листопад 2023 · Вшанування</p><h3>Прощання в рідному місті</h3><p>Запис церемонії вшанування. Публікація — лише за згодою родини.</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-c demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">[дата] · Архів</p><h3>[Назва відео]</h3><p>[Короткий опис — 1–2 речення.]</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-d demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">[дата] · ЗМІ</p><h3>[Назва матеріалу]</h3><p>[Короткий опис і джерело.]</p></div></article>
+
+    <div class="section-heading split-heading">
+      <div>
+        <p class="eyebrow">Усі записи</p>
+        <h2>Відеоархів</h2>
+      </div>
+
+      <p>
+        Усі матеріали додаються та публікуються
+        тільки через адміністративну панель.
+      </p>
     </div>
-    <div class="accessibility-note"><span aria-hidden="true">CC</span><p><strong>Доступність:</strong> для кожного відео передбачено текстовий опис; за можливості додаються субтитри або розшифровка.</p></div>
+
+    {% if videos %}
+      <div class="video-grid">
+        {% for video in videos %}
+          <article class="video-card">
+              <div class="video-card-media">
+                <video
+                  controls
+                  preload="metadata"
+                  {% if video.thumbnail %}
+                    poster="{{ video.thumbnail.url }}"
+                  {% endif %}
+                >
+                  <source src="{{ video.video_file.url }}">
+                  Ваш браузер не підтримує відео.
+                </video>
+              </div>
+
+              <div class="video-card-copy">
+                <h3>{{ video.title }}</h3>
+
+                {% if video.description %}
+                  <p>{{ video.description }}</p>
+                {% endif %}
+              </div>
+            </article>
+        {% endfor %}
+      </div>
+    {% elif not featured_video %}
+      <div class="empty-state">
+        <h2>Відеоархів ще наповнюється</h2>
+
+        <p>
+          Перевірені відеоматеріали з’являться тут
+          після публікації адміністратором.
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="accessibility-note">
+      <span aria-hidden="true">CC</span>
+
+      <p>
+        <strong>Доступність:</strong>
+        за можливості до відео додається текстовий опис
+        або розшифровка.
+      </p>
+    </div>
+
   </div>
 </section>
+
 {% endblock %}

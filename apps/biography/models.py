@@ -6,7 +6,9 @@ class Biography(models.Model):
 
     full_name = models.CharField("ПІБ", max_length=255)
     rank = models.CharField(
-        "Звання / роль", max_length=255, blank=True,
+        "Звання / роль",
+        max_length=255,
+        blank=True,
         help_text="Наприклад: «Старший лейтенант, командир взводу»",
     )
     birth_date = models.DateField("Дата народження", null=True, blank=True)
@@ -15,18 +17,14 @@ class Biography(models.Model):
         "Портрет", upload_to="biography/", null=True, blank=True
     )
     award_title = models.CharField(
-        "Нагорода (коротко)", max_length=255, blank=True,
+        "Нагорода (коротко)",
+        max_length=255,
+        blank=True,
         help_text="Наприклад: «Герой України»",
     )
-    intro_text = models.TextField(
-        "Вступний текст на головній", blank=True
-    )
-    signature_quote = models.CharField(
-        "Ключова цитата", max_length=500, blank=True
-    )
-    summary = models.TextField(
-        "Короткий опис (для головної)", blank=True
-    )
+    intro_text = models.TextField("Вступний текст на головній", blank=True)
+    signature_quote = models.CharField("Ключова цитата", max_length=500, blank=True)
+    summary = models.TextField("Короткий опис (для головної)", blank=True)
     full_text = models.TextField("Повний життєпис", blank=True)
 
     class Meta:
