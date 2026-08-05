@@ -1,0 +1,82 @@
+name: Django CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Tests and coverage
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: memorial
+          POSTGRES_USER: memorial
+          POSTGRES_PASSWORD: memorial_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U memorial -d memorial"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      SECRET_KEY: ci-test-secret-key-not-for-production
+      DEBUG: "False"
+      ALLOWED_HOSTS: localhost,127.0.0.1,testserver
+
+      DB_NAME: memorial
+      DB_USER: memorial
+      DB_PASSWORD: memorial_password
+      DB_HOST: localhost
+      DB_PORT: "5432"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install dependencies
+        run: uv sync --locked --dev
+
+      - name: Check Django configuration
+        run: uv run python manage.py check
+
+      - name: Check missing migrations
+        run: uv run python manage.py makemigrations --check --dry-run
+
+      - name: Apply migrations
+        run: uv run python manage.py migrate --noinput
+
+      - name: Run tests with coverage
+        run: uv run coverage run --branch manage.py test --verbosity=2
+
+      - name: Show coverage report
+        run: uv run coverage report -m
+
+      - name: Enforce minimum coverage
+        run: uv run coverage report --fail-under=90
