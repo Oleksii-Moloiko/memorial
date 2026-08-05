@@ -8,7 +8,6 @@ from django.urls import reverse
 
 from .models import SeoPage
 
-
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
 
 
@@ -75,10 +74,7 @@ class SeoPageModelTests(TestCase):
             "memories",
         }
 
-        actual_keys = {
-            value
-            for value, _label in SeoPage.PageKey.choices
-        }
+        actual_keys = {value for value, _label in SeoPage.PageKey.choices}
 
         self.assertEqual(actual_keys, expected_keys)
 
@@ -91,9 +87,7 @@ class SeoMetaTests(TestCase):
         shutil.rmtree(TEST_MEDIA_ROOT, ignore_errors=True)
 
     def test_default_meta_tags_are_displayed_without_seo_record(self):
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertEqual(response.status_code, 200)
 
@@ -109,19 +103,13 @@ class SeoMetaTests(TestCase):
 
         self.assertContains(
             response,
-            (
-                '<meta property="og:title" '
-                'content="Пам’ять про Олександра Мельника">'
-            ),
+            ('<meta property="og:title" content="Пам’ять про Олександра Мельника">'),
             html=True,
         )
 
         self.assertContains(
             response,
-            (
-                '<meta property="og:description" '
-                'content="Цифровий простір пам’яті">'
-            ),
+            ('<meta property="og:description" content="Цифровий простір пам’яті">'),
             html=True,
         )
 
@@ -132,25 +120,17 @@ class SeoMetaTests(TestCase):
             description="Історія життя та спогади близьких.",
         )
 
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertContains(
             response,
-            (
-                '<meta property="og:title" '
-                'content="Світла пам’ять про Олександра">'
-            ),
+            ('<meta property="og:title" content="Світла пам’ять про Олександра">'),
             html=True,
         )
 
         self.assertContains(
             response,
-            (
-                '<meta name="description" '
-                'content="Історія життя та спогади близьких.">'
-            ),
+            ('<meta name="description" content="Історія життя та спогади близьких.">'),
             html=True,
         )
 
@@ -169,9 +149,7 @@ class SeoMetaTests(TestCase):
             title="Меморіальна сторінка",
         )
 
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertContains(
             response,
@@ -186,9 +164,7 @@ class SeoMetaTests(TestCase):
             description="Опис тільки головної сторінки.",
         )
 
-        response = self.client.get(
-            reverse("pages:life")
-        )
+        response = self.client.get(reverse("pages:life"))
 
         self.assertNotContains(
             response,
@@ -221,9 +197,7 @@ class SeoMetaTests(TestCase):
                     description=f"SEO description: {page_key}",
                 )
 
-                response = self.client.get(
-                    reverse(url_name)
-                )
+                response = self.client.get(reverse(url_name))
 
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(
@@ -236,23 +210,16 @@ class SeoMetaTests(TestCase):
                 )
 
     def test_og_url_contains_absolute_page_url(self):
-        response = self.client.get(
-            reverse("pages:photos")
-        )
+        response = self.client.get(reverse("pages:photos"))
 
         self.assertContains(
             response,
-            (
-                '<meta property="og:url" '
-                'content="http://testserver/photos/">'
-            ),
+            ('<meta property="og:url" content="http://testserver/photos/">'),
             html=True,
         )
 
     def test_og_type_is_website(self):
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertContains(
             response,
@@ -268,9 +235,7 @@ class SeoMetaTests(TestCase):
             og_image=create_test_image(),
         )
 
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertEqual(
             response.context["seo_image"],
@@ -279,10 +244,7 @@ class SeoMetaTests(TestCase):
 
         self.assertContains(
             response,
-            (
-                '<meta property="og:image" '
-                f'content="{seo_page.og_image.url}">'
-            ),
+            (f'<meta property="og:image" content="{seo_page.og_image.url}">'),
             html=True,
         )
 
@@ -293,9 +255,7 @@ class SeoMetaTests(TestCase):
             description="Опис сторінки.",
         )
 
-        response = self.client.get(
-            reverse("pages:home")
-        )
+        response = self.client.get(reverse("pages:home"))
 
         self.assertNotContains(
             response,
