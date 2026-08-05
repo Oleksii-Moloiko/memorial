@@ -13,7 +13,6 @@ from .models import (
     validate_video_size,
 )
 
-
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
 
 
@@ -282,7 +281,7 @@ class VideosPageTests(TestCase):
         )
 
     def test_video_metadata_is_displayed(self):
-        video = Video.objects.create(
+        Video.objects.create(
             title="Відео зі служби",
             video_file=create_test_video(),
             category=Video.Category.SERVICE,
