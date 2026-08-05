@@ -1,0 +1,27 @@
+[run]
+source = apps,config
+branch = True
+omit =
+    */migrations/*
+    */tests.py
+    */tests/*
+    */admin.py
+    */apps.py
+    */__init__.py
+    config/settings/*
+    config/asgi.py
+    config/wsgi.py
+    config/urls.py
+    apps/pages/urls.py
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 1
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    raise NotImplementedError
+
+[html]
+directory = htmlcov
