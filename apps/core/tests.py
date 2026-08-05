@@ -82,9 +82,7 @@ class SiteSettingsModelTests(TestCase):
 
         settings.delete()
 
-        self.assertTrue(
-            SiteSettings.objects.filter(pk=1).exists()
-        )
+        self.assertTrue(SiteSettings.objects.filter(pk=1).exists())
 
     def test_save_invalidates_cached_settings(self):
         settings = SiteSettings.objects.create(
@@ -221,13 +219,9 @@ class SiteSettingsTemplateTests(TestCase):
         )
 
     def test_page_works_without_precreated_settings(self):
-        self.assertFalse(
-            SiteSettings.objects.exists()
-        )
+        self.assertFalse(SiteSettings.objects.exists())
 
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(
-            SiteSettings.objects.filter(pk=1).exists()
-        )
+        self.assertTrue(SiteSettings.objects.filter(pk=1).exists())
