@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_key %}home{% endblock %}
-{% block title %}Головна — {{ seo.title|default:"Пам’ять про Олександра Мельника" }}{% endblock %}
+{% block title %}Головна — {{ seo_title|default:"Пам’ять про Олександра Мельника" }}{% endblock %}
 
 {% block content %}
 
@@ -63,7 +63,7 @@
     <div class="section-heading"><p class="eyebrow">Фотоархів</p><h2>Моменти життя</h2></div>
     <div class="home-gallery">
       {% for photo in gallery_preview %}
-      <a class="gallery-teaser {{ photo.layout_size|default:'' }} media-placeholder tone-{{ forloop.counter|slice:':1' }}" href="{% url 'pages:photos' %}">
+      <a class="gallery-teaser {{ photo.layout_size|cut:'span-' }} media-placeholder {% cycle 'tone-a' 'tone-b' 'tone-c' 'tone-d' 'tone-e' 'tone-f' %}" href="{% url 'pages:photos' %}">
         {% if photo.image %}<img src="{{ photo.image.url }}" alt="{{ photo.caption }}">{% endif %}
         <span>{{ photo.caption }}</span>
       </a>

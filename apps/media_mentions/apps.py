@@ -2,4 +2,6 @@ from django.apps import AppConfig
 
 
 class MediaMentionsConfig(AppConfig):
-    name = 'media_mentions'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.media_mentions"
+    verbose_name = "Згадки в медіа"

@@ -1,42 +1,70 @@
 from django.shortcuts import render
-from django.views.decorators.http import require_safe
+
+from apps.biography.models import Biography
+from apps.gallery.models import Photo
+from apps.media_mentions.models import MediaMention
+from apps.memories.models import Memory
+from apps.seo.models import SeoPage
+from apps.videos.models import Video
 
 
-@require_safe
+def _seo(page_key):
+    """SEO-метадані для сторінки, або None якщо ще не заповнені в адмінці —
+    includes/seo_meta.html підставляє дефолти сам."""
+    return SeoPage.objects.filter(page_key=page_key).first()
+
+
 def home(request):
-    return render(request, "pages/home.html")
+    context = {
+        "biography": Biography.objects.first(),
+        "photos": Photo.objects.all()[:6],
+        "seo_page": _seo("home"),
+    }
+    return render(request, "pages/home.html", context)
 
 
-@require_safe
 def life(request):
-    return render(request, "pages/life.html")
+    context = {
+        "biography": Biography.objects.first(),
+        "seo_page": _seo("life"),
+    }
+    return render(request, "pages/life.html", context)
 
 
-@require_safe
 def service(request):
-    return render(request, "pages/service.html")
+    context = {
+        "seo_page": _seo("service"),
+    }
+    return render(request, "pages/service.html", context)
 
 
-@require_safe
 def photos(request):
-    return render(request, "pages/photos.html")
+    context = {
+        "photos": Photo.objects.all(),
+        "seo_page": _seo("photos"),
+    }
+    return render(request, "pages/photos.html", context)
 
 
-@require_safe
 def videos(request):
-    return render(request, "pages/videos.html")
+    context = {
+        "videos": Video.objects.all(),
+        "seo_page": _seo("videos"),
+    }
+    return render(request, "pages/videos.html", context)
 
 
-@require_safe
 def media(request):
-    return render(request, "pages/media.html")
+    context = {
+        "mentions": MediaMention.objects.all(),
+        "seo_page": _seo("media"),
+    }
+    return render(request, "pages/media.html", context)
 
 
-@require_safe
 def memories(request):
-    return render(request, "pages/memories.html")
-
-
-@require_safe
-def styleguide(request):
-    return render(request, "pages/styleguide.html")
+    context = {
+        "memories": Memory.objects.filter(status=Memory.Status.APPROVED),
+        "seo_page": _seo("memories"),
+    }
+    return render(request, "pages/memories.html", context)
