@@ -1,96 +1,166 @@
-    <!doctype html>
-    <html lang="uk">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="Демонстраційний макет меморіального сайту">
-      <title>Відео — Пам’ять про Олександра Мельника</title>
-      <link rel="stylesheet" href="assets/styles.css">
-    </head>
-    <body data-page="videos">
-      <a class="skip-link" href="#main">Перейти до основного змісту</a>
+{% extends "base.html" %}
 
-      <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-        <span>Прототип</span>
-        <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-        <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
-        <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
-      </div>
+{% block page_key %}videos{% endblock %}
 
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="index.html" data-preserve-query aria-label="На головну">
-            <span class="brand-mark" aria-hidden="true">П</span>
-            <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-          </a>
-          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
-            <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
-          </button>
-          <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
-            <a href="index.html" data-preserve-query>Головна</a>
-<a href="life.html" data-preserve-query>Життя</a>
-<a href="service.html" data-preserve-query>Подвиг і служба</a>
-<a href="photos.html" data-preserve-query>Фото</a>
-<a href="videos.html" data-preserve-query class="active" aria-current="page">Відео</a>
-<a href="media.html" data-preserve-query>У ЗМІ</a>
-<a href="memories.html" data-preserve-query>Спогади</a>
-          </nav>
-        </div>
-      </header>
+{% block title %}
+  Відео — Пам’ять про Олександра Мельника
+{% endblock %}
 
-      <div class="demo-strip">
-        <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
-      </div>
-
-      <main id="main">
+{% block content %}
 
 <section class="page-hero section-dark">
   <div class="container page-hero-grid grid-guide">
-    <div><p class="eyebrow">Архівні записи</p><h1>Відео</h1></div>
-    <p class="page-lead">Інтерв’ю, сімейні записи та матеріали вшанування. Під кожним роликом — короткий текстовий опис для доступності.</p>
+    <div>
+      <p class="eyebrow">Архівні записи</p>
+      <h1>Відео</h1>
+    </div>
+
+    <p class="page-lead">
+      Сімейні записи, інтерв’ю, матеріали зі служби
+      та відео вшанування.
+    </p>
   </div>
 </section>
-<section class="section section-paper">
-  <div class="container">
-    <article class="featured-video">
-      <button class="featured-video-media media-placeholder demo-action" aria-label="Відтворити демонстраційне відео"><span class="play-large">▶</span><span>Вбудоване відео 16:9</span></button>
-      <div class="featured-video-copy"><p class="eyebrow">Рекомендоване відео</p><h2>Інтерв’ю після навчань, 2022</h2><p>Коротко про рішення повернутися до ЗСУ після 24 лютого. Джерело та дозвіл на публікацію мають бути підтверджені.</p><dl class="media-meta"><div><dt>Джерело</dt><dd>YouTube / файл</dd></div><div><dt>Дата запису</dt><dd>2022</dd></div><div><dt>Тривалість</dt><dd>[хв:с]</dd></div></dl></div>
-    </article>
-  </div>
-</section>
+
+{% if featured_video %}
+  <section class="section section-paper">
+    <div class="container">
+      <article class="featured-video">
+
+        <div class="featured-video-media">
+          <video
+            controls
+            preload="metadata"
+            {% if featured_video.thumbnail %}
+              poster="{{ featured_video.thumbnail.url }}"
+            {% endif %}
+          >
+            <source
+              src="{{ featured_video.video_file.url }}"
+            >
+
+            Ваш браузер не підтримує відео.
+          </video>
+        </div>
+
+        <div class="featured-video-copy">
+          <p class="eyebrow">
+            Рекомендоване відео
+          </p>
+
+          <h2>{{ featured_video.title }}</h2>
+
+          {% if featured_video.description %}
+            <p>{{ featured_video.description }}</p>
+          {% endif %}
+
+          <dl class="media-meta">
+            {% if featured_video.recorded_at %}
+              <div>
+                <dt>Дата запису</dt>
+                <dd>{{ featured_video.recorded_at }}</dd>
+              </div>
+            {% endif %}
+
+            {% if featured_video.category %}
+              <div>
+                <dt>Категорія</dt>
+                <dd>
+                  {{ featured_video.get_category_display }}
+                </dd>
+              </div>
+            {% endif %}
+
+            {% if featured_video.duration %}
+              <div>
+                <dt>Тривалість</dt>
+                <dd>{{ featured_video.duration }}</dd>
+              </div>
+            {% endif %}
+          </dl>
+
+          {% if featured_video.transcript %}
+            <details class="video-transcript">
+              <summary>
+                Текстовий опис відео
+              </summary>
+
+              <div>
+                {{ featured_video.transcript|linebreaks }}
+              </div>
+            </details>
+          {% endif %}
+        </div>
+
+      </article>
+    </div>
+  </section>
+{% endif %}
+
 <section class="section section-stone">
   <div class="container">
-    <div class="section-heading split-heading"><div><p class="eyebrow">Усі записи</p><h2>Відеоархів</h2></div><p>Картки підтримують YouTube, Vimeo або локальний відеофайл.</p></div>
-    <div class="video-grid">
-      <article class="video-card"><button class="video-thumb media-placeholder tone-a demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">2022 · Інтерв’ю</p><h3>Після навчань</h3><p>Короткий опис змісту відео в одному-двох реченнях.</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-b demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">листопад 2023 · Вшанування</p><h3>Прощання в рідному місті</h3><p>Запис церемонії вшанування. Публікація — лише за згодою родини.</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-c demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">[дата] · Архів</p><h3>[Назва відео]</h3><p>[Короткий опис — 1–2 речення.]</p></div></article>
-      <article class="video-card"><button class="video-thumb media-placeholder tone-d demo-action"><span class="play-icon">▶</span><span>16:9</span></button><div><p class="meta-line">[дата] · ЗМІ</p><h3>[Назва матеріалу]</h3><p>[Короткий опис і джерело.]</p></div></article>
+
+    <div class="section-heading split-heading">
+      <div>
+        <p class="eyebrow">Усі записи</p>
+        <h2>Відеоархів</h2>
+      </div>
+
+      <p>
+        Усі матеріали додаються та публікуються
+        тільки через адміністративну панель.
+      </p>
     </div>
-    <div class="accessibility-note"><span aria-hidden="true">CC</span><p><strong>Доступність:</strong> для кожного відео передбачено текстовий опис; за можливості додаються субтитри або розшифровка.</p></div>
+
+    {% if videos %}
+      <div class="video-grid">
+        {% for video in videos %}
+          <article class="video-card">
+              <div class="video-card-media">
+                <video
+                  controls
+                  preload="metadata"
+                  {% if video.thumbnail %}
+                    poster="{{ video.thumbnail.url }}"
+                  {% endif %}
+                >
+                  <source src="{{ video.video_file.url }}">
+                  Ваш браузер не підтримує відео.
+                </video>
+              </div>
+
+              <div class="video-card-copy">
+                <h3>{{ video.title }}</h3>
+
+                {% if video.description %}
+                  <p>{{ video.description }}</p>
+                {% endif %}
+              </div>
+            </article>
+        {% endfor %}
+      </div>
+    {% elif not featured_video %}
+      <div class="empty-state">
+        <h2>Відеоархів ще наповнюється</h2>
+
+        <p>
+          Перевірені відеоматеріали з’являться тут
+          після публікації адміністратором.
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="accessibility-note">
+      <span aria-hidden="true">CC</span>
+
+      <p>
+        <strong>Доступність:</strong>
+        за можливості до відео додається текстовий опис
+        або розшифровка.
+      </p>
+    </div>
+
   </div>
 </section>
 
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-grid">
-          <div>
-            <a class="brand brand-footer" href="index.html" data-preserve-query>
-              <span class="brand-mark" aria-hidden="true">П</span>
-              <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-            </a>
-            <p>Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.</p>
-          </div>
-          <div class="footer-nav" aria-label="Навігація в підвалі"><a href="index.html" data-preserve-query>Головна</a> · <a href="life.html" data-preserve-query>Життя</a> · <a href="service.html" data-preserve-query>Подвиг і служба</a> · <a href="photos.html" data-preserve-query>Фото</a> · <a href="videos.html" data-preserve-query>Відео</a> · <a href="media.html" data-preserve-query>У ЗМІ</a> · <a href="memories.html" data-preserve-query>Спогади</a></div>
-          <div class="footer-meta">
-            <p>© <span data-year></span> Родина Олександра Мельника</p>
-            <p>Матеріали публікуються лише за згодою.</p>
-          </div>
-        </div>
-      </footer>
-
-      <div class="toast" role="status" aria-live="polite"></div>
-      <script src="assets/app.js"></script>
-    </body>
-    </html>
+{% endblock %}

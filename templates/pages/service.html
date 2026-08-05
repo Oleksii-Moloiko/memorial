@@ -1,49 +1,10 @@
-    <!doctype html>
-    <html lang="uk">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="Демонстраційний макет меморіального сайту">
-      <title>Подвиг і служба — Пам’ять про Олександра Мельника</title>
-      <link rel="stylesheet" href="assets/styles.css">
-    </head>
-    <body data-page="service">
-      <a class="skip-link" href="#main">Перейти до основного змісту</a>
+{% extends "base.html" %}
 
-      <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-        <span>Прототип</span>
-        <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-        <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
-        <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
-      </div>
+{% block page_key %}service{% endblock %}
 
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="index.html" data-preserve-query aria-label="На головну">
-            <span class="brand-mark" aria-hidden="true">П</span>
-            <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-          </a>
-          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
-            <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
-          </button>
-          <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
-            <a href="index.html" data-preserve-query>Головна</a>
-<a href="life.html" data-preserve-query>Життя</a>
-<a href="service.html" data-preserve-query class="active" aria-current="page">Подвиг і служба</a>
-<a href="photos.html" data-preserve-query>Фото</a>
-<a href="videos.html" data-preserve-query>Відео</a>
-<a href="media.html" data-preserve-query>У ЗМІ</a>
-<a href="memories.html" data-preserve-query>Спогади</a>
-          </nav>
-        </div>
-      </header>
+{% block title %}Подвиг і служба — Пам’ять про Олександра Мельника{% endblock %}
 
-      <div class="demo-strip">
-        <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
-      </div>
-
-      <main id="main">
-
+{% block content %}
 <section class="page-hero section-dark service-hero">
   <div class="container page-hero-grid grid-guide">
     <div><p class="eyebrow">Офіційно узгоджений розділ</p><h1>Подвиг<br>і служба</h1></div>
@@ -91,27 +52,4 @@
     </ul>
   </div>
 </section>
-
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-grid">
-          <div>
-            <a class="brand brand-footer" href="index.html" data-preserve-query>
-              <span class="brand-mark" aria-hidden="true">П</span>
-              <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-            </a>
-            <p>Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.</p>
-          </div>
-          <div class="footer-nav" aria-label="Навігація в підвалі"><a href="index.html" data-preserve-query>Головна</a> · <a href="life.html" data-preserve-query>Життя</a> · <a href="service.html" data-preserve-query>Подвиг і служба</a> · <a href="photos.html" data-preserve-query>Фото</a> · <a href="videos.html" data-preserve-query>Відео</a> · <a href="media.html" data-preserve-query>У ЗМІ</a> · <a href="memories.html" data-preserve-query>Спогади</a></div>
-          <div class="footer-meta">
-            <p>© <span data-year></span> Родина Олександра Мельника</p>
-            <p>Матеріали публікуються лише за згодою.</p>
-          </div>
-        </div>
-      </footer>
-
-      <div class="toast" role="status" aria-live="polite"></div>
-      <script src="assets/app.js"></script>
-    </body>
-    </html>
+{% endblock %}

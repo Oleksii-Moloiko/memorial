@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path
 
 from . import views
@@ -12,5 +13,8 @@ urlpatterns = [
     path("videos/", views.videos, name="videos"),
     path("media/", views.media, name="media"),
     path("memories/", views.memories, name="memories"),
-    path("styleguide/", views.styleguide, name="styleguide"),
 ]
+
+if settings.DEBUG:
+    # Дизайн-концепт показуємо тільки в розробці, у проді сторінки не існує.
+    urlpatterns += [path("styleguide/", views.styleguide, name="styleguide")]

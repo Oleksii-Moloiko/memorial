@@ -1,100 +1,151 @@
-    <!doctype html>
-    <html lang="uk">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="Демонстраційний макет меморіального сайту">
-      <title>Спогади — Пам’ять про Олександра Мельника</title>
-      <link rel="stylesheet" href="assets/styles.css">
-    </head>
-    <body data-page="memories">
-      <a class="skip-link" href="#main">Перейти до основного змісту</a>
+{% extends "base.html" %}
 
-      <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-        <span>Прототип</span>
-        <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-        <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
-        <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
-      </div>
+{% block page_key %}memories{% endblock %}
 
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="index.html" data-preserve-query aria-label="На головну">
-            <span class="brand-mark" aria-hidden="true">П</span>
-            <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-          </a>
-          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
-            <span></span><span></span><span></span><span class="sr-only">Відкрити меню</span>
-          </button>
-          <nav class="primary-nav" id="primary-nav" aria-label="Головна навігація">
-            <a href="index.html" data-preserve-query>Головна</a>
-<a href="life.html" data-preserve-query>Життя</a>
-<a href="service.html" data-preserve-query>Подвиг і служба</a>
-<a href="photos.html" data-preserve-query>Фото</a>
-<a href="videos.html" data-preserve-query>Відео</a>
-<a href="media.html" data-preserve-query>У ЗМІ</a>
-<a href="memories.html" data-preserve-query class="active" aria-current="page">Спогади</a>
-          </nav>
-        </div>
-      </header>
+{% block title %}
+  Спогади — Пам’ять про Олександра Мельника
+{% endblock %}
 
-      <div class="demo-strip">
-        <div class="container"><strong>Демонстраційний макет.</strong> Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.</div>
-      </div>
-
-      <main id="main">
-
+{% block content %}
 <section class="page-hero section-dark memories-hero">
   <div class="container page-hero-grid grid-guide">
-    <div><p class="eyebrow">Слова близьких</p><h1>Спогади</h1></div>
-    <p class="page-lead">Слова родини, побратимів, друзів і однокласників. Кожен текст публікується лише після ручної модерації.</p>
+    <div>
+      <p class="eyebrow">Слова близьких</p>
+      <h1>Спогади</h1>
+    </div>
+
+    <p class="page-lead">
+      Слова родини, побратимів, друзів і однокласників.
+      Кожен текст публікується лише після ручної модерації.
+    </p>
   </div>
 </section>
+
 <section class="section section-paper">
   <div class="container">
     <div class="memories-grid">
-      <figure class="memory-card featured"><blockquote>«Сашко завжди був тим, хто йшов першим. Пам’ятатимемо.»</blockquote><figcaption>побратим, позивний «Сокіл»</figcaption></figure>
-      <figure class="memory-card"><blockquote>«Дякуємо за службу і за життя, яке він подарував іншим.»</blockquote><figcaption>мешканка м. Прилуки</figcaption></figure>
-      <figure class="memory-card"><blockquote>«[Спогад родини — до приблизно 500 символів.]»</blockquote><figcaption>родина</figcaption></figure>
-      <figure class="memory-card"><blockquote>«[Текст однокласника або друга, погоджений з автором.]»</blockquote><figcaption>[ім’я або роль]</figcaption></figure>
-      <figure class="memory-card"><blockquote>«[Ще один короткий спогад для стартового наповнення.]»</blockquote><figcaption>[підпис]</figcaption></figure>
-      <figure class="memory-card"><blockquote>«[Слова побратима або колеги.]»</blockquote><figcaption>[підпис]</figcaption></figure>
+      {% for memory in memories %}
+        <figure class="memory-card{% if memory.featured %} featured{% endif %}">
+          <blockquote>
+            «{{ memory.text }}»
+          </blockquote>
+
+          <figcaption>
+            {% if memory.author_role %}
+              {{ memory.author_name }}, {{ memory.author_role }}
+            {% else %}
+              {{ memory.author_name }}
+            {% endif %}
+          </figcaption>
+        </figure>
+      {% empty %}
+        <div class="empty-state">
+          <h2>Спогадів поки немає</h2>
+          <p>
+            Після перевірки модератором опубліковані спогади
+            з’являться тут.
+          </p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+
 <section class="section section-stone submission-section">
   <div class="container submission-grid">
-    <div><p class="eyebrow">Поділитися спогадом</p><h2>Залиште кілька слів</h2><p>Форма показує рекомендовану структуру. У робочій версії кожне повідомлення потрапляє на ручну модерацію й не з’являється на сайті автоматично.</p><div class="moderation-note"><strong>Модерація</strong><span>Відповідальна особа від родини</span></div></div>
-    <form class="memory-form demo-form">
-      <label>Ім’я або підпис<input type="text" name="name" placeholder="Наприклад: побратим, позивний…"></label>
-      <label>Ким ви були знайомі<select name="relation"><option>Оберіть варіант</option><option>Родина</option><option>Друг / подруга</option><option>Побратим</option><option>Однокласник / однокурсник</option><option>Інше</option></select></label>
-      <label class="full">Текст спогаду<textarea name="message" maxlength="500" rows="6" placeholder="До 500 символів"></textarea><span class="counter">0 / 500</span></label>
-      <label class="checkbox full"><input type="checkbox" required><span>Погоджуюся на публікацію після перевірки модератором.</span></label>
-      <button class="button button-primary full" type="submit">Надіслати на модерацію</button>
+    <div>
+      <p class="eyebrow">Поділитися спогадом</p>
+
+      <h2>Залиште кілька слів</h2>
+
+      <p>
+        Кожне повідомлення потрапляє на ручну модерацію
+        й не з’являється на сайті автоматично.
+      </p>
+
+      <div class="moderation-note">
+        <strong>Модерація</strong>
+        <span>Відповідальна особа від родини</span>
+      </div>
+    </div>
+
+    <form
+      class="memory-form"
+      method="post"
+      action="{% url 'pages:memories' %}"
+      novalidate
+    >
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="form-errors full" role="alert">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <label for="{{ form.author_name.id_for_label }}">
+        {{ form.author_name.label }}
+        {{ form.author_name }}
+
+        {% if form.author_name.errors %}
+          <span class="field-error" role="alert">
+            {{ form.author_name.errors.0 }}
+          </span>
+        {% endif %}
+      </label>
+
+      <label for="{{ form.author_role.id_for_label }}">
+        {{ form.author_role.label }}
+        {{ form.author_role }}
+
+        {% if form.author_role.errors %}
+          <span class="field-error" role="alert">
+            {{ form.author_role.errors.0 }}
+          </span>
+        {% endif %}
+      </label>
+
+      <label
+        class="full"
+        for="{{ form.text.id_for_label }}"
+      >
+        {{ form.text.label }}
+        {{ form.text }}
+
+        <span class="counter" data-memory-counter>
+          {{ form.text.value|default:""|length }} / 500
+        </span>
+
+        {% if form.text.errors %}
+          <span class="field-error" role="alert">
+            {{ form.text.errors.0 }}
+          </span>
+        {% endif %}
+      </label>
+
+      <label
+        class="checkbox full"
+        for="{{ form.consent.id_for_label }}"
+      >
+        {{ form.consent }}
+        <span>{{ form.consent.label }}</span>
+      </label>
+
+      {% if form.consent.errors %}
+        <span class="field-error full" role="alert">
+          {{ form.consent.errors.0 }}
+        </span>
+      {% endif %}
+
+      <button
+        class="button button-primary full"
+        type="submit"
+      >
+        Надіслати на модерацію
+      </button>
     </form>
   </div>
 </section>
-
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-grid">
-          <div>
-            <a class="brand brand-footer" href="index.html" data-preserve-query>
-              <span class="brand-mark" aria-hidden="true">П</span>
-              <span class="brand-copy"><strong>ПАМ’ЯТЬ</strong><small>Олександр Мельник</small></span>
-            </a>
-            <p>Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.</p>
-          </div>
-          <div class="footer-nav" aria-label="Навігація в підвалі"><a href="index.html" data-preserve-query>Головна</a> · <a href="life.html" data-preserve-query>Життя</a> · <a href="service.html" data-preserve-query>Подвиг і служба</a> · <a href="photos.html" data-preserve-query>Фото</a> · <a href="videos.html" data-preserve-query>Відео</a> · <a href="media.html" data-preserve-query>У ЗМІ</a> · <a href="memories.html" data-preserve-query>Спогади</a></div>
-          <div class="footer-meta">
-            <p>© <span data-year></span> Родина Олександра Мельника</p>
-            <p>Матеріали публікуються лише за згодою.</p>
-          </div>
-        </div>
-      </footer>
-
-      <div class="toast" role="status" aria-live="polite"></div>
-      <script src="assets/app.js"></script>
-    </body>
-    </html>
+{% endblock %}
