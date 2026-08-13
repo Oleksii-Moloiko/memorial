@@ -21,6 +21,29 @@ class SiteSettings(models.Model):
     copyright_holder = models.CharField(
         "Правовласник у копірайті", max_length=200, blank=True
     )
+    biography_title = models.CharField(
+        "Назва розділу «Життєпис»",
+        max_length=100,
+        default="Життєпис",
+    )
+
+    memories_title = models.CharField(
+        "Назва розділу «Спогади»",
+        max_length=100,
+        default="Спогади",
+    )
+
+    publications_title = models.CharField(
+        "Назва розділу «Публікації»",
+        max_length=100,
+        default="Публікації",
+    )
+
+    gallery_title = models.CharField(
+        "Назва розділу «Галерея»",
+        max_length=100,
+        default="Галерея",
+    )
     demo_strip_enabled = models.BooleanField(
         "Показувати демо-плашку",
         default=True,

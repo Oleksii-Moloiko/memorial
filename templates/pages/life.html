@@ -1,100 +1,97 @@
 {% extends "base.html" %}
-
+ 
 {% block page_key %}life{% endblock %}
-
-{% block title %}
-  {% if biography %}
-    Життя — {{ biography.full_name }}
-  {% else %}
-    Життя — Сторінка пам’яті
-  {% endif %}
-{% endblock %}
-
+ 
+{% block title %}{% if biography %}Життя — {{ biography.full_name }}{% else %}Життя — Сторінка пам’яті{% endif %}{% endblock %}
+ 
 {% block content %}
-
+ 
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">Про нього</p>
       <h1>Життя</h1>
     </div>
-
+ 
     <p class="page-lead">
       Людина поза подвигом: дитинство, навчання, родина,
       інтереси й підтверджена хронологія життя.
     </p>
   </div>
 </section>
-
+ 
 <section class="section section-paper biography-section">
   <div class="container biography-grid">
-
+ 
     <aside class="biography-aside">
       {% if biography and biography.portrait %}
         <img
           class="portrait-secondary"
           src="{{ biography.portrait.url }}"
           alt="Портрет {{ biography.full_name }}"
+          loading="lazy"
+          width="{{ biography.portrait.width }}"
+          height="{{ biography.portrait.height }}"
         >
       {% else %}
         <div class="media-placeholder portrait-secondary">
           <span>Портрет ще не додано</span>
         </div>
       {% endif %}
-
+ 
       {% if biography %}
         <dl class="fact-list">
-
+ 
           {% if biography.birth_date %}
             <div>
               <dt>Народився</dt>
               <dd>{{ biography.birth_date|date:"d.m.Y" }}</dd>
             </div>
           {% endif %}
-
+ 
           {% if biography.death_date %}
             <div>
               <dt>Дата смерті</dt>
               <dd>{{ biography.death_date|date:"d.m.Y" }}</dd>
             </div>
           {% endif %}
-
+ 
           {% if biography.rank %}
             <div>
               <dt>Звання / роль</dt>
               <dd>{{ biography.rank }}</dd>
             </div>
           {% endif %}
-
+ 
           {% if biography.award_title %}
             <div>
               <dt>Нагорода</dt>
               <dd>{{ biography.award_title }}</dd>
             </div>
           {% endif %}
-
+ 
         </dl>
       {% endif %}
     </aside>
-
+ 
     <article class="longform">
       {% if biography %}
-
-        <p class="eyebrow">Життєпис</p>
+ 
+        <p class="eyebrow">{{ site_settings.biography_title }}</p>
         <h2>{{ biography.full_name }}</h2>
-
+ 
         {% if biography.summary %}
           <p class="intro-paragraph">
             {{ biography.summary }}
           </p>
         {% endif %}
-
+ 
         {% if biography.signature_quote %}
           <blockquote class="inline-quote">
             «{{ biography.signature_quote }}»
           </blockquote>
         {% endif %}
-
+ 
         {% if biography.full_text %}
           <div class="biography-content">
             {{ biography.full_text|linebreaks }}
@@ -104,45 +101,45 @@
             Повний життєпис ще готується до публікації.
           </p>
         {% endif %}
-
+ 
       {% else %}
         <p class="intro-paragraph">
           Інформація для цієї сторінки ще готується.
         </p>
-
+ 
         <p>
           Життєпис можна додати через адміністративну панель.
         </p>
       {% endif %}
     </article>
-
+ 
   </div>
 </section>
-
+ 
 <section class="section section-stone timeline-section">
   <div class="container">
-
+ 
     <div class="section-heading split-heading">
       <div>
         <p class="eyebrow">Хронологія</p>
         <h2>Ключові події</h2>
       </div>
-
+ 
       <p>
         До публікації додаються лише події з підтвердженими
         датами та формулюваннями.
       </p>
     </div>
-
+ 
     {% if timeline %}
       <ol class="timeline-list">
         {% for event in timeline %}
           <li>
             <time>{{ event.date_label }}</time>
-
+ 
             <div>
               <h3>{{ event.title }}</h3>
-
+ 
               {% if event.description %}
                 <p>{{ event.description }}</p>
               {% endif %}
@@ -159,37 +156,77 @@
         </p>
       </div>
     {% endif %}
-
+ 
   </div>
 </section>
-
+ 
 <section class="section section-paper">
   <div class="container">
-
+ 
     <div class="section-heading">
       <p class="eyebrow">Фото до історії</p>
       <h2>Роки, що залишилися у світлинах</h2>
     </div>
-
+ 
     <div class="story-strip">
-      <div class="media-placeholder tone-a">
-        <span>Дитинство</span>
-      </div>
-
-      <div class="media-placeholder tone-b">
-        <span>Навчання</span>
-      </div>
-
-      <div class="media-placeholder tone-c">
-        <span>Родина</span>
-      </div>
+      {% if childhood_photo %}
+        <div class="tone-a">
+          <img
+            src="{{ childhood_photo.image.url }}"
+            alt="{{ childhood_photo.alt_text|default:'Дитинство' }}"
+            loading="lazy"
+            width="{{ childhood_photo.image.width }}"
+            height="{{ childhood_photo.image.height }}"
+          >
+          <span>{{ childhood_photo.caption|default:"Дитинство" }}</span>
+        </div>
+      {% else %}
+        <div class="media-placeholder tone-a">
+          <span>Дитинство</span>
+        </div>
+      {% endif %}
+ 
+      {% if study_photo %}
+        <div class="tone-b">
+          <img
+            src="{{ study_photo.image.url }}"
+            alt="{{ study_photo.alt_text|default:'Навчання' }}"
+            loading="lazy"
+            width="{{ study_photo.image.width }}"
+            height="{{ study_photo.image.height }}"
+          >
+          <span>{{ study_photo.caption|default:"Навчання" }}</span>
+        </div>
+      {% else %}
+        <div class="media-placeholder tone-b">
+          <span>Навчання</span>
+        </div>
+      {% endif %}
+ 
+      {% if family_photo %}
+        <div class="tone-c">
+          <img
+            src="{{ family_photo.image.url }}"
+            alt="{{ family_photo.alt_text|default:'Родина' }}"
+            loading="lazy"
+            width="{{ family_photo.image.width }}"
+            height="{{ family_photo.image.height }}"
+          >
+          <span>{{ family_photo.caption|default:"Родина" }}</span>
+        </div>
+      {% else %}
+        <div class="media-placeholder tone-c">
+          <span>Родина</span>
+        </div>
+      {% endif %}
     </div>
-
+ 
     <a class="text-link" href="{% url 'pages:photos' %}">
       Перейти до фотоархіву →
     </a>
-
+ 
   </div>
 </section>
-
+ 
 {% endblock %}
+ 

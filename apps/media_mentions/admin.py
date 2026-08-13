@@ -7,22 +7,74 @@ from .models import MediaMention
 
 @admin.register(MediaMention)
 class MediaMentionAdmin(admin.ModelAdmin):
-    """Admin configuration for external media mentions."""
-
-    list_display = ("source_name", "published_date", "external_link", "order")
-    list_editable = ("order",)
-    list_filter = ("published_date",)
-    search_fields = ("source_name", "url")
+    list_display = (
+        "title",
+        "source_name",
+        "category",
+        "published_date",
+        "is_featured",
+        "is_published",
+        "external_link",
+        "order",
+    )
+    list_editable = (
+        "is_featured",
+        "is_published",
+        "order",
+    )
+    list_filter = (
+        "category",
+        "is_featured",
+        "is_published",
+        "published_date",
+    )
+    search_fields = (
+        "title",
+        "source_name",
+        "url",
+    )
     date_hierarchy = "published_date"
-    ordering = ("order", "-published_date")
+    ordering = (
+        "order",
+        "-published_date",
+    )
     list_per_page = 30
 
+    fieldsets = (
+        (
+            "Матеріал",
+            {
+                "fields": (
+                    "title",
+                    "source_name",
+                    "category",
+                    "url",
+                    "published_date",
+                )
+            },
+        ),
+        (
+            "Публікація",
+            {
+                "fields": (
+                    "is_featured",
+                    "is_published",
+                    "order",
+                )
+            },
+        ),
+    )
+
     @admin.display(description="Посилання")
-    def external_link(self, obj: MediaMention) -> SafeString | str:
-        """Render a safe external link to the publication."""
+    def external_link(
+        self,
+        obj: MediaMention,
+    ) -> SafeString | str:
         if not obj.url:
             return "—"
+
         return format_html(
-            '<a href="{}" target="_blank" rel="noopener noreferrer">Відкрити</a>',
+            '<a href="{}" target="_blank" '
+            'rel="noopener noreferrer">Відкрити</a>',
             obj.url,
         )

@@ -6,46 +6,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Memorial{% endblock %}</title>
+    <title>
+        {% block title %}
+            {{ seo_title|default:"Пам’ять про Назара Боровицького" }}
+        {% endblock %}
+    </title>
 
     {% include "includes/seo_meta.html" %}
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block extra_head %}{% endblock %}
 </head>
+
 <body data-page="{% block page_key %}{% endblock %}">
     <a class="skip-link" href="#main-content">
         Перейти до основного вмісту
     </a>
 
     {% if debug and site_settings.demo_strip_enabled|default:True %}
-    <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-      <span>Прототип</span>
-      <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-      <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
-      <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
-    </div>
+        <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
+            <span>Прототип</span>
+            <a class="mode-link mode-design" href="?view=design">Дизайн</a>
+            <a class="mode-link mode-wireframe" href="?view=wireframe">
+                Wireframe
+            </a>
+            <button
+                class="grid-toggle"
+                type="button"
+                aria-pressed="false"
+            >
+                Сітка
+            </button>
+        </div>
     {% endif %}
 
     {% include "includes/header.html" %}
 
     {% if site_settings.demo_strip_enabled %}
-      <div class="demo-strip">
-        <div class="container">
-          <strong>Демонстраційний макет.</strong>
-          Усі персональні дані та матеріали умовні й мають бути замінені
-          після перевірки родиною.
+        <div class="demo-strip">
+            <div class="container">
+                <strong>Демонстраційний макет.</strong>
+                Усі персональні дані та матеріали умовні й мають бути
+                замінені після перевірки родиною.
+            </div>
         </div>
-      </div>
     {% endif %}
 
     {% if messages %}
-      <div class="container form-messages" aria-live="polite">
-        {% for message in messages %}
-          <div class="form-message form-message-{{ message.tags }}">
-            {{ message }}
-          </div>
-        {% endfor %}
-      </div>
+        <div class="container form-messages" aria-live="polite">
+            {% for message in messages %}
+                <div class="form-message form-message-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <main id="main-content">

@@ -319,42 +319,4 @@
     }
   );
 
-  /*
-   * Media mentions filters
-   */
-
-  const mediaFilterButtons =
-    document.querySelectorAll(
-      ".media-filter"
-    );
-
-  const mediaRows =
-    document.querySelectorAll(
-      ".article-row"
-    );
-
-  mediaFilterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      mediaFilterButtons.forEach((item) => {
-        item.classList.remove("active");
-      });
-
-      button.classList.add("active");
-
-      const selectedFilter =
-        button.dataset.mediaFilter;
-
-      mediaRows.forEach((row) => {
-        const shouldHide =
-          selectedFilter !== "all" &&
-          row.dataset.mediaCategory !==
-            selectedFilter;
-
-        row.classList.toggle(
-          "is-hidden",
-          shouldHide
-        );
-      });
-    });
-  });
 })();

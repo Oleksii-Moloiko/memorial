@@ -2,13 +2,34 @@
 
 {% block page_key %}service{% endblock %}
 
-{% block title %}Подвиг і служба — Пам’ять про Олександра Мельника{% endblock %}
+{% block title %}
+  {{ seo_title|default:"Подвиг і служба — Пам’ять про Назара Боровітський" }}
+{% endblock %}
 
 {% block content %}
 <section class="page-hero section-dark service-hero">
   <div class="container page-hero-grid grid-guide">
-    <div><p class="eyebrow">Офіційно узгоджений розділ</p><h1>Подвиг<br>і служба</h1></div>
-    <div class="page-lead"><p>Опис обставин служби та нагородження публікується лише після перевірки офіційних джерел і погодження з підрозділом.</p><span class="status-pill">Потрібне погодження</span></div>
+    <div>
+      <p class="eyebrow">
+        {{ service_page.hero_eyebrow|default:"Офіційно узгоджений розділ" }}
+      </p>
+
+      <h1>
+        {{ service_page.hero_title|default:"Подвиг і служба" }}
+      </h1>
+    </div>
+
+    <div class="page-lead">
+      {% if service_page.hero_description %}
+        <p>{{ service_page.hero_description|linebreaksbr }}</p>
+      {% endif %}
+
+      {% if service_page %}
+        <span class="status-pill">
+          {{ service_page.get_publication_status_display }}
+        </span>
+      {% endif %}
+    </div>
   </div>
 </section>
 
@@ -20,30 +41,96 @@
       <a href="#award">Нагорода</a>
       <a href="#safety">Безпека публікації</a>
     </aside>
+
     <article class="longform service-story" id="story">
-      <p class="intro-paragraph">3 листопада 2023 року в ході оборонного бою на Донецькому напрямку взвод під командуванням Олександра Мельника відбив штурми переважаючих сил, забезпечивши відхід підрозділу та евакуацію поранених побратимів.</p>
-      <p>Опис події наведено як умовний приклад із контент-плану. Перед публікацією його потрібно замінити на текст, підтверджений родиною, командиром або пресслужбою підрозділу.</p>
-      <div class="official-note"><strong>Редакційна позначка</strong><p>Не публікувати координати, тактику, чисельність чи інші чутливі відомості. Допустимий рівень деталізації визначає підрозділ.</p></div>
+      {% if service_page.service_intro %}
+        <p class="intro-paragraph">
+          {{ service_page.service_intro|linebreaksbr }}
+        </p>
+      {% endif %}
+
+      {% if service_page.service_text %}
+        <div class="service-main-text">
+          {{ service_page.service_text|linebreaks }}
+        </div>
+      {% endif %}
+
+      {% if service_page.editorial_note %}
+        <div class="official-note">
+          <strong>Редакційна позначка</strong>
+
+          <p>
+            {{ service_page.editorial_note|linebreaksbr }}
+          </p>
+        </div>
+      {% endif %}
+
+      {% if not service_page %}
+        <p>Інформація для цього розділу ще не додана.</p>
+      {% endif %}
     </article>
   </div>
 </section>
 
-<section class="section section-stone" id="award">
-  <div class="container award-card">
-    <div class="award-emblem" aria-hidden="true">✦</div>
-    <div><p class="eyebrow">Нагорода</p><h2>Герой України</h2><p>Орден «Золота Зірка» (посмертно)</p></div>
-    <dl>
-      <div><dt>Дата Указу</dt><dd>[дата]</dd></div>
-      <div><dt>Номер</dt><dd>№ [номер]</dd></div>
-      <div><dt>Джерело</dt><dd>president.gov.ua</dd></div>
-    </dl>
-    <a class="button button-secondary demo-action" href="#">Читати повний текст Указу</a>
-  </div>
-</section>
+{% if service_page.award_title %}
+  <section class="section section-stone" id="award">
+    <div class="container award-card">
+      <div class="award-emblem" aria-hidden="true">✦</div>
+
+      <div>
+        <p class="eyebrow">Нагорода</p>
+
+        <h2>{{ service_page.award_title }}</h2>
+
+        {% if service_page.award_subtitle %}
+          <p>{{ service_page.award_subtitle }}</p>
+        {% endif %}
+      </div>
+
+      <dl>
+        {% if service_page.decree_date %}
+          <div>
+            <dt>Дата Указу</dt>
+            <dd>{{ service_page.decree_date|date:"d.m.Y" }}</dd>
+          </div>
+        {% endif %}
+
+        {% if service_page.decree_number %}
+          <div>
+            <dt>Номер</dt>
+            <dd>№ {{ service_page.decree_number }}</dd>
+          </div>
+        {% endif %}
+
+        {% if service_page.decree_source_name %}
+          <div>
+            <dt>Джерело</dt>
+            <dd>{{ service_page.decree_source_name }}</dd>
+          </div>
+        {% endif %}
+      </dl>
+
+      {% if service_page.decree_url %}
+        <a
+          class="button button-secondary"
+          href="{{ service_page.decree_url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Читати повний текст Указу
+        </a>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}
 
 <section class="section section-paper" id="safety">
   <div class="container safety-grid">
-    <div><p class="eyebrow">Перед публікацією</p><h2>Перевірка фактів і безпеки</h2></div>
+    <div>
+      <p class="eyebrow">Перед публікацією</p>
+      <h2>Перевірка фактів і безпеки</h2>
+    </div>
+
     <ul class="check-list">
       <li>Текст погоджено з частиною або пресслужбою.</li>
       <li>Дата й номер Указу звірені з офіційним джерелом.</li>

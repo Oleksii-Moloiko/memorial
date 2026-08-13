@@ -36,13 +36,35 @@ class Biography(models.Model):
 
 
 class TimelineEvent(models.Model):
-    """Подія хронології життя. date_label — текст, не строга дата
-    (в макеті трапляються діапазони на кшталт «2001–2011»)."""
+    """Подія хронології життя."""
 
-    date_label = models.CharField("Дата / період", max_length=50)
-    title = models.CharField("Заголовок події", max_length=255)
-    description = models.CharField("Опис", max_length=500, blank=True)
-    order = models.PositiveIntegerField("Порядок", default=0)
+    biography = models.ForeignKey(
+        Biography,
+        on_delete=models.CASCADE,
+        related_name="timeline_events",
+        verbose_name="Життєпис",
+    )
+
+    date_label = models.CharField(
+        "Дата / період",
+        max_length=50,
+    )
+
+    title = models.CharField(
+        "Заголовок події",
+        max_length=255,
+    )
+
+    description = models.CharField(
+        "Опис",
+        max_length=500,
+        blank=True,
+    )
+
+    order = models.PositiveIntegerField(
+        "Порядок",
+        default=0,
+    )
 
     class Meta:
         verbose_name = "Подія хронології"

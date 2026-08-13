@@ -38,9 +38,21 @@ def home(request):
 
 
 def life(request):
+    family_photos = list(
+        Photo.objects.filter(
+            category=Photo.Category.FAMILY, is_published=True
+        )[:2]
+    )
+    study_photo = Photo.objects.filter(
+        category=Photo.Category.STUDY, is_published=True
+    ).first()
+
     context = {
         "biography": Biography.objects.first(),
         "timeline": TimelineEvent.objects.all(),
+        "childhood_photo": family_photos[0] if len(family_photos) > 0 else None,
+        "family_photo": family_photos[1] if len(family_photos) > 1 else None,
+        "study_photo": study_photo,
         **_seo_context("life"),
     }
     return render(request, "pages/life.html", context)
