@@ -58,7 +58,7 @@ class Photo(models.Model):
 
     class Meta:
         verbose_name = "Фото"
-        verbose_name_plural = "Фотогалерея"
+        verbose_name_plural = "Фото"
         ordering = ["order", "id"]
 
     def __str__(self):

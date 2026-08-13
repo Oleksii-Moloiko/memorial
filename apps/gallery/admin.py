@@ -8,6 +8,7 @@ from .models import Photo
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
     """Admin configuration for memorial gallery photos."""
+    change_list_template = "admin/gallery/photo/change_list.html"
 
     list_display = (
         "preview",
@@ -27,7 +28,7 @@ class PhotoAdmin(admin.ModelAdmin):
     save_on_top = True
     fieldsets = (
         (
-            "Зображення",
+            "ФОТО",
             {
                 "fields": (
                     "image",
@@ -38,13 +39,20 @@ class PhotoAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Відображення",
+            "ВІДОБРАЖЕННЯ",
             {
                 "fields": (
                     "category",
                     "layout_size",
-                    "is_published",
                     "order",
+                )
+            },
+        ),
+        (
+            "ПУБЛІКАЦІЯ",
+            {
+                "fields": (
+                    "is_published",
                 )
             },
         ),
