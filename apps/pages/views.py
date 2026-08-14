@@ -27,14 +27,36 @@ def _seo_context(page_key):
 def home(request):
     context = {
         "biography": Biography.objects.first(),
+
         "timeline_preview": TimelineEvent.objects.all()[:3],
-        "gallery_preview": Photo.objects.filter(is_published=True)[:6],
+
+        "gallery_preview": Photo.objects.filter(
+            is_published=True,
+        )[:6],
+
         "featured_memory": Memory.objects.filter(
-            status=Memory.Status.APPROVED, featured=True
+            status=Memory.Status.APPROVED,
+            featured=True,
         ).first(),
+
+        "featured_video": Video.objects.filter(
+            is_published=True,
+            is_featured=True,
+        ).first(),
+
+        "featured_mention": MediaMention.objects.filter(
+            is_published=True,
+            is_featured=True,
+        ).first(),
+
         **_seo_context("home"),
     }
-    return render(request, "pages/home.html", context)
+
+    return render(
+        request,
+        "pages/home.html",
+        context,
+    )
 
 
 def life(request):

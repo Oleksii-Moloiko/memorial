@@ -1,0 +1,367 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="home-admin">
+
+    <div class="home-admin__header">
+        <h1>🏠 Головна</h1>
+
+        <p>
+            Контент, який зараз відображається на головній сторінці сайту.
+        </p>
+    </div>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+            <div>
+                <h2>Перший екран</h2>
+                <p>Портрет, ім’я, звання, дати та вступний текст.</p>
+            </div>
+
+            <a
+                href="{{ biography_url }}"
+                class="button"
+            >
+                Редагувати
+            </a>
+        </div>
+
+
+        {% if biography %}
+
+            <div>
+
+                {% if biography.portrait %}
+                    <img
+                        src="{{ biography.portrait.url }}"
+                        alt="{{ biography.full_name }}"
+                        style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: cover;
+                            border-radius: 8px;
+                            margin-bottom: 16px;
+                        "
+                    >
+                {% endif %}
+
+                <h3>
+                    {{ biography.full_name }}
+                </h3>
+
+                {% if biography.rank %}
+                    <p>
+                        {{ biography.rank }}
+                    </p>
+                {% endif %}
+
+                {% if biography.birth_date or biography.death_date %}
+                    <p>
+                        {{ biography.birth_date|date:"d.m.Y" }}
+                        —
+                        {{ biography.death_date|date:"d.m.Y" }}
+                    </p>
+                {% endif %}
+
+                {% if biography.intro_text %}
+                    <p>
+                        {{ biography.intro_text }}
+                    </p>
+                {% endif %}
+
+            </div>
+
+        {% else %}
+
+            <p>Основну інформацію ще не заповнено.</p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Цитата</h2>
+            </div>
+
+            <a
+                href="{{ biography_url }}"
+                class="button"
+            >
+                Редагувати
+            </a>
+
+        </div>
+
+        {% if biography.signature_quote %}
+
+            <blockquote>
+                “{{ biography.signature_quote }}”
+            </blockquote>
+
+        {% else %}
+
+            <p>Цитату ще не додано.</p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Хронологія</h2>
+                <p>
+                    На головній показуються перші 3 події за порядком.
+                </p>
+            </div>
+
+            <a
+                href="{{ life_url }}"
+                class="button"
+            >
+                Керувати
+            </a>
+
+        </div>
+
+
+        {% if timeline_events %}
+
+            <ul>
+                {% for event in timeline_events %}
+                    <li>
+                        <strong>
+                            {{ event.date_label }}
+                        </strong>
+
+                        — {{ event.title }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+
+            <p>Подій ще немає.</p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Фото</h2>
+
+                <p>
+                    На головній показуються перші 6 опублікованих фото.
+                </p>
+            </div>
+
+            <a
+                href="{{ photos_url }}"
+                class="button"
+            >
+                Керувати фото
+            </a>
+
+        </div>
+
+
+        {% if gallery_photos %}
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:repeat(6, 100px);
+                    gap:8px;
+                "
+            >
+
+                {% for photo in gallery_photos %}
+
+                    {% if photo.image %}
+                        <img
+                            src="{{ photo.image.url }}"
+                            alt="{{ photo.alt_text|default:photo.caption }}"
+                            style="
+                                width:100px;
+                                height:75px;
+                                object-fit:cover;
+                                border-radius:6px;
+                            "
+                        >
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p>Опублікованих фото ще немає.</p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Рекомендоване відео</h2>
+            </div>
+
+            <a
+                href="{{ videos_url }}"
+                class="button"
+            >
+                Керувати
+            </a>
+
+        </div>
+
+
+        {% if featured_video %}
+
+            <strong>
+                {{ featured_video.title }}
+            </strong>
+
+            {% if featured_video.recorded_at %}
+                <p>
+                    {{ featured_video.recorded_at }}
+                </p>
+            {% endif %}
+
+        {% else %}
+
+            <p>
+                Рекомендоване відео не вибране.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Рекомендована публікація</h2>
+            </div>
+
+            <a
+                href="{{ publications_url }}"
+                class="button"
+            >
+                Керувати
+            </a>
+
+        </div>
+
+
+        {% if featured_mention %}
+
+            <strong>
+                {{ featured_mention.title }}
+            </strong>
+
+            <p>
+                {{ featured_mention.source_name }}
+            </p>
+
+        {% else %}
+
+            <p>
+                Публікацію для головної не вибрано.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <hr>
+
+
+    <section class="home-admin-section">
+
+        <div class="home-admin-section__header">
+
+            <div>
+                <h2>Спогад на головній</h2>
+            </div>
+
+            <a
+                href="{{ memories_url }}"
+                class="button"
+            >
+                Керувати
+            </a>
+
+        </div>
+
+
+        {% if featured_memory %}
+
+            <strong>
+                {{ featured_memory.author_name }}
+            </strong>
+
+            {% if featured_memory.author_role %}
+                <p>
+                    {{ featured_memory.author_role }}
+                </p>
+            {% endif %}
+
+            <blockquote>
+                “{{ featured_memory.text }}”
+            </blockquote>
+
+        {% else %}
+
+            <p>
+                Спогад для головної не вибрано.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}
