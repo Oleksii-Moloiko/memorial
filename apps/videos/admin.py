@@ -14,7 +14,6 @@ class VideoAdmin(admin.ModelAdmin):
         "title",
         "category",
         "recorded_at",
-        "duration",
         "is_featured",
         "is_published",
         "order",
@@ -26,7 +25,6 @@ class VideoAdmin(admin.ModelAdmin):
     readonly_fields = (
         "large_thumbnail_preview",
         "video_preview",
-        "created_at",
     )
     date_hierarchy = "created_at"
     ordering = ("order", "id")
@@ -34,19 +32,7 @@ class VideoAdmin(admin.ModelAdmin):
     save_on_top = True
     fieldsets = (
         (
-            "Основна інформація",
-            {
-                "fields": (
-                    "title",
-                    "description",
-                    "category",
-                    "recorded_at",
-                    "duration",
-                )
-            },
-        ),
-        (
-            "Файли",
+            "ВІДЕО",
             {
                 "fields": (
                     "video_file",
@@ -57,17 +43,39 @@ class VideoAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Доступність",
-            {"fields": ("transcript",)},
+            "ОСНОВНА ІНФОРМАЦІЯ",
+            {
+                "fields": (
+                    "title",
+                    "description",
+                )
+            },
         ),
         (
-            "Публікація",
+            "КЛАСИФІКАЦІЯ",
+            {
+                "fields": (
+                    "category",
+                    "recorded_at",
+                    "duration",
+                )
+            },
+        ),
+        (
+            "ДОСТУПНІСТЬ",
+            {
+                "fields": (
+                    "transcript",
+                )
+            },
+        ),
+        (
+            "ПУБЛІКАЦІЯ",
             {
                 "fields": (
                     "is_featured",
                     "is_published",
                     "order",
-                    "created_at",
                 )
             },
         ),

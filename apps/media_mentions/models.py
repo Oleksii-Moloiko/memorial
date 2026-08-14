@@ -51,8 +51,8 @@ class MediaMention(models.Model):
             ).update(is_featured=False)
 
     class Meta:
-        verbose_name = "Згадка в медіа"
-        verbose_name_plural = "Згадки в медіа"
+        verbose_name = "Публікація"
+        verbose_name_plural = "Публікації"
         ordering = ["order", "-published_date"]
 
     def __str__(self) -> str:

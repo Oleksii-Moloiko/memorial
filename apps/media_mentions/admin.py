@@ -12,9 +12,9 @@ class MediaMentionAdmin(admin.ModelAdmin):
         "source_name",
         "category",
         "published_date",
+        "external_link",
         "is_featured",
         "is_published",
-        "external_link",
         "order",
     )
     list_editable = (
@@ -42,23 +42,23 @@ class MediaMentionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            "Матеріал",
+            "ПУБЛІКАЦІЯ",
             {
                 "fields": (
                     "title",
                     "source_name",
                     "category",
-                    "url",
                     "published_date",
+                    "url",
                 )
             },
         ),
         (
-            "Публікація",
+            "ВІДОБРАЖЕННЯ",
             {
                 "fields": (
-                    "is_featured",
                     "is_published",
+                    "is_featured",
                     "order",
                 )
             },
