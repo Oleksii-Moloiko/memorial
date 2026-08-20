@@ -6,7 +6,7 @@ class Biography(models.Model):
 
     full_name = models.CharField("ПІБ", max_length=255)
     rank = models.CharField(
-        "Звання / роль",
+        "Звання",
         max_length=255,
         blank=True,
         help_text="Наприклад: «Старший лейтенант, командир взводу»",
@@ -23,7 +23,7 @@ class Biography(models.Model):
         help_text="Наприклад: «Герой України»",
     )
     intro_text = models.TextField("Вступний текст на головній", blank=True)
-    signature_quote = models.CharField("Ключова цитата", max_length=500, blank=True)
+    signature_quote = models.CharField("Головна цитата", max_length=500, blank=True)
     summary = models.TextField("Короткий опис (для головної)", blank=True)
     full_text = models.TextField("Повний життєпис", blank=True)
 

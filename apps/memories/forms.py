@@ -4,6 +4,16 @@ from .models import Memory
 
 
 class MemoryForm(forms.ModelForm):
+    website = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "tabindex": "-1",
+                "autocomplete": "off",
+            }
+        ),
+    )
+
     consent = forms.BooleanField(
         required=True,
         label="Погоджуюся на публікацію після перевірки модератором.",
@@ -59,6 +69,16 @@ class MemoryForm(forms.ModelForm):
             )
 
         return author_name
+
+    def clean_website(self):
+        value = self.cleaned_data.get("website", "")
+
+        if value:
+            raise forms.ValidationError(
+                "Не вдалося надіслати форму."
+            )
+
+        return ""
 
     def clean_author_role(self):
         return self.cleaned_data.get("author_role", "").strip()

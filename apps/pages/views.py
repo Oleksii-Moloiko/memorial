@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django_ratelimit.decorators import ratelimit
 
 from apps.biography.models import Biography, TimelineEvent
 from apps.gallery.models import Photo
@@ -8,6 +9,8 @@ from apps.memories.forms import MemoryForm
 from apps.memories.models import Memory
 from apps.seo.models import SeoPage
 from apps.videos.models import Video
+
+from .models import ServicePage
 
 
 def _seo_context(page_key):
@@ -81,7 +84,15 @@ def life(request):
 
 
 def service(request):
-    context = _seo_context("service")
+    service_page = ServicePage.objects.filter(
+        is_published=True,
+    ).first()
+
+    context = {
+        "service_page": service_page,
+        **_seo_context("service"),
+    }
+
     return render(request, "pages/service.html", context)
 
 
@@ -130,14 +141,30 @@ def videos(request):
 
 def media(request):
     context = {
-        "mentions": MediaMention.objects.all(),
+        "mentions": MediaMention.objects.filter(is_published=True),
         **_seo_context("media"),
     }
     return render(request, "pages/media.html", context)
 
-
+@ratelimit(
+    key="ip",
+    rate="3/h",
+    method="POST",
+    block=False,
+)
 def memories(request):
     if request.method == "POST":
+        if getattr(request, "limited", False):
+            messages.error(
+                request,
+                (
+                    "Ви надіслали кілька спогадів за короткий час. "
+                    "Спробуйте, будь ласка, пізніше."
+                ),
+            )
+
+            return redirect("pages:memories")
+
         form = MemoryForm(request.POST)
 
         if form.is_valid():
@@ -152,16 +179,23 @@ def memories(request):
             )
 
             return redirect("pages:memories")
+
     else:
         form = MemoryForm()
 
     context = {
-        "memories": Memory.objects.filter(status=Memory.Status.APPROVED),
+        "memories": Memory.objects.filter(
+            status=Memory.Status.APPROVED,
+        ),
         "form": form,
         **_seo_context("memories"),
     }
 
-    return render(request, "pages/memories.html", context)
+    return render(
+        request,
+        "pages/memories.html",
+        context,
+    )
 
 
 def styleguide(request):

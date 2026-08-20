@@ -1,9 +1,10 @@
-from django.test import TestCase
+from django.contrib.admin.sites import AdminSite
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from .forms import MemoryForm
 from .models import Memory
-
+from .admin import MemoryAdmin
 
 class MemoryModelTests(TestCase):
     def test_memory_string_representation(self):
@@ -219,3 +220,56 @@ class MemoriesPageTests(TestCase):
             response,
             "Дякуємо. Ваш спогад надіслано на модерацію.",
         )
+
+class MemoryAdminStatusTests(TestCase):
+    def setUp(self):
+        self.admin = MemoryAdmin(Memory, AdminSite())
+        self.factory = RequestFactory()
+
+    def test_rejected_featured_memory_is_unfeatured(self):
+        memory = Memory.objects.create(
+            author_name="Іван",
+            text="Достатньо довгий текст спогаду.",
+            status=Memory.Status.APPROVED,
+            featured=True,
+        )
+
+        request = self.factory.post("/admin/")
+
+        self.admin._update_status(
+            request,
+            Memory.objects.filter(pk=memory.pk),
+            Memory.Status.REJECTED,
+        )
+
+        memory.refresh_from_db()
+
+        self.assertEqual(
+            memory.status,
+            Memory.Status.REJECTED,
+        )
+        self.assertFalse(memory.featured)
+
+    def test_pending_featured_memory_is_unfeatured(self):
+        memory = Memory.objects.create(
+            author_name="Іван",
+            text="Достатньо довгий текст спогаду.",
+            status=Memory.Status.APPROVED,
+            featured=True,
+        )
+
+        request = self.factory.post("/admin/")
+
+        self.admin._update_status(
+            request,
+            Memory.objects.filter(pk=memory.pk),
+            Memory.Status.PENDING,
+        )
+
+        memory.refresh_from_db()
+
+        self.assertEqual(
+            memory.status,
+            Memory.Status.PENDING,
+        )
+        self.assertFalse(memory.featured)

@@ -17,7 +17,7 @@ class ServicePageAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            "ПЕРШИЙ ЕКРАН",
+            "1. ПЕРШИЙ ЕКРАН",
             {
                 "fields": (
                     "hero_eyebrow",
@@ -27,7 +27,7 @@ class ServicePageAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "СЛУЖБА",
+            "2. ОПИС СЛУЖБИ",
             {
                 "fields": (
                     "service_intro",
@@ -37,7 +37,7 @@ class ServicePageAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "НАГОРОДА",
+            "3. НАГОРОДА",
             {
                 "fields": (
                     "award_title",
@@ -50,7 +50,7 @@ class ServicePageAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "ПУБЛІКАЦІЯ",
+            "4. ПУБЛІКАЦІЯ СТОРІНКИ",
             {
                 "fields": (
                     "publication_status",

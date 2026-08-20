@@ -24,30 +24,41 @@ class BiographyAdmin(admin.ModelAdmin):
     readonly_fields = ("large_portrait_preview",)
     fieldsets = (
         (
-            "Основна інформація",
+            "ГОЛОВНА — ПЕРШИЙ ЕКРАН",
             {
+                "description": (
+                    "Поля цього блоку відображаються у першому екрані "
+                    "головної сторінки."
+                ),
                 "fields": (
+                    "portrait",
+                    "large_portrait_preview",
                     "full_name",
                     "rank",
                     "birth_date",
                     "death_date",
                     "award_title",
-                )
+                    "intro_text",
+                ),
             },
         ),
         (
-            "Портрет",
-            {"fields": ("portrait", "large_portrait_preview")},
+            "ГОЛОВНА — ЦИТАТА",
+            {
+                "description": "Окремий блок-цитата під першим екраном.",
+                "fields": ("signature_quote",),
+            },
         ),
         (
-            "Тексти",
+            "ЖИТТЯ — БІОГРАФІЯ",
             {
+                "description": (
+                    "Тексти основного біографічного блоку на сторінці «Життя»."
+                ),
                 "fields": (
-                    "intro_text",
-                    "signature_quote",
                     "summary",
                     "full_text",
-                )
+                ),
             },
         ),
     )

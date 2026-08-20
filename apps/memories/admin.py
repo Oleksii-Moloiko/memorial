@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.core.exceptions import PermissionDenied
 from django.db import DatabaseError, transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -68,15 +69,14 @@ class MemoryAdmin(admin.ModelAdmin):
 
         return custom_urls + urls
 
-    def approve_memory_view(
-            self,
-            request: HttpRequest,
-            memory_id: int,
-    ):
+    def approve_memory_view(self, request: HttpRequest, memory_id: int):
         if request.method != "POST":
             return redirect("admin:memories_memory_changelist")
 
         memory = get_object_or_404(Memory, pk=memory_id)
+
+        if not self.has_chanhe_permission(request, memory):
+            raise PermissionDenied
 
         memory.status = Memory.Status.APPROVED
         memory.save(update_fields=["status"])
@@ -99,8 +99,12 @@ class MemoryAdmin(admin.ModelAdmin):
 
         memory = get_object_or_404(Memory, pk=memory_id)
 
+        if not self.has_change_permission(request, memory):
+            raise PermissionDenied
+
         memory.status = Memory.Status.REJECTED
         memory.featured = False
+
         memory.save(
             update_fields=[
                 "status",
@@ -246,14 +250,24 @@ class MemoryAdmin(admin.ModelAdmin):
         self.message_user(request, "Спогад додано на головну сторінку.")
 
     def _update_status(
-        self,
-        request: HttpRequest,
-        queryset: QuerySet[Memory],
-        status: str,
+            self,
+            request: HttpRequest,
+            queryset: QuerySet[Memory],
+            status: str,
     ) -> None:
-        """Update moderation status and report database errors."""
+        """Update moderation status while keeping featured state consistent."""
+
         try:
-            updated = queryset.update(status=status)
+            with transaction.atomic():
+                update_fields = {
+                    "status": status,
+                }
+
+                if status != Memory.Status.APPROVED:
+                    update_fields["featured"] = False
+
+                updated = queryset.update(**update_fields)
+
         except DatabaseError:
             self.message_user(
                 request,
@@ -262,4 +276,7 @@ class MemoryAdmin(admin.ModelAdmin):
             )
             return
 
-        self.message_user(request, f"Оновлено спогадів: {updated}.")
+        self.message_user(
+            request,
+            f"Оновлено спогадів: {updated}.",
+        )
