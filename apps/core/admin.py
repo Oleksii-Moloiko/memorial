@@ -28,10 +28,13 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             "НАЗВИ РОЗДІЛІВ",
             {
                 "fields": (
-                    "biography_title",
+                    "home_title",
+                    "life_title",
+                    "service_title",
+                    "photos_title",
+                    "videos_title",
+                    "media_title",
                     "memories_title",
-                    "publications_title",
-                    "gallery_title",
                 )
             },
         ),

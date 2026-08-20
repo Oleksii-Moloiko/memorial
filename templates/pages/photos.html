@@ -3,7 +3,7 @@
 {% block page_key %}photos{% endblock %}
 
 {% block title %}
-  Фото — Пам’ять про Назара Боровицького
+  {{ site_settings.photos_title }} — Пам’ять про Назара Боровицького
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">Фотоархів</p>
-      <h1>Фото</h1>
+      <h1>{{ site_settings.photos_title }}</h1>
     </div>
 
     <p class="page-lead">

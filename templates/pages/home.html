@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_key %}home{% endblock %}
-{% block title %}Головна — {{ seo_title|default:"Пам’ять про Назара Боровицького" }}{% endblock %}
+{% block title %}{{ site_settings.home_title }} — {{ seo_title|default:"Пам’ять про Назара Боровицького" }}{% endblock %}
 
 {% block extra_head %}
 {% if biography %}

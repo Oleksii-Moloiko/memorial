@@ -11,14 +11,35 @@
       <p>{{ site_settings.footer_text|default:"Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких." }}</p>
     </div>
     <div class="footer-nav" aria-label="Навігація в підвалі">
-      <a href="{% url 'pages:home' %}">Головна</a> ·
-      <a href="{% url 'pages:life' %}">Життя</a> ·
-      <a href="{% url 'pages:service' %}">Подвиг і служба</a> ·
-      <a href="{% url 'pages:photos' %}">Фото</a> ·
-      <a href="{% url 'pages:videos' %}">Відео</a> ·
-      <a href="{% url 'pages:media' %}">У ЗМІ</a> ·
-      <a href="{% url 'pages:memories' %}">Спогади</a>
-      {# без "Контакти" — узгоджено раніше #}
+
+        <a href="{% url 'pages:home' %}">
+            {{ site_settings.home_title }}
+        </a> ·
+
+        <a href="{% url 'pages:life' %}">
+            {{ site_settings.life_title }}
+        </a> ·
+
+        <a href="{% url 'pages:service' %}">
+            {{ site_settings.service_title }}
+        </a> ·
+
+        <a href="{% url 'pages:photos' %}">
+            {{ site_settings.photos_title }}
+        </a> ·
+
+        <a href="{% url 'pages:videos' %}">
+            {{ site_settings.videos_title }}
+        </a> ·
+
+        <a href="{% url 'pages:media' %}">
+        {{ site_settings.media_title }}
+        </a> ·
+
+        <a href="{% url 'pages:memories' %}">
+        {{ site_settings.memories_title }}
+        </a>
+
     </div>
     <div class="footer-meta">
       <p>© {% now "Y" %} {{ site_settings.copyright_holder|default:"Родина Назара Боровицького" }}</p>

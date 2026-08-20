@@ -2,14 +2,16 @@
 
 {% block page_key %}media{% endblock %}
 
-{% block title %}{{ seo_title|default:"У ЗМІ та статтях — Пам’ять про Назара Боровицького" }}{% endblock %}
+{% block title %}
+  {{ site_settings.media_title }} — Пам’ять про Назара Боровицького
+{% endblock %}
 
 {% block content %}
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">Зовнішні джерела</p>
-      <h1>У ЗМІ<br>та статтях</h1>
+      <h1>{{ site_settings.media_title }}</h1>
     </div>
 
     <p class="page-lead">

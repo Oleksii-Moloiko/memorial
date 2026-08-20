@@ -2,7 +2,7 @@
  
 {% block page_key %}life{% endblock %}
  
-{% block title %}{% if biography %}Життя — {{ biography.full_name }}{% else %}Життя — Сторінка пам’яті{% endif %}{% endblock %}
+{% block title %}{% if biography %}{{ site_settings.life_title }} — {{ biography.full_name }}{% else %}{{ site_settings.life_title }} — Сторінка пам’яті{% endif %}{% endblock %}
  
 {% block content %}
  
@@ -10,7 +10,7 @@
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">Про нього</p>
-      <h1>Життя</h1>
+      <h1>{{ site_settings.life_title }}</h1>
     </div>
  
     <p class="page-lead">
@@ -77,7 +77,7 @@
     <article class="longform">
       {% if biography %}
  
-        <p class="eyebrow">{{ site_settings.biography_title }}</p>
+        <p class="eyebrow">{{ site_settings.life_title }}</p>
         <h2>{{ biography.full_name }}</h2>
  
         {% if biography.summary %}

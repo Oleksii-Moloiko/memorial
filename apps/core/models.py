@@ -3,28 +3,68 @@ from django.db import models
 
 
 class SiteSettings(models.Model):
-    """Singleton з глобальними налаштуваннями сайту.
-
-    Використовується через SiteSettings.load(), доступний у будь-якому
-    шаблоні як `site_settings` завдяки config.context_processors.site_settings.
-    """
+    """Singleton з глобальними налаштуваннями сайту."""
 
     site_title = models.CharField(
         "Назва сайту",
         max_length=200,
         default="Memorial",
     )
-    brand_letter = models.CharField("Літера логотипа", max_length=4, blank=True)
-    site_name = models.CharField("Назва в шапці", max_length=100, blank=True)
-    subtitle = models.CharField("Підзаголовок у шапці", max_length=200, blank=True)
-    footer_text = models.TextField("Текст у футері", blank=True)
-    copyright_holder = models.CharField(
-        "Правовласник у копірайті", max_length=200, blank=True
+
+    brand_letter = models.CharField(
+        "Літера логотипа",
+        max_length=4,
+        blank=True,
     )
-    biography_title = models.CharField(
-        "Назва розділу «Життєпис»",
+
+    site_name = models.CharField(
+        "Назва в шапці",
         max_length=100,
-        default="Життєпис",
+        blank=True,
+    )
+
+    subtitle = models.CharField(
+        "Підзаголовок у шапці",
+        max_length=200,
+        blank=True,
+    )
+
+    # Назви розділів
+
+    home_title = models.CharField(
+        "Назва розділу «Головна»",
+        max_length=100,
+        default="Головна",
+    )
+
+    life_title = models.CharField(
+        "Назва розділу «Життя»",
+        max_length=100,
+        default="Життя",
+    )
+
+    service_title = models.CharField(
+        "Назва розділу «Подвиг і служба»",
+        max_length=100,
+        default="Подвиг і служба",
+    )
+
+    photos_title = models.CharField(
+        "Назва розділу «Фото»",
+        max_length=100,
+        default="Фото",
+    )
+
+    videos_title = models.CharField(
+        "Назва розділу «Відео»",
+        max_length=100,
+        default="Відео",
+    )
+
+    media_title = models.CharField(
+        "Назва розділу «Посилання»",
+        max_length=100,
+        default="Посилання",
     )
 
     memories_title = models.CharField(
@@ -33,21 +73,26 @@ class SiteSettings(models.Model):
         default="Спогади",
     )
 
-    publications_title = models.CharField(
-        "Назва розділу «Публікації»",
-        max_length=100,
-        default="Публікації",
+
+
+    footer_text = models.TextField(
+        "Текст у футері",
+        blank=True,
     )
 
-    gallery_title = models.CharField(
-        "Назва розділу «Галерея»",
-        max_length=100,
-        default="Галерея",
+    copyright_holder = models.CharField(
+        "Правовласник у копірайті",
+        max_length=200,
+        blank=True,
     )
+
     demo_strip_enabled = models.BooleanField(
         "Показувати демо-плашку",
         default=True,
-        help_text="Стрічка «Демонстраційний макет» під шапкою. Вимкнути перед передачею родині.",
+        help_text=(
+            "Стрічка «Демонстраційний макет» під шапкою. "
+            "Вимкнути перед передачею родині."
+        ),
     )
 
     class Meta:
@@ -63,13 +108,20 @@ class SiteSettings(models.Model):
         cache.delete("site_settings")
 
     def delete(self, *args, **kwargs):
-        pass  # singleton — не видаляється
+        pass
 
     @classmethod
     def load(cls):
         cached = cache.get("site_settings")
         if cached is not None:
             return cached
+
         obj, _ = cls.objects.get_or_create(pk=1)
-        cache.set("site_settings", obj, 300)
+
+        cache.set(
+            "site_settings",
+            obj,
+            300,
+        )
+
         return obj
