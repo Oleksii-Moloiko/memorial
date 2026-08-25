@@ -9,13 +9,12 @@
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Про нього</p>
+      <p class="eyebrow">{{ site_settings.life_hero_eyebrow }}</p>
       <h1>{{ site_settings.life_title }}</h1>
     </div>
  
     <p class="page-lead">
-      Людина поза подвигом: дитинство, навчання, родина,
-      інтереси й підтверджена хронологія життя.
+      {{ site_settings.life_hero_description }}
     </p>
   </div>
 </section>
@@ -98,13 +97,13 @@
           </div>
         {% else %}
           <p>
-            Повний життєпис ще готується до публікації.
+            {{ site_settings.life_empty_biography_text }}
           </p>
         {% endif %}
  
       {% else %}
         <p class="intro-paragraph">
-          Інформація для цієї сторінки ще готується.
+          {{ site_settings.life_empty_page_text }}
         </p>
  
         <p>
@@ -121,13 +120,12 @@
  
     <div class="section-heading split-heading">
       <div>
-        <p class="eyebrow">Хронологія</p>
-        <h2>Ключові події</h2>
+        <p class="eyebrow">{{ site_settings.life_timeline_eyebrow }}</p>
+        <h2>{{ site_settings.life_timeline_title }}</h2>
       </div>
  
       <p>
-        До публікації додаються лише події з підтвердженими
-        датами та формулюваннями.
+        {{ site_settings.life_timeline_description }}
       </p>
     </div>
  
@@ -149,10 +147,9 @@
       </ol>
     {% else %}
       <div class="empty-state">
-        <h3>Хронологія ще наповнюється</h3>
+        <h3>{{ site_settings.life_timeline_empty_title }}</h3>
         <p>
-          Підтверджені події з’являться тут після додавання
-          через адміністративну панель.
+          {{ site_settings.life_timeline_empty_text }}
         </p>
       </div>
     {% endif %}
@@ -164,8 +161,8 @@
   <div class="container">
  
     <div class="section-heading">
-      <p class="eyebrow">Фото до історії</p>
-      <h2>Роки, що залишилися у світлинах</h2>
+      <p class="eyebrow">{{ site_settings.life_photos_eyebrow }}</p>
+      <h2>{{ site_settings.life_photos_title }}</h2>
     </div>
  
     <div class="story-strip">

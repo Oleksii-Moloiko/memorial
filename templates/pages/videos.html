@@ -3,7 +3,7 @@
 {% block page_key %}videos{% endblock %}
 
 {% block title %}
-  {{ site_settings.videos_title }} — Пам’ять про Назара Боровицького
+  {{ site_settings.videos_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
@@ -11,13 +11,12 @@
 <section class="page-hero section-dark">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Архівні записи</p>
+      <p class="eyebrow">{{ site_settings.videos_hero_eyebrow }}</p>
       <h1>{{ site_settings.videos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Сімейні записи, інтерв’ю, матеріали зі служби
-      та відео вшанування.
+      {{ site_settings.videos_hero_description }}
     </p>
   </div>
 </section>
@@ -45,7 +44,7 @@
 
         <div class="featured-video-copy">
           <p class="eyebrow">
-            Рекомендоване відео
+            {{ site_settings.videos_featured_label }}
           </p>
 
           <h2>{{ featured_video.title }}</h2>
@@ -82,7 +81,7 @@
           {% if featured_video.transcript %}
             <details class="video-transcript">
               <summary>
-                Текстовий опис відео
+                {{ site_settings.videos_transcript_label }}
               </summary>
 
               <div>
@@ -102,13 +101,12 @@
 
     <div class="section-heading split-heading">
       <div>
-        <p class="eyebrow">Усі записи</p>
-        <h2>Відеоархів</h2>
+        <p class="eyebrow">{{ site_settings.videos_all_records_label }}</p>
+        <h2>{{ site_settings.videos_archive_title }}</h2>
       </div>
 
       <p>
-        Усі матеріали додаються та публікуються
-        тільки через адміністративну панель.
+        {{ site_settings.videos_admin_note }}
       </p>
     </div>
 
@@ -141,11 +139,10 @@
       </div>
     {% elif not featured_video %}
       <div class="empty-state">
-        <h2>Відеоархів ще наповнюється</h2>
+        <h2>{{ site_settings.videos_empty_title }}</h2>
 
         <p>
-          Перевірені відеоматеріали з’являться тут
-          після публікації адміністратором.
+          {{ site_settings.videos_empty_text }}
         </p>
       </div>
     {% endif %}
@@ -154,9 +151,8 @@
       <span aria-hidden="true">CC</span>
 
       <p>
-        <strong>Доступність:</strong>
-        за можливості до відео додається текстовий опис
-        або розшифровка.
+        <strong>{{ site_settings.videos_accessibility_label }}</strong>
+        {{ site_settings.videos_accessibility_text }}
       </p>
     </div>
 

@@ -3,20 +3,20 @@
 {% block page_key %}memories{% endblock %}
 
 {% block title %}
-  {{ site_settings.memories_title }} — Пам’ять про Назара Боровицького
+  {{ site_settings.memories_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
 <section class="page-hero section-dark memories-hero">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Слова близьких</p>
+      <p class="eyebrow">{{ site_settings.memories_hero_eyebrow }}</p>
       <h1>{{ site_settings.memories_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Слова родини, побратимів, друзів і однокласників.
-      Кожен текст публікується лише після ручної модерації.
+      {{ site_settings.memories_hero_description }}
+      {{ site_settings.memories_moderation_note }}
     </p>
   </div>
 </section>
@@ -40,10 +40,9 @@
         </figure>
       {% empty %}
         <div class="empty-state">
-          <h2>Спогадів поки немає</h2>
+          <h2>{{ site_settings.memories_empty_title }}</h2>
           <p>
-            Після перевірки модератором опубліковані спогади
-            з’являться тут.
+            {{ site_settings.memories_empty_text }}
           </p>
         </div>
       {% endfor %}
@@ -54,18 +53,17 @@
 <section class="section section-stone submission-section">
   <div class="container submission-grid">
     <div>
-      <p class="eyebrow">Поділитися спогадом</p>
+      <p class="eyebrow">{{ site_settings.memories_submit_eyebrow }}</p>
 
-      <h2>Залиште кілька слів</h2>
+      <h2>{{ site_settings.memories_submit_title }}</h2>
 
       <p>
-        Кожне повідомлення потрапляє на ручну модерацію
-        й не з’являється на сайті автоматично.
+        {{ site_settings.memories_submit_description }}
       </p>
 
       <div class="moderation-note">
-        <strong>Модерація</strong>
-        <span>Відповідальна особа від родини</span>
+        <strong>{{ site_settings.memories_moderation_label }}</strong>
+        <span>{{ site_settings.memories_moderator_text }}</span>
       </div>
     </div>
 

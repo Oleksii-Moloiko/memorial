@@ -3,7 +3,7 @@
 {% block page_key %}photos{% endblock %}
 
 {% block title %}
-  {{ site_settings.photos_title }} — Пам’ять про Назара Боровицького
+  {{ site_settings.photos_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
@@ -11,13 +11,13 @@
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Фотоархів</p>
+      <p class="eyebrow">{{ site_settings.photos_hero_title }}</p>
       <h1>{{ site_settings.photos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Основний архів світлин, згрупований за періодами життя.
-      Кожне фото публікується лише після перевірки.
+      {{ site_settings.photos_hero_description }}
+      {{ site_settings.photos_verification_note }}
     </p>
   </div>
 </section>
@@ -119,16 +119,15 @@
         data-gallery-empty
         hidden
       >
-        У цій категорії поки немає фотографій.
+        {{ site_settings.photos_category_empty_text }}
       </p>
 
     {% else %}
       <div class="empty-state">
-        <h2>Фотоархів ще наповнюється</h2>
+        <h2>{{ site_settings.photos_empty_title }}</h2>
 
         <p>
-          Перевірені родиною фотографії з’являться тут
-          після публікації.
+          {{ site_settings.photos_empty_text }}
         </p>
       </div>
     {% endif %}

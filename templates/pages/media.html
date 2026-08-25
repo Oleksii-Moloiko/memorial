@@ -3,20 +3,19 @@
 {% block page_key %}media{% endblock %}
 
 {% block title %}
-  {{ site_settings.media_title }} — Пам’ять про Назара Боровицького
+  {{ site_settings.media_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Зовнішні джерела</p>
+      <p class="eyebrow">{{ site_settings.media_hero_eyebrow }}</p>
       <h1>{{ site_settings.media_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Перевірені посилання на публікації, офіційні документи
-      й матеріали вшанування — без копіювання повних текстів.
+      {{ site_settings.media_hero_description }}
     </p>
   </div>
 </section>
@@ -24,11 +23,11 @@
 <section class="section section-paper media-page">
   <div class="container media-layout">
     <aside class="media-sidebar">
-      <p class="eyebrow">Матеріали</p>
+      <p class="eyebrow">{{ site_settings.media_section_title }}</p>
 
       <div class="link-check">
         <strong>{{ mentions|length }} джерел{{ mentions|length|pluralize:",а," }}</strong>
-        <p>Перевірка посилань рекомендована 1–2 рази на рік.</p>
+        <p>{{ site_settings.media_verification_note }}</p>
       </div>
     </aside>
 
@@ -60,10 +59,9 @@
         </article>
       {% empty %}
         <div class="empty-state">
-          <h2>Матеріалів поки немає</h2>
+          <h2>{{ site_settings.media_empty_title }}</h2>
           <p>
-            Перевірені публікації та офіційні джерела
-            з’являться тут пізніше.
+            {{ site_settings.media_empty_text }}
           </p>
         </div>
       {% endfor %}

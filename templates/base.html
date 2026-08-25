@@ -8,7 +8,7 @@
 
     <title>
         {% block title %}
-            {{ seo_title|default:"Пам’ять про Назара Боровицького" }}
+            {{ seo_title|default:site_settings.site_title }}
         {% endblock %}
     </title>
 

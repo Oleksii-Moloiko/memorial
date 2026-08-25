@@ -39,6 +39,139 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "ГОЛОВНА СТОРІНКА",
+            {
+                "fields": (
+                    "home_hero_eyebrow",
+                    "home_empty_title",
+                    "home_empty_text",
+
+                    "home_life_eyebrow",
+                    "home_life_title",
+                    "home_life_description",
+                    "home_life_empty_text",
+
+                    "home_gallery_eyebrow",
+                    "home_gallery_title",
+                    "home_gallery_empty_text",
+
+                    "home_video_title",
+                    "home_video_description",
+
+                    "home_media_eyebrow",
+                    "home_media_title",
+                    "home_media_description",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «ЖИТТЯ»",
+            {
+                "fields": (
+                    "life_hero_eyebrow",
+                    "life_hero_description",
+                    "life_empty_biography_text",
+                    "life_empty_page_text",
+
+                    "life_timeline_eyebrow",
+                    "life_timeline_title",
+                    "life_timeline_description",
+                    "life_timeline_empty_title",
+                    "life_timeline_empty_text",
+
+                    "life_photos_eyebrow",
+                    "life_photos_title",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «ПОДВИГ І СЛУЖБА»",
+            {
+                "fields": (
+                    "service_section_title",
+                    "service_award_title",
+                    "service_safety_eyebrow",
+                    "service_editorial_label",
+                    "service_empty_text",
+                    "service_decree_link_text",
+
+                    "service_checklist_eyebrow",
+                    "service_checklist_title",
+                    "service_checklist_item_1",
+                    "service_checklist_item_2",
+                    "service_checklist_item_3",
+                    "service_checklist_item_4",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «ФОТО»",
+            {
+                "fields": (
+                    "photos_hero_title",
+                    "photos_hero_description",
+                    "photos_verification_note",
+                    "photos_category_empty_text",
+                    "photos_empty_title",
+                    "photos_empty_text",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «ВІДЕО»",
+            {
+                "fields": (
+                    "videos_hero_eyebrow",
+                    "videos_hero_description",
+                    "videos_featured_label",
+                    "videos_transcript_label",
+
+                    "videos_all_records_label",
+                    "videos_archive_title",
+                    "videos_admin_note",
+
+                    "videos_empty_title",
+                    "videos_empty_text",
+
+                    "videos_accessibility_label",
+                    "videos_accessibility_text",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «МАТЕРІАЛИ»",
+            {
+                "fields": (
+                    "media_hero_eyebrow",
+                    "media_hero_description",
+                    "media_section_title",
+                    "media_verification_note",
+                    "media_empty_title",
+                    "media_empty_text",
+                )
+            },
+        ),
+        (
+            "СТОРІНКА «СПОГАДИ»",
+            {
+                "fields": (
+                    "memories_hero_eyebrow",
+                    "memories_hero_description",
+                    "memories_moderation_note",
+
+                    "memories_empty_title",
+                    "memories_empty_text",
+
+                    "memories_submit_eyebrow",
+                    "memories_submit_title",
+                    "memories_submit_description",
+
+                    "memories_moderation_label",
+                    "memories_moderator_text",
+                )
+            },
+        ),
+        (
             "ФУТЕР",
             {
                 "fields": (
