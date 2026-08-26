@@ -109,7 +109,19 @@
       </div>
     </div>
   </div>
-  <div class="hero-scroll" aria-hidden="true">Гортайте, щоб дізнатися більше <span>↓</span></div>
+    <div class="hero-scroll">
+      <span class="hero-scroll__label">
+        Гортайте, щоб дізнатися більше
+      </span>
+
+      <button
+        type="button"
+        class="hero-scroll__dot"
+        aria-label="Перейти до наступного розділу"
+      >
+        <span class="hero-scroll__arrow" aria-hidden="true">↓</span>
+      </button>
+  </div>
 </section>
 
 {% if biography.signature_quote %}

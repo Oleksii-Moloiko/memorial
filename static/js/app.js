@@ -318,5 +318,24 @@
       }
     }
   );
+/*
+ * Hero scroll hint
+ */
+
+const heroScrollDot =
+  document.querySelector(".hero-scroll__dot");
+
+heroScrollDot?.addEventListener("click", () => {
+  const hero =
+    document.querySelector(".hero");
+
+  const nextSection =
+    hero?.nextElementSibling;
+
+  nextSection?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+});
 
 })();
