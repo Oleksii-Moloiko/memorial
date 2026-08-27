@@ -138,47 +138,105 @@
       <div><p class="eyebrow">{{ site_settings.home_life_eyebrow }}</p><h2>{{ site_settings.home_life_title }}</h2></div>
       <p>{{ site_settings.home_life_description }}</p>
     </div>
-    <div class="timeline-preview">
-      {% for event in timeline_preview %}
-        <article>
-          <time>{{ event.date_label }}</time>
-          <h3>{{ event.title }}</h3>
+    <div class="timeline-carousel" data-timeline-carousel>
+      <div class="timeline-carousel__sticky" data-timeline-sticky>
 
-          {% if event.description %}
-            <p>{{ event.description }}</p>
-          {% endif %}
-        </article>
-      {% empty %}
-        <p>{{ site_settings.home_life_empty_text }}</p>
-      {% endfor %}
+        <div class="timeline-carousel__viewport">
+          <div class="timeline-carousel__track" data-timeline-track>
+
+            {% for event in timeline_preview %}
+              <article
+                class="timeline-carousel__card"
+                data-timeline-card
+              >
+                <time class="timeline-carousel__year">
+                  {{ event.date_label }}
+                </time>
+
+                <div class="timeline-carousel__content">
+                  <h3>{{ event.title }}</h3>
+
+                  {% if event.description %}
+                    <p>{{ event.description|truncatewords:24 }}</p>
+                  {% endif %}
+
+                  <a
+                    class="timeline-carousel__more"
+                    href="{% url 'pages:life' %}#timeline-event-{{ event.id }}"
+                  >
+                    Дивитись далі →
+                  </a>
+                </div>
+              </article>
+
+            {% empty %}
+              <p>{{ site_settings.home_life_empty_text }}</p>
+            {% endfor %}
+
+          </div>
+        </div>
+
+        {% if timeline_preview %}
+          <div class="timeline-carousel__ruler">
+
+            <div
+              class="timeline-carousel__ticks"
+              data-timeline-ticks
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="timeline-carousel__labels"
+              data-timeline-labels
+            >
+              {% for event in timeline_preview %}
+                <span>
+                  {{ event.date_label }}
+                </span>
+              {% endfor %}
+            </div>
+
+          </div>
+        {% endif %}
+
+      </div>
     </div>
-    <a class="text-link" href="{% url 'pages:life' %}">Повна хронологія <span aria-hidden="true">→</span></a>
+    <a
+      class="text-link"
+      href="{% url 'pages:life' %}#timeline"
+    >
+      Читати далі <span aria-hidden="true">→</span>
+    </a>
   </div>
 </section>
 
 <section class="section section-stone">
   <div class="container">
     <div class="section-heading"><p class="eyebrow">{{ site_settings.home_gallery_eyebrow }}</p><h2>{{ site_settings.home_gallery_title }}</h2></div>
-    <div class="home-gallery">
-      {% for photo in gallery_preview %}
-      <a
-        class="gallery-teaser {{ photo.layout_size|cut:'span-' }} {% if not photo.image %}media-placeholder{% endif %} {% cycle 'tone-a' 'tone-b' 'tone-c' 'tone-d' 'tone-e' 'tone-f' %}"
-        href="{% url 'pages:photos' %}"
-      >
-        {% if photo.image %}
-          <img
-            src="{{ photo.image.url }}"
-            alt="{{ photo.caption }}"
-            loading="lazy"
-            width="{{ photo.image.width }}"
-            height="{{ photo.image.height }}"
+    <div class="home-photo-mosaic">
+      <div class="home-photo-mosaic__grid">
+        {% for photo in gallery_preview %}
+          <a
+            class="home-photo-mosaic__item {% if forloop.first %}is-portrait{% else %}is-landscape{% endif %}"
+            href="{% url 'pages:photos' %}"
           >
-        {% endif %}
-        <span>{{ photo.caption }}</span>
-      </a>
-      {% empty %}
-      <div class="gallery-teaser media-placeholder tone-a"><span>{{ site_settings.home_gallery_empty_text }}</span></div>
-      {% endfor %}
+            <img
+              src="{{ photo.image.url }}"
+              alt="{{ photo.alt_text|default:photo.caption }}"
+              loading="lazy"
+              width="{{ photo.image.width }}"
+              height="{{ photo.image.height }}"
+            >
+            {% if photo.caption %}
+              <span>{{ photo.caption }}</span>
+            {% endif %}
+          </a>
+        {% empty %}
+          <div class="home-photo-mosaic__empty media-placeholder tone-a">
+            <span>{{ site_settings.home_gallery_empty_text }}</span>
+          </div>
+        {% endfor %}
+      </div>
     </div>
     <a class="button button-secondary" href="{% url 'pages:photos' %}">Відкрити весь фотоархів</a>
   </div>

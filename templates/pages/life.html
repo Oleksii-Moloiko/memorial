@@ -115,7 +115,10 @@
   </div>
 </section>
  
-<section class="section section-stone timeline-section">
+<section
+  class="section section-stone timeline-section"
+  id="timeline"
+>
   <div class="container">
  
     <div class="section-heading split-heading">
@@ -132,7 +135,7 @@
     {% if timeline %}
       <ol class="timeline-list">
         {% for event in timeline %}
-          <li>
+          <<li id="timeline-event-{{ event.id }}">
             <time>{{ event.date_label }}</time>
  
             <div>

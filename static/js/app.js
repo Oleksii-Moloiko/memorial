@@ -202,6 +202,51 @@
       "[data-gallery-empty]"
     );
 
+  const galleryLayoutClasses = [
+    "layout-portrait-left",
+    "layout-landscape-right",
+    "layout-full",
+    "layout-landscape-left",
+    "layout-portrait-right",
+  ];
+
+  const galleryPattern = [
+    "layout-portrait-left",
+    "layout-landscape-right",
+    "layout-landscape-right",
+    "layout-landscape-right",
+    "layout-full",
+    "layout-landscape-left",
+    "layout-landscape-left",
+    "layout-landscape-left",
+    "layout-portrait-right",
+    "layout-full",
+  ];
+
+  const applyGalleryLayout = () => {
+    let visibleIndex = 0;
+
+    galleryCards.forEach((card) => {
+      card.classList.remove(
+        ...galleryLayoutClasses
+      );
+
+      if (card.classList.contains("is-hidden")) {
+        return;
+      }
+
+      card.classList.add(
+        galleryPattern[
+          visibleIndex % galleryPattern.length
+        ]
+      );
+
+      visibleIndex += 1;
+    });
+  };
+
+  applyGalleryLayout();
+
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const selectedCategory =
@@ -238,6 +283,8 @@
           visibleCount += 1;
         }
       });
+
+      applyGalleryLayout();
 
       if (galleryEmpty) {
         galleryEmpty.hidden =
@@ -338,4 +385,299 @@ heroScrollDot?.addEventListener("click", () => {
   });
 });
 
+
+const timelineCarousel = document.querySelector('[data-timeline-carousel]');
+
+if (timelineCarousel) {
+  const viewport = timelineCarousel.querySelector(
+    '.timeline-carousel__viewport'
+  );
+
+  const track = timelineCarousel.querySelector(
+    '[data-timeline-track]'
+  );
+
+
+
+  const ticksContainer = timelineCarousel.querySelector(
+    '[data-timeline-ticks]'
+  );
+
+  const labelsContainer = timelineCarousel.querySelector(
+    '[data-timeline-labels]'
+  );
+
+  const labels = labelsContainer
+    ? Array.from(labelsContainer.children)
+    : [];
+
+  const cards = Array.from(
+    timelineCarousel.querySelectorAll('[data-timeline-card]')
+  );
+
+  const MINOR_TICKS = 9;
+  const majorTicks = [];
+  let allTicks = [];
+
+  const buildTimelineTicks = () => {
+    if (!ticksContainer || !labels.length) return;
+
+    ticksContainer.innerHTML = '';
+    majorTicks.length = 0;
+
+    labels.forEach((label, index) => {
+      const major = document.createElement('i');
+
+      major.className =
+        'timeline-carousel__tick timeline-carousel__tick--major';
+
+      ticksContainer.appendChild(major);
+      majorTicks.push(major);
+
+      if (index < labels.length - 1) {
+        for (let i = 0; i < MINOR_TICKS; i += 1) {
+          const minor = document.createElement('i');
+
+          minor.className = 'timeline-carousel__tick';
+
+          ticksContainer.appendChild(minor);
+        }
+      }
+    });
+
+    allTicks = Array.from(
+      ticksContainer.querySelectorAll('.timeline-carousel__tick')
+    );
+  };
+
+  const updateTimelineRuler = (scrollRatio, activeIndex) => {
+    if (!allTicks.length || !labels.length) return;
+
+    const safeRatio = Math.max(
+      0,
+      Math.min(scrollRatio, 1)
+    );
+
+    const safeIndex = Math.max(
+      0,
+      Math.min(activeIndex, labels.length - 1)
+    );
+
+    const filledIndex = Math.round(
+      safeRatio * (allTicks.length - 1)
+    );
+
+    allTicks.forEach((tick, index) => {
+      tick.classList.toggle(
+        'is-filled',
+        index <= filledIndex
+      );
+    });
+
+    labels.forEach((label, index) => {
+      label.classList.toggle(
+        'is-current',
+        index === safeIndex
+      );
+    });
+
+    majorTicks.forEach((tick, index) => {
+      tick.classList.toggle(
+        'is-current',
+        index === safeIndex
+      );
+    });
+  };
+
+  const mobileMedia = window.matchMedia('(max-width: 767px)');
+
+  let currentX = 0;
+
+  const getDesktopMaxScroll = () => {
+    return Math.max(
+      0,
+      track.scrollWidth - viewport.clientWidth
+    );
+  };
+
+  const updateDesktop = () => {
+    if (mobileMedia.matches) return;
+
+    const maxScroll = getDesktopMaxScroll();
+
+    currentX = Math.max(
+      0,
+      Math.min(currentX, maxScroll)
+    );
+
+    track.style.transform =
+      `translate3d(${-currentX}px, 0, 0)`;
+
+    const scrollRatio =
+      maxScroll > 0
+        ? currentX / maxScroll
+        : 0;
+
+    let activeIndex = 0;
+
+    if (cards.length > 1) {
+      const cardStep =
+        cards[1].offsetLeft - cards[0].offsetLeft;
+
+      if (cardStep > 0) {
+        activeIndex = Math.round(
+          currentX / cardStep
+        );
+      }
+    }
+
+    activeIndex = Math.max(
+      0,
+      Math.min(activeIndex, cards.length - 1)
+    );
+
+    updateTimelineRuler(
+      scrollRatio,
+      activeIndex
+    );
+  };
+
+  const updateMobile = () => {
+    if (!mobileMedia.matches) return;
+
+    const maxScroll =
+      viewport.scrollWidth - viewport.clientWidth;
+
+    const scrollRatio =
+      maxScroll > 0
+        ? viewport.scrollLeft / maxScroll
+        : 0;
+
+    let activeIndex = 0;
+
+    if (cards.length > 1) {
+      const cardStep =
+        cards[1].offsetLeft - cards[0].offsetLeft;
+
+      if (cardStep > 0) {
+        activeIndex = Math.round(
+          viewport.scrollLeft / cardStep
+        );
+      }
+    }
+
+    activeIndex = Math.max(
+      0,
+      Math.min(activeIndex, cards.length - 1)
+    );
+
+    updateTimelineRuler(
+      scrollRatio,
+      activeIndex
+    );
+  };
+
+  const updateDesktopSectionHeight = () => {
+    if (mobileMedia.matches) {
+      timelineCarousel.style.height = '';
+      return;
+    }
+
+    const maxScroll = getDesktopMaxScroll();
+
+    const EXIT_HOLD = window.innerHeight * 0.35;
+
+    const extraScroll =
+      Math.max(
+        window.innerHeight * 1.2,
+        maxScroll
+      ) + EXIT_HOLD;
+
+    timelineCarousel.style.height =
+      `${window.innerHeight + extraScroll}px`;
+  };
+
+  const updateDesktopFromScroll = () => {
+    if (mobileMedia.matches) return;
+
+    updateDesktopSectionHeight();
+
+    const maxScroll = getDesktopMaxScroll();
+
+    if (maxScroll <= 0) {
+      currentX = 0;
+      updateDesktop();
+      return;
+    }
+
+    const rect = timelineCarousel.getBoundingClientRect();
+
+    const scrollableDistance =
+      timelineCarousel.offsetHeight - window.innerHeight;
+
+    if (scrollableDistance <= 0) return;
+
+    const scrolledInsideSection = -rect.top;
+
+    const EXIT_HOLD = window.innerHeight * 0.35;
+
+    const movementDistance = Math.max(
+      1,
+      scrollableDistance - EXIT_HOLD
+    );
+
+    const scrollProgress = Math.max(
+      0,
+      Math.min(
+        scrolledInsideSection / movementDistance,
+        1
+      )
+    );
+
+    currentX = scrollProgress * maxScroll;
+
+    updateDesktop();
+  };
+
+  const handleBreakpointChange = () => {
+    if (mobileMedia.matches) {
+      track.style.transform = 'none';
+      viewport.scrollLeft = 0;
+      updateMobile();
+    } else {
+      viewport.scrollLeft = 0;
+      updateDesktopFromScroll();
+    }
+  };
+
+  window.addEventListener(
+    'scroll',
+    updateDesktopFromScroll,
+    { passive: true }
+  );
+
+  viewport.addEventListener(
+    'scroll',
+    updateMobile,
+    { passive: true }
+  );
+
+  window.addEventListener('resize', () => {
+    if (mobileMedia.matches) {
+      timelineCarousel.style.height = '';
+      updateMobile();
+    } else {
+      updateDesktopSectionHeight();
+      updateDesktopFromScroll();
+    }
+  });
+
+  mobileMedia.addEventListener(
+    'change',
+    handleBreakpointChange
+  );
+
+  buildTimelineTicks();
+  handleBreakpointChange();
+}
 })();

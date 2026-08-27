@@ -31,11 +31,11 @@ def home(request):
     context = {
         "biography": Biography.objects.first(),
 
-        "timeline_preview": TimelineEvent.objects.all()[:3],
+        "timeline_preview": TimelineEvent.objects.all(),
 
         "gallery_preview": Photo.objects.filter(
             is_published=True,
-        )[:6],
+        )[:4],
 
         "featured_memory": Memory.objects.filter(
             status=Memory.Status.APPROVED,

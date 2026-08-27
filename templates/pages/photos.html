@@ -82,10 +82,11 @@
         </button>
       </div>
 
-      <div class="gallery-grid">
+      <div class="gallery-mosaic">
+        <div class="gallery-grid">
         {% for photo in photos %}
           <figure
-            class="gallery-card {{ photo.layout_size }}"
+            class="gallery-card"
             data-category="{{ photo.category }}"
           >
             <button
@@ -112,6 +113,7 @@
             {% endif %}
           </figure>
         {% endfor %}
+        </div>
       </div>
 
       <p
