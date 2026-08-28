@@ -181,50 +181,92 @@
  
     <div class="story-strip">
       {% if childhood_photo %}
-        <div class="tone-a">
+        <a
+          class="story-tile tone-a"
+          href="{% url 'pages:photos' %}?category=family"
+          aria-label="Дитинство — дивитись більше"
+        >
           <img
+            class="story-tile__img"
             src="{{ childhood_photo.image.url }}"
             alt="{{ childhood_photo.alt_text|default:'Дитинство' }}"
             loading="lazy"
             width="{{ childhood_photo.image.width }}"
             height="{{ childhood_photo.image.height }}"
           >
-          <span>{{ childhood_photo.caption|default:"Дитинство" }}</span>
-        </div>
+
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              Дивитись більше <span>→</span>
+            </span>
+          </span>
+
+          <span class="story-tile__tag">
+            {{ childhood_photo.caption|default:"Дитинство" }}
+          </span>
+        </a>
       {% else %}
         <div class="media-placeholder tone-a">
           <span>Дитинство</span>
         </div>
       {% endif %}
- 
+
       {% if study_photo %}
-        <div class="tone-b">
+        <a
+          class="story-tile tone-b"
+          href="{% url 'pages:photos' %}?category=study"
+          aria-label="Навчання — дивитись більше"
+        >
           <img
+            class="story-tile__img"
             src="{{ study_photo.image.url }}"
             alt="{{ study_photo.alt_text|default:'Навчання' }}"
             loading="lazy"
             width="{{ study_photo.image.width }}"
             height="{{ study_photo.image.height }}"
           >
-          <span>{{ study_photo.caption|default:"Навчання" }}</span>
-        </div>
+
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              Дивитись більше <span>→</span>
+            </span>
+          </span>
+
+          <span class="story-tile__tag">
+            {{ study_photo.caption|default:"Навчання" }}
+          </span>
+        </a>
       {% else %}
         <div class="media-placeholder tone-b">
           <span>Навчання</span>
         </div>
       {% endif %}
- 
+
       {% if family_photo %}
-        <div class="tone-c">
+        <a
+          class="story-tile tone-c"
+          href="{% url 'pages:photos' %}?category=family"
+          aria-label="Родина — дивитись більше"
+        >
           <img
+            class="story-tile__img"
             src="{{ family_photo.image.url }}"
             alt="{{ family_photo.alt_text|default:'Родина' }}"
             loading="lazy"
             width="{{ family_photo.image.width }}"
             height="{{ family_photo.image.height }}"
           >
-          <span>{{ family_photo.caption|default:"Родина" }}</span>
-        </div>
+
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              Дивитись більше <span>→</span>
+            </span>
+          </span>
+
+          <span class="story-tile__tag">
+            {{ family_photo.caption|default:"Родина" }}
+          </span>
+        </a>
       {% else %}
         <div class="media-placeholder tone-c">
           <span>Родина</span>

@@ -184,6 +184,180 @@
     });
 
   /*
+ * Life biography sidebar
+ *
+ * Високий sidebar рухається разом зі сторінкою.
+ * При скролі вниз зупиняється, коли видно його низ.
+ * При скролі вгору зупиняється під header.
+ */
+
+  const biographyAside =
+    document.querySelector(".biography-aside");
+
+  if (biographyAside) {
+    const biographyDesktop =
+      window.matchMedia("(min-width: 961px)");
+
+    const STICKY_TOP = 118;
+    const STICKY_BOTTOM = 24;
+
+    let lastScrollY = window.scrollY;
+    let stickyTop = STICKY_TOP;
+    let ticking = false;
+
+    const clamp = (value, min, max) =>
+      Math.min(Math.max(value, min), max);
+
+    const getStickyLimits = () => {
+      const asideHeight =
+        biographyAside.offsetHeight;
+
+      const minTop = Math.min(
+        STICKY_TOP,
+        window.innerHeight -
+          STICKY_BOTTOM -
+          asideHeight
+      );
+
+      return {
+        minTop,
+        maxTop: STICKY_TOP,
+      };
+    };
+
+    const resetBiographySticky = () => {
+      lastScrollY = window.scrollY;
+
+      if (!biographyDesktop.matches) {
+        biographyAside.classList.remove(
+          "is-sticky"
+        );
+
+        biographyAside.style.removeProperty(
+          "--biography-sticky-top"
+        );
+
+        return;
+      }
+
+      const rect =
+        biographyAside.getBoundingClientRect();
+
+      const { minTop, maxTop } =
+        getStickyLimits();
+
+      stickyTop = clamp(
+        rect.top,
+        minTop,
+        maxTop
+      );
+
+      biographyAside.style.setProperty(
+        "--biography-sticky-top",
+        `${stickyTop}px`
+      );
+
+      biographyAside.classList.add(
+        "is-sticky"
+      );
+    };
+
+    const updateBiographySticky = () => {
+      ticking = false;
+
+      if (!biographyDesktop.matches) {
+        lastScrollY = window.scrollY;
+        return;
+      }
+
+      const currentScrollY =
+        window.scrollY;
+
+      const scrollDelta =
+        currentScrollY - lastScrollY;
+
+      const { minTop, maxTop } =
+        getStickyLimits();
+
+      /*
+       * Якщо sidebar повністю влазить у viewport,
+       * використовуємо звичайний sticky під header.
+       */
+      if (
+        biographyAside.offsetHeight <=
+        window.innerHeight -
+          STICKY_TOP -
+          STICKY_BOTTOM
+      ) {
+        stickyTop = STICKY_TOP;
+      } else {
+      /*
+       * Вниз:
+       * stickyTop поступово зменшується,
+       * доки низ sidebar не стане видимим.
+       *
+       * Вгору:
+       * stickyTop збільшується,
+       * доки верх не дійде до header.
+       */
+        stickyTop = clamp(
+          stickyTop - scrollDelta,
+          minTop,
+          maxTop
+        );
+      }
+
+      biographyAside.style.setProperty(
+        "--biography-sticky-top",
+        `${stickyTop}px`
+      );
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) {
+          return;
+        }
+
+        ticking = true;
+
+        requestAnimationFrame(
+          updateBiographySticky
+        );
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      resetBiographySticky
+    );
+
+    biographyDesktop.addEventListener(
+      "change",
+      resetBiographySticky
+    );
+
+    if ("ResizeObserver" in window) {
+      const biographyResizeObserver =
+        new ResizeObserver(() => {
+          resetBiographySticky();
+        });
+
+      biographyResizeObserver.observe(
+        biographyAside
+      );
+    }
+
+    resetBiographySticky();
+  }
+
+
+
+  /*
    * Photo gallery filters
    */
 
@@ -215,6 +389,43 @@
     GALLERY_PAGE_SIZE;
 
   let activeGalleryFilter = "all";
+
+  const galleryUrlParams =
+    new URLSearchParams(window.location.search);
+
+  const requestedGalleryFilter =
+    galleryUrlParams.get("category");
+
+  const availableGalleryFilters =
+    Array.from(filterButtons).map(
+      (button) => button.dataset.filter
+    );
+
+  if (
+    requestedGalleryFilter &&
+    availableGalleryFilters.includes(
+      requestedGalleryFilter
+    )
+  ) {
+    activeGalleryFilter =
+      requestedGalleryFilter;
+
+    filterButtons.forEach((button) => {
+      const isActive =
+        button.dataset.filter ===
+        requestedGalleryFilter;
+
+      button.classList.toggle(
+        "active",
+        isActive
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        String(isActive)
+      );
+    });
+  }
 
   const updateGalleryVisibility = () => {
     let matchedIndex = 0;
@@ -467,6 +678,18 @@
       mirrored = !mirrored;
     }
   };
+  const initialMatchingCount =
+    Array.from(galleryCards).filter(
+      (card) =>
+        activeGalleryFilter === "all" ||
+        card.dataset.category ===
+          activeGalleryFilter
+    ).length;
+
+  if (galleryEmpty) {
+    galleryEmpty.hidden =
+      initialMatchingCount !== 0;
+  }
 
   updateGalleryVisibility();
 
