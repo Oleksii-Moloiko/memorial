@@ -76,20 +76,31 @@
     <article class="longform">
       {% if biography %}
  
-        <p class="eyebrow">{{ site_settings.life_title }}</p>
-        <h2>{{ biography.full_name }}</h2>
- 
-        {% if biography.summary %}
-          <p class="intro-paragraph">
-            {{ biography.summary }}
-          </p>
-        {% endif %}
- 
-        {% if biography.signature_quote %}
-          <blockquote class="inline-quote">
-            «{{ biography.signature_quote }}»
-          </blockquote>
-        {% endif %}
+        <div class="life-head">
+          <h2 class="life-head__name">
+            {{ biography.full_name }}
+          </h2>
+
+          <div class="life-head__rule"></div>
+
+          {% if biography.summary %}
+            <div class="life-head__epigraph">
+              <p class="life-head__key">
+                Життєвий<br>принцип
+              </p>
+
+              <p class="life-head__motto">
+                {{ biography.summary }}
+              </p>
+            </div>
+          {% endif %}
+
+          {% if biography.signature_quote %}
+            <p class="life-head__credo">
+              {{ biography.signature_quote }}
+            </p>
+          {% endif %}
+        </div>
  
         {% if biography.full_text %}
           <div class="biography-content">
