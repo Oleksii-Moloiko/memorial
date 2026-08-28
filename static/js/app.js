@@ -196,11 +196,89 @@
     document.querySelectorAll(
       ".gallery-card[data-category]"
     );
+  const galleryGrid =
+    document.querySelector(".gallery-grid");
 
   const galleryEmpty =
     document.querySelector(
       "[data-gallery-empty]"
     );
+
+  const galleryMoreButton =
+    document.querySelector(
+      "[data-gallery-more]"
+    );
+
+  const GALLERY_PAGE_SIZE = 10;
+
+  let galleryVisibleLimit =
+    GALLERY_PAGE_SIZE;
+
+  let activeGalleryFilter = "all";
+
+  const updateGalleryVisibility = () => {
+    let matchedIndex = 0;
+
+    galleryCards.forEach((card) => {
+      const matchesFilter =
+        activeGalleryFilter === "all" ||
+        card.dataset.category === activeGalleryFilter;
+
+      const shouldShow =
+        matchesFilter &&
+        matchedIndex < galleryVisibleLimit;
+
+      card.classList.toggle(
+        "is-hidden",
+        !shouldShow
+      );
+
+      if (matchesFilter) {
+        matchedIndex += 1;
+      }
+    });
+
+    if (galleryMoreButton) {
+      galleryMoreButton.hidden =
+        matchedIndex <= galleryVisibleLimit;
+    }
+
+    applyGalleryLayout();
+  };
+
+  if (galleryMoreButton) {
+    galleryMoreButton.addEventListener(
+      "click",
+      () => {
+        const matchingCards =
+          Array.from(galleryCards).filter(
+            (card) =>
+              activeGalleryFilter === "all" ||
+              card.dataset.category ===
+                activeGalleryFilter
+          );
+
+        const firstNewCard =
+          matchingCards[galleryVisibleLimit];
+
+        galleryVisibleLimit +=
+          GALLERY_PAGE_SIZE;
+
+        updateGalleryVisibility();
+
+        if (firstNewCard) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              firstNewCard.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            });
+          });
+        }
+      }
+    );
+  }
 
   const galleryLayoutClasses = [
     "layout-portrait-left",
@@ -224,35 +302,184 @@
   ];
 
   const applyGalleryLayout = () => {
-    let visibleIndex = 0;
+    if (!galleryGrid || !galleryCards.length) {
+      return;
+    }
 
-    galleryCards.forEach((card) => {
-      card.classList.remove(
-        ...galleryLayoutClasses
+    const allCards = Array.from(galleryCards).sort(
+      (a, b) =>
+        Number(a.dataset.galleryIndex) -
+        Number(b.dataset.galleryIndex)
+    );
+
+  /*
+   * Повертаємо картки з попередніх груп назад
+   * перед повторною побудовою сітки.
+   * Це важливо для роботи фільтрів.
+   */
+    allCards.forEach((card) => {
+      galleryGrid.appendChild(card);
+    });
+
+    galleryGrid
+      .querySelectorAll(".gallery-band")
+      .forEach((band) => band.remove());
+
+    allCards.forEach((card) => {
+      card.classList.remove(...galleryLayoutClasses);
+    });
+
+    const visibleCards = allCards.filter(
+      (card) => !card.classList.contains("is-hidden")
+    );
+
+    galleryGrid.classList.add("is-grouped");
+
+    let index = 0;
+    let mirrored = false;
+
+    while (index < visibleCards.length) {
+      const splitCards = visibleCards.slice(
+        index,
+        index + 4
       );
 
-      if (card.classList.contains("is-hidden")) {
-        return;
+      if (splitCards.length) {
+        const band = document.createElement("div");
+
+        band.className =
+          "gallery-band gallery-band--split";
+
+        const stack = document.createElement("div");
+
+
+        stack.className =
+          "gallery-band__stack";
+
+        /*
+ * Якщо для повного split-блоку не вистачає 4 фото,
+ * показуємо залишок звичайними 16:9 на всю ширину.
+ */
+        if (splitCards.length < 4) {
+          band.classList.remove("gallery-band--split");
+          band.classList.add("gallery-band--partial");
+
+          splitCards.forEach((card) => {
+            card.classList.add("layout-full");
+            band.appendChild(card);
+          });
+
+          galleryGrid.appendChild(band);
+
+          index += splitCards.length;
+          break;
+        }
+
+        if (!mirrored) {
+        /*
+         * 9:16 | 16:9
+         *      | 16:9
+         *      | 16:9
+         */
+          const portrait = splitCards[0];
+          const landscapes = splitCards.slice(1);
+
+          portrait.classList.add(
+            "layout-portrait-left"
+          );
+
+          landscapes.forEach((card) => {
+            card.classList.add(
+              "layout-landscape-right"
+            );
+
+            stack.appendChild(card);
+          });
+
+          band.appendChild(portrait);
+          band.appendChild(stack);
+        } else {
+        /*
+         * 16:9 |
+         * 16:9 | 9:16
+         * 16:9 |
+         */
+          const hasFullSplit = splitCards.length === 4;
+
+          const portrait = hasFullSplit
+            ? splitCards[3]
+            : null;
+
+          const landscapes = hasFullSplit
+            ? splitCards.slice(0, 3)
+            : splitCards;
+
+          if (!hasFullSplit) {
+            band.classList.remove("gallery-band--split");
+            band.classList.add("gallery-band--partial");
+          }
+
+          landscapes.forEach((card) => {
+            card.classList.add(
+              "layout-landscape-left"
+            );
+
+            stack.appendChild(card);
+          });
+
+          band.appendChild(stack);
+
+          if (portrait) {
+            portrait.classList.add(
+              "layout-portrait-right"
+            );
+
+            band.appendChild(portrait);
+          }
+        }
+
+        galleryGrid.appendChild(band);
+
+        index += splitCards.length;
       }
 
-      card.classList.add(
-        galleryPattern[
-          visibleIndex % galleryPattern.length
-        ]
-      );
+    /*
+     * Після кожних чотирьох фото —
+     * велике 16:9.
+     */
+      if (index < visibleCards.length) {
+        const fullCard = visibleCards[index];
 
-      visibleIndex += 1;
-    });
+        const fullBand =
+          document.createElement("div");
+
+        fullBand.className =
+          "gallery-band gallery-band--full";
+
+        fullCard.classList.add("layout-full");
+
+        fullBand.appendChild(fullCard);
+        galleryGrid.appendChild(fullBand);
+
+        index += 1;
+      }
+
+      mirrored = !mirrored;
+    }
   };
 
-  applyGalleryLayout();
+  updateGalleryVisibility();
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const selectedCategory =
         button.dataset.filter;
 
-      let visibleCount = 0;
+      activeGalleryFilter =
+        selectedCategory;
+
+      galleryVisibleLimit =
+        GALLERY_PAGE_SIZE;
 
       filterButtons.forEach((item) => {
         const isActive = item === button;
@@ -268,28 +495,20 @@
         );
       });
 
-      galleryCards.forEach((card) => {
-        const shouldShow =
-          selectedCategory === "all" ||
-          card.dataset.category ===
-            selectedCategory;
-
-        card.classList.toggle(
-          "is-hidden",
-          !shouldShow
-        );
-
-        if (shouldShow) {
-          visibleCount += 1;
-        }
-      });
-
-      applyGalleryLayout();
+      const matchingCount =
+        Array.from(galleryCards).filter(
+          (card) =>
+            selectedCategory === "all" ||
+            card.dataset.category ===
+              selectedCategory
+        ).length;
 
       if (galleryEmpty) {
         galleryEmpty.hidden =
-          visibleCount !== 0;
+          matchingCount !== 0;
       }
+
+      updateGalleryVisibility();
     });
   });
 

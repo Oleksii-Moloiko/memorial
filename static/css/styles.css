@@ -953,11 +953,14 @@ body.wireframe{--ink:#111;--paper:#fff;--paper-2:#fff;--stone:#eee;--olive:#111;
 
 .gallery-grid {
   --photo-gap: 2.207cqw;
+
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-flow: dense;
+
   column-gap: var(--photo-gap);
   row-gap: var(--photo-gap);
+
   align-items: stretch;
 }
 
@@ -987,6 +990,58 @@ body.wireframe{--ink:#111;--paper:#fff;--paper-2:#fff;--stone:#eee;--olive:#111;
 .gallery-card.layout-portrait-right {
   grid-column: 2;
   grid-row: span 3;
+}
+
+
+/* 16:9 */
+.gallery-card.layout-landscape-left .gallery-open,
+.gallery-card.layout-landscape-right .gallery-open,
+.gallery-card.layout-full .gallery-open {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+
+/* 9:16 — висоту задають три сусідні 16:9 */
+.gallery-card.layout-portrait-left .gallery-open,
+.gallery-card.layout-portrait-right .gallery-open {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Фото завжди заповнює слот */
+.gallery-card .gallery-open img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-card .gallery-open {
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-band--partial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--photo-gap);
+}
+
+.gallery-band--partial .gallery-card {
+  width: 100%;
+}
+
+.gallery-band--partial .gallery-open {
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
 
 .gallery-card .gallery-open,
@@ -1055,6 +1110,95 @@ body.wireframe{--ink:#111;--paper:#fff;--paper-2:#fff;--stone:#eee;--olive:#111;
   }
 }
 
+/* Photo gallery grouped layout */
+
+.gallery-grid.is-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: var(--photo-gap);
+}
+
+.gallery-band {
+  display: grid;
+  width: 100%;
+  gap: var(--photo-gap);
+}
+
+.gallery-band--split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gallery-band--full {
+  grid-template-columns: 1fr;
+}
+
+.gallery-band__stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--photo-gap);
+}
+
+.gallery-band .gallery-card {
+  width: 100%;
+}
+
+.gallery-band--split .gallery-card.layout-portrait-left,
+.gallery-band--split .gallery-card.layout-portrait-right,
+.gallery-band--split .gallery-card.layout-landscape-left,
+.gallery-band--split .gallery-card.layout-landscape-right,
+.gallery-band--full .gallery-card.layout-full {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.gallery-band--full .gallery-card.layout-full .gallery-open {
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 700px) {
+  .gallery-grid.is-grouped {
+    gap: 14px;
+  }
+
+  .gallery-band,
+  .gallery-band--split,
+  .gallery-band--full,
+  .gallery-band--partial {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .gallery-band__stack {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .gallery-card,
+  .gallery-card.layout-portrait-left,
+  .gallery-card.layout-portrait-right,
+  .gallery-card.layout-landscape-left,
+  .gallery-card.layout-landscape-right,
+  .gallery-card.layout-full {
+    grid-column: auto;
+    grid-row: auto;
+    width: 100%;
+  }
+
+  .gallery-card .gallery-open {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 .timeline-list li {
   scroll-margin-top: 120px;
 }
@@ -1083,4 +1227,42 @@ body.wireframe{--ink:#111;--paper:#fff;--paper-2:#fff;--stone:#eee;--olive:#111;
 
 .timeline-carousel__more:hover {
   opacity: 0.7;
+}
+
+.gallery-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.gallery-more__button {
+  min-width: 180px;
+  padding: 14px 24px;
+
+  border: 1px solid rgba(60, 74, 60, 0.35);
+  border-radius: 6px;
+
+  background: transparent;
+  color: #3c4a3c;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.gallery-more__button:hover {
+  background: #3c4a3c;
+  color: #f0efe2;
+  border-color: #3c4a3c;
+}
+
+.gallery-more__button[hidden] {
+  display: none;
 }

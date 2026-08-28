@@ -9,9 +9,9 @@ class Photo(models.Model):
         MEMORY = "memory", "Вшанування"
 
     class LayoutSize(models.TextChoices):
-        NORMAL = "", "Звичайний"
-        TALL = "span-tall", "Високий"
-        WIDE = "span-wide", "Широкий"
+        NORMAL = "", "Автоматично"
+        TALL = "span-tall", "Вертикальне 9:16"
+        WIDE = "span-wide", "Горизонтальне 16:9"
 
     image = models.ImageField(
         "Фото",

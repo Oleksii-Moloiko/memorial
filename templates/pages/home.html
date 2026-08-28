@@ -217,7 +217,12 @@
       <div class="home-photo-mosaic__grid">
         {% for photo in gallery_preview %}
           <a
-            class="home-photo-mosaic__item {% if forloop.first %}is-portrait{% else %}is-landscape{% endif %}"
+            class="home-photo-mosaic__item
+              {% if forloop.counter == 1 %}
+                is-portrait
+              {% else %}
+                is-landscape
+              {% endif %}"
             href="{% url 'pages:photos' %}"
           >
             <img

@@ -88,6 +88,8 @@
           <figure
             class="gallery-card"
             data-category="{{ photo.category }}"
+            data-layout-size="{{ photo.layout_size }}"
+            data-gallery-index="{{ forloop.counter0 }}"
           >
             <button
               class="gallery-open"
@@ -114,6 +116,16 @@
           </figure>
         {% endfor %}
         </div>
+      </div>
+
+      <div class="gallery-more">
+        <button
+          class="gallery-more__button"
+          type="button"
+          data-gallery-more
+        >
+          Показати більше
+        </button>
       </div>
 
       <p
