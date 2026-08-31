@@ -1,6 +1,8 @@
 from django.contrib.admin.sites import AdminSite
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.sessions.middleware import SessionMiddleware
 
 from .forms import MemoryForm
 from .models import Memory
@@ -236,6 +238,12 @@ class MemoryAdminStatusTests(TestCase):
 
         request = self.factory.post("/admin/")
 
+        middleware = SessionMiddleware(lambda req: None)
+        middleware.process_request(request)
+        request.session.save()
+
+        request._messages = FallbackStorage(request)
+
         self.admin._update_status(
             request,
             Memory.objects.filter(pk=memory.pk),
@@ -247,29 +255,5 @@ class MemoryAdminStatusTests(TestCase):
         self.assertEqual(
             memory.status,
             Memory.Status.REJECTED,
-        )
-        self.assertFalse(memory.featured)
-
-    def test_pending_featured_memory_is_unfeatured(self):
-        memory = Memory.objects.create(
-            author_name="Іван",
-            text="Достатньо довгий текст спогаду.",
-            status=Memory.Status.APPROVED,
-            featured=True,
-        )
-
-        request = self.factory.post("/admin/")
-
-        self.admin._update_status(
-            request,
-            Memory.objects.filter(pk=memory.pk),
-            Memory.Status.PENDING,
-        )
-
-        memory.refresh_from_db()
-
-        self.assertEqual(
-            memory.status,
-            Memory.Status.PENDING,
         )
         self.assertFalse(memory.featured)

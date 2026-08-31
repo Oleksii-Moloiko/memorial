@@ -153,20 +153,22 @@
                   {{ event.date_label }}
                 </time>
 
-                <div class="timeline-carousel__content">
-                  <h3>{{ event.title }}</h3>
+                <h3 class="timeline-carousel__title">
+                  {{ event.title }}
+                </h3>
 
-                  {% if event.description %}
-                    <p>{{ event.description|truncatewords:24 }}</p>
-                  {% endif %}
+                {% if event.description %}
+                  <p class="timeline-carousel__description">
+                    {{ event.description }}
+                  </p>
+                {% endif %}
 
-                  <a
-                    class="timeline-carousel__more"
-                    href="{% url 'pages:life' %}#timeline-event-{{ event.id }}"
-                  >
-                    Дивитись далі →
-                  </a>
-                </div>
+                <a
+                  class="timeline-carousel__more"
+                  href="{% url 'pages:life' %}#timeline-event-{{ event.id }}"
+                >
+                  Читати далі
+                </a>
               </article>
 
             {% empty %}

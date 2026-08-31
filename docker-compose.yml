@@ -1,15 +1,14 @@
 services:
   web:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
     command: >
-      sh -c "uv run python manage.py migrate &&
-             uv run python manage.py collectstatic --noinput &&
-             uv run python manage.py runserver 0.0.0.0:8000"
+      sh -c ".venv/bin/python manage.py migrate &&
+             .venv/bin/python manage.py collectstatic --noinput &&
+             .venv/bin/gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - .:/app
-      - /app/.venv
       - static_data:/app/staticfiles
       - media_data:/app/media
     expose:
@@ -17,12 +16,17 @@ services:
     env_file:
       - .env
     environment:
-      DJANGO_SETTINGS_MODULE: config.settings.dev
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-False}
+      SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-0}
+      SECURE_HSTS_INCLUDE_SUBDOMAINS: ${SECURE_HSTS_INCLUDE_SUBDOMAINS:-False}
+      SECURE_HSTS_PRELOAD: ${SECURE_HSTS_PRELOAD:-False}
     depends_on:
       db:
         condition: service_healthy
 
   db:
+    restart: unless-stopped
     image: postgres:16
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -42,6 +46,7 @@ services:
       start_period: 5s
 
   nginx:
+    restart: unless-stopped
     image: nginx:1.27-alpine
     ports:
       - "8000:80"

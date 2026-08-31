@@ -75,7 +75,7 @@ class MemoryAdmin(admin.ModelAdmin):
 
         memory = get_object_or_404(Memory, pk=memory_id)
 
-        if not self.has_chanhe_permission(request, memory):
+        if not self.has_change_permission(request, memory):
             raise PermissionDenied
 
         memory.status = Memory.Status.APPROVED

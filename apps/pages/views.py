@@ -140,10 +140,24 @@ def videos(request):
 
 
 def media(request):
+    published_mentions = MediaMention.objects.filter(is_published=True)
+
+    category_counts = {
+        "all": published_mentions.count(),
+        "official": published_mentions.filter(
+            category=MediaMention.Category.OFFICIAL
+        ).count(),
+        "press": published_mentions.filter(
+            category=MediaMention.Category.PRESS
+        ).count(),
+    }
+
     context = {
-        "mentions": MediaMention.objects.filter(is_published=True),
+        "mentions": published_mentions,
+        "category_counts": category_counts,
         **_seo_context("media"),
     }
+
     return render(request, "pages/media.html", context)
 
 @ratelimit(
