@@ -37,8 +37,11 @@
                         src="{{ biography.portrait.url }}"
                         alt="{{ biography.full_name }}"
                         style="
+                            display: block;
                             width: 120px;
-                            height: 120px;
+                            max-width: 100%;
+                            height: auto;
+                            aspect-ratio: 1 / 1;
                             object-fit: cover;
                             border-radius: 8px;
                         "
@@ -116,19 +119,19 @@
 
     <section>
 
-        <div>
+        <div class="life-admin__section-header">
             <h2>Хронологія</h2>
 
             <a
                 href="{{ timeline_add_url }}"
-                class="button"
+                class="button life-admin__section-action"
             >
                 + Додати подію
             </a>
         </div>
 
         {% if timeline_events %}
-
+        <div class="admin-table-scroll">
             <table>
                 <thead>
                     <tr>
@@ -169,7 +172,7 @@
 
                 </tbody>
             </table>
-
+        </div>
         {% else %}
 
             <p>

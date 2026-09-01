@@ -1,6 +1,14 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
 
+{% block extrastyle %}
+    {{ block.super }}
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/memorial_dashboard.css' %}"
+    >
+{% endblock %}
+
 {% block content %}
 
 <div class="home-admin">
@@ -193,13 +201,7 @@
 
         {% if gallery_photos %}
 
-            <div
-                style="
-                    display:grid;
-                    grid-template-columns:repeat(6, 100px);
-                    gap:8px;
-                "
-            >
+            <div class="home-admin-gallery-preview">
 
                 {% for photo in gallery_photos %}
 
@@ -207,12 +209,7 @@
                         <img
                             src="{{ photo.image.url }}"
                             alt="{{ photo.alt_text|default:photo.caption }}"
-                            style="
-                                width:100px;
-                                height:75px;
-                                object-fit:cover;
-                                border-radius:6px;
-                            "
+                            class="home-admin-gallery-preview__image"
                         >
                     {% endif %}
 

@@ -41,106 +41,179 @@
   <div class="container service-layout">
     <aside class="service-index">
       <p class="eyebrow">На сторінці</p>
-      <a href="#story">{{ site_settings.service_section_title }}</a>
-      <a href="#award">{{ site_settings.service_award_title }}</a>
-      <a href="#safety">{{ site_settings.service_safety_eyebrow }}</a>
+
+      <a href="#awards">
+        Нагороди
+      </a>
+
+      <a href="#quotes">
+        Цитати
+      </a>
+
+      <a href="#links">
+        Посилання
+      </a>
     </aside>
 
-    <article class="longform service-story" id="story">
-      {% if service_page.service_intro %}
-        <p class="intro-paragraph">
-          {{ service_page.service_intro|linebreaksbr }}
-        </p>
-      {% endif %}
-
-      {% if service_page.service_text %}
-        <div class="service-main-text">
-          {{ service_page.service_text|linebreaks }}
-        </div>
-      {% endif %}
-
-      {% if service_page.editorial_note %}
-        <div class="official-note">
-          <strong>{{ site_settings.service_editorial_label }}</strong>
-
-          <p>
-            {{ service_page.editorial_note|linebreaksbr }}
-          </p>
-        </div>
-      {% endif %}
-
-      {% if not service_page %}
-        <p>{{ site_settings.service_empty_text }}</p>
-      {% endif %}
-    </article>
   </div>
 </section>
 
-{% if service_page.award_title %}
-  <section class="section section-stone" id="award">
-    <div class="container award-card">
-      <div class="award-emblem" aria-hidden="true">✦</div>
+{% if service_page.awards.all %}
+<section class="section section-stone" id="awards">
+  <div class="container">
 
-      <div>
-        <p class="eyebrow">Нагорода</p>
-
-        <h2>{{ service_page.award_title }}</h2>
-
-        {% if service_page.award_subtitle %}
-          <p>{{ service_page.award_subtitle }}</p>
-        {% endif %}
-      </div>
-
-      <dl>
-        {% if service_page.decree_date %}
-          <div>
-            <dt>Дата Указу</dt>
-            <dd>{{ service_page.decree_date|date:"d.m.Y" }}</dd>
-          </div>
-        {% endif %}
-
-        {% if service_page.decree_number %}
-          <div>
-            <dt>Номер</dt>
-            <dd>№ {{ service_page.decree_number }}</dd>
-          </div>
-        {% endif %}
-
-        {% if service_page.decree_source_name %}
-          <div>
-            <dt>Джерело</dt>
-            <dd>{{ service_page.decree_source_name }}</dd>
-          </div>
-        {% endif %}
-      </dl>
-
-      {% if service_page.decree_url %}
-        <a
-          class="button button-secondary"
-          href="{{ service_page.decree_url }}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ site_settings.service_decree_link_text }}
-        </a>
-      {% endif %}
+    <div class="section-heading">
+      <p class="eyebrow">Нагороди</p>
+      <h2>Нагороди та відзнаки</h2>
     </div>
-  </section>
+
+    <div class="awards-list">
+      {% for award in service_page.awards.all %}
+        <article class="award-list-item">
+
+          <div class="award-list-item__number" aria-hidden="true">
+            {{ forloop.counter|stringformat:"02d" }}
+          </div>
+
+          <div class="award-list-item__content">
+            <h3>{{ award.title }}</h3>
+
+            {% if award.subtitle %}
+              <p class="award-list-item__subtitle">
+                {{ award.subtitle }}
+              </p>
+            {% endif %}
+          </div>
+
+          <dl class="award-list-item__meta">
+            {% if award.decree_date %}
+              <div>
+                <dt>Дата указу</dt>
+                <dd>{{ award.decree_date|date:"d.m.Y" }}</dd>
+              </div>
+            {% endif %}
+
+            {% if award.decree_number %}
+              <div>
+                <dt>Номер</dt>
+                <dd>№ {{ award.decree_number }}</dd>
+              </div>
+            {% endif %}
+
+            {% if award.decree_source_name %}
+              <div>
+                <dt>Джерело</dt>
+                <dd>{{ award.decree_source_name }}</dd>
+              </div>
+            {% endif %}
+          </dl>
+
+          {% if award.decree_url %}
+            <a
+              class="award-list-item__link"
+              href="{{ award.decree_url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Відкрити джерело: {{ award.title }}"
+            >
+              ↗
+            </a>
+          {% endif %}
+
+        </article>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
 {% endif %}
 
-<section class="section section-paper" id="safety">
-  <div class="container safety-grid">
-    <div>
-      <p class="eyebrow">{{ site_settings.service_checklist_eyebrow }}</p>
-      <h2>Перевірка фактів і безпеки</h2>
+{% if service_page.quotes.all %}
+<section class="section section-paper" id="quotes">
+    <div class="container">
+
+        <div class="section-heading">
+            <p class="eyebrow">Цитати</p>
+            <h2>Слова, що залишилися</h2>
+        </div>
+
+        <div class="quotes-grid">
+            {% for quote in service_page.quotes.all %}
+
+                <figure
+                    class="quote-card{% if forloop.first %} featured{% endif %}"
+                >
+                    <blockquote>
+                        «{{ quote.text }}»
+                    </blockquote>
+
+                    {% if quote.context %}
+                        <figcaption>
+                            {{ quote.context }}
+                        </figcaption>
+                    {% endif %}
+                </figure>
+
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+{% endif %}
+
+{% if mentions %}
+<section class="section section-stone" id="links">
+  <div class="container">
+
+    <div class="section-heading">
+      <p class="eyebrow">Посилання</p>
+      <h2>Матеріали та джерела</h2>
     </div>
 
-    <ul class="check-list">
-      <li>{{ site_settings.service_checklist_item_1 }}</li>
-      <li>{{ site_settings.service_checklist_item_2 }}</li>
-      <li>{{ site_settings.service_checklist_item_3 }}</li>
-      <li>{{ site_settings.service_checklist_item_4 }}</li>
-    </ul>
+    <div class="service-links">
+      {% for mention in mentions %}
+        <article class="service-link-item">
+
+          <div class="service-link-item__date">
+            {% if mention.published_date %}
+              <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
+                {{ mention.published_date|date:"d.m.Y" }}
+              </time>
+            {% else %}
+              <span>Дата не вказана</span>
+            {% endif %}
+
+            {% if mention.source_name %}
+              <span class="service-link-item__source">
+                {{ mention.source_name }}
+              </span>
+            {% endif %}
+          </div>
+
+          <div class="service-link-item__content">
+            <h3>{{ mention.title }}</h3>
+
+            {% if mention.description %}
+              <p>{{ mention.description }}</p>
+            {% endif %}
+          </div>
+
+          <a
+            class="service-link-item__link"
+            href="{{ mention.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Відкрити джерело: {{ mention.title }}"
+          >
+            ↗
+          </a>
+
+        </article>
+      {% endfor %}
+    </div>
+
   </div>
 </section>
+{% endif %}
+
 {% endblock %}

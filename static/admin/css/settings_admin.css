@@ -23,6 +23,10 @@
     justify-content: space-between;
     gap: 20px;
 
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
     padding: 14px 16px;
 
     color: var(--body-fg);
@@ -31,6 +35,10 @@
     background: var(--body-bg);
     border: 1px solid var(--hairline-color);
     border-radius: 8px;
+}
+
+.settings-seo__item > div {
+    min-width: 0;
 }
 
 .settings-seo__item:hover {
@@ -46,6 +54,8 @@
 .settings-seo__item span {
     color: var(--body-quiet-color);
     font-size: 12px;
+
+    overflow-wrap: anywhere;
 }
 
 .settings-seo__action {
@@ -53,4 +63,16 @@
 
     color: var(--link-fg) !important;
     font-weight: 500;
+}
+
+@media (max-width: 767px) {
+    .settings-seo__item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .settings-seo__action {
+        width: 100%;
+    }
 }

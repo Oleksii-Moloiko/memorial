@@ -44,9 +44,12 @@ body {
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 24px;
 
     padding: 0 32px;
 
+    box-sizing: border-box;
     border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
@@ -69,10 +72,25 @@ body {
     margin: 0;
 }
 
+#branding {
+    min-width: 0;
+}
+
+#branding h1,
+#branding h1 a {
+    min-width: 0;
+}
+
+#branding h1 a {
+    overflow-wrap: anywhere;
+}
+
 /* user links */
 
 #user-tools {
     color: rgba(226, 224, 200, .75) !important;
+
+    flex-shrink: 0;
 
     font-size: 12px;
     letter-spacing: .02em;
@@ -121,12 +139,49 @@ body {
     margin-bottom: 32px;
 }
 
+#content > h1 {
+    min-width: 0;
+    max-width: 100%;
+
+    overflow-wrap: anywhere;
+}
+
+.object-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    max-width: 100%;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
+.object-tools li {
+    float: none;
+    margin: 0;
+}
+
+.object-tools a {
+    display: block;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    white-space: normal;
+    text-align: center;
+}
+
 /* =========================================================
    BREADCRUMBS
    ========================================================= */
 
 div.breadcrumbs {
     background: transparent !important;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    overflow-wrap: anywhere;
 
     color: var(--admin-olive) !important;
 
@@ -184,15 +239,119 @@ a:hover {
 
     text-transform: uppercase;
 }
+.inline-group,
+.inline-related,
+.tabular,
+.tabular fieldset,
+.tabular .module {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
 
+.tabular {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabular table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+.tabular td,
+.tabular th {
+    box-sizing: border-box;
+}
+.inline-related input:not([type="checkbox"]):not([type="radio"]),
+.inline-related textarea,
+.inline-related select {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.inline-related .form-row {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.inline-related .form-row > div {
+    width: 100%;
+    min-width: 0;
+}
+.inline-related input[type="text"],
+.inline-related input[type="url"],
+.inline-related input[type="number"],
+.inline-related textarea,
+.inline-related select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.inline-related h3 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.inline-related h3 > * {
+    min-width: 0;
+}
+
+@media (max-width: 767px) {
+    .inline-group {
+        width: 100%;
+        overflow: hidden;
+    }
+    .inline-related {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .inline-related h3 {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .tabular {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .tabular table {
+        min-width: 700px;
+    }
+}
 /* =========================================================
    TABLES
    ========================================================= */
-
+#changelist .results {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 #changelist table {
     border: 0 !important;
+    width: 100%;
+    min-width: 900px;
 
     background: var(--admin-paper-light) !important;
+}
+#changelist table th,
+#changelist table td {
+    white-space: nowrap;
+}
+
+#changelist table .field-title,
+#changelist table .field-description,
+#changelist table .field-short_description {
+    white-space: normal;
+    min-width: 220px;
 }
 
 #changelist table thead th {
@@ -222,6 +381,56 @@ a:hover {
     border-bottom: 1px solid var(--admin-line) !important;
 }
 
+#changelist .field-order input {
+    width: 72px;
+    max-width: 72px;
+    box-sizing: border-box;
+}
+
+#changelist .field-is_featured,
+#changelist .field-is_published {
+    width: 90px;
+    text-align: center;
+}
+
+#changelist .field-external_link {
+    width: 100px;
+    white-space: nowrap;
+}
+#changelist .field-title {
+    min-width: 240px;
+    white-space: normal;
+}
+
+#changelist .field-source_name {
+    min-width: 150px;
+    white-space: normal;
+}
+
+.admin-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-table-scroll table {
+    width: 100%;
+    min-width: 1200px;
+    table-layout: auto;
+}
+
+.admin-table-scroll th,
+.admin-table-scroll td {
+    white-space: normal;
+}
+
+.admin-table-scroll th:last-child,
+.admin-table-scroll td:last-child {
+    width: 110px;
+    min-width: 110px;
+    white-space: nowrap;
+}
 /* =========================================================
    FORMS
    ========================================================= */
@@ -253,6 +462,26 @@ select:focus {
 
     box-shadow:
         0 0 0 3px rgba(129, 140, 120, .15) !important;
+}
+
+.form-row,
+fieldset,
+fieldset.module,
+.aligned {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.form-row > div,
+.aligned .form-row > div {
+    min-width: 0;
+}
+
+.form-row input:not([type="checkbox"]):not([type="radio"]),
+.form-row textarea,
+.form-row select {
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* =========================================================
@@ -307,8 +536,11 @@ input[type="submit"].default {
 
 #changelist-filter {
     background: var(--admin-paper-light) !important;
-
     border-left: 1px solid var(--admin-line) !important;
+
+    width: 220px;
+    min-width: 220px;
+    box-sizing: border-box;
 
     padding: 20px;
 }
@@ -345,6 +577,31 @@ input[type="submit"].default {
     border-radius: 6px;
 }
 
+#changelist-search > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    width: 100%;
+    max-width: 100%;
+}
+
+#changelist-search label {
+    flex-shrink: 0;
+}
+
+#changelist-search #searchbar {
+    flex: 1 1 240px;
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
+}
+
+#changelist-search input[type="submit"] {
+    flex-shrink: 0;
+}
+
 /* =========================================================
    ACTIONS
    ========================================================= */
@@ -359,11 +616,40 @@ input[type="submit"].default {
     padding: 10px !important;
 }
 
+#changelist .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#changelist .actions label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+#changelist .actions select {
+    max-width: 100%;
+}
+
 /* =========================================================
    SAVE ROW
    ========================================================= */
 
 .submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+
     background: transparent !important;
 
     border-top: 1px solid var(--admin-line) !important;
@@ -443,7 +729,26 @@ body.login {
 @media (max-width: 767px) {
 
     #header {
-        padding: 0 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+
+        min-height: 0;
+        padding: 16px 18px;
+    }
+
+    #branding {
+        width: 100%;
+    }
+
+    #branding h1,
+    #branding h1 a {
+        width: 100%;
+    }
+
+    #user-tools {
+        width: 100%;
+        line-height: 1.6;
     }
 
     #content {
@@ -517,6 +822,8 @@ body.login {
 
     gap: 12px;
 
+    min-width: 0;
+
     min-height: 42px;
 
     padding: 9px 11px;
@@ -539,6 +846,8 @@ body.login {
 
 .memorial-sidebar__item span {
     width: 22px;
+    min-width: 22px;
+    flex-shrink: 0;
 
     color: #818c78;
 
@@ -576,10 +885,10 @@ body.login {
 
 
 .main #content {
-    max-width: none !important;
-
+    width: 100%;
+    max-width: 1280px !important;
+    margin: 0 auto;
     box-sizing: border-box;
-
     padding: 40px;
 }
 
@@ -595,18 +904,245 @@ body.login {
 
 
 /* MOBILE */
+@media (min-width: 768px) and (max-width: 1100px) {
+    #nav-sidebar.memorial-sidebar {
+        width: 190px;
+        min-width: 190px;
+        padding: 24px 12px;
+    }
+
+    .memorial-sidebar__item {
+        align-items: flex-start;
+
+        gap: 9px;
+
+        padding-left: 9px;
+        padding-right: 9px;
+
+        line-height: 1.35;
+
+        overflow-wrap: anywhere;
+    }
+
+    .memorial-sidebar__item span {
+        width: 18px;
+        min-width: 18px;
+        flex-shrink: 0;
+
+        line-height: 1.35;
+    }
+}
 
 @media (max-width: 767px) {
-
     #nav-sidebar.memorial-sidebar {
-        width: 210px;
+        display: none;
+    }
 
-        min-width: 210px;
-
-        padding: 20px 12px;
+    .main {
+        display: block !important;
     }
 
     .main #content {
+        width: 100%;
         padding: 24px 18px;
     }
-}}
+}
+
+.admin-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-table-scroll table {
+    width: 100%;
+    min-width: 720px;
+}
+
+.home-admin-section__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.home-admin-section__header > div {
+    min-width: 0;
+}
+
+.home-admin-section__header .button {
+    flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+    .home-admin-section__header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .home-admin-section__header .button {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    #changelist-search > div {
+        align-items: stretch;
+    }
+
+    #changelist-search #searchbar {
+        flex: 1 1 100%;
+        width: 100%;
+        margin: 0;
+    }
+
+    #changelist-search input[type="submit"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #changelist .actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #changelist .actions label {
+        align-items: stretch;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #changelist .actions select,
+    #changelist .actions .button {
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 767px) {
+    .submit-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .submit-row input,
+    .submit-row a,
+    .submit-row .button {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    .object-tools {
+        align-items: stretch;
+        flex-direction: column;
+
+        width: 100%;
+        margin-top: -16px;
+    }
+
+    .object-tools li {
+        width: 100%;
+    }
+
+    .object-tools a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    #changelist {
+        min-width: 0;
+    }
+
+    #changelist .results {
+        overflow-x: auto;
+    }
+
+    #changelist table {
+        min-width: 850px;
+    }
+}
+
+.life-admin__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 16px;
+}
+
+.life-admin__section-header h2 {
+    min-width: 0;
+    margin: 0;
+}
+
+.life-admin__section-action {
+    flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+    .life-admin__section-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .life-admin__section-action {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+
+.life-admin {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.life-admin section {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.life-admin p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.life-admin td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+@media (max-width: 1100px) {
+    #changelist .changelist-form-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    #changelist .changelist-form-container:has(#changelist-filter) > div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    #changelist-filter {
+        order: 2;
+
+        width: 100%;
+        min-width: 0;
+        flex: none;
+
+        margin: 0;
+
+        border-left: 0 !important;
+        border-top: 1px solid var(--admin-line) !important;
+
+        box-sizing: border-box;
+    }
+}

@@ -10,6 +10,10 @@ from apps.memories.models import Memory
 from apps.seo.models import SeoPage
 from apps.videos.models import Video
 
+from .constants import MEMORY_TEASER_LIMIT
+from .utils import make_memory_teaser
+
+
 from .models import ServicePage
 
 
@@ -88,8 +92,13 @@ def service(request):
         is_published=True,
     ).first()
 
+    mentions = MediaMention.objects.filter(
+        is_published=True,
+    )
+
     context = {
         "service_page": service_page,
+        "mentions": mentions,
         **_seo_context("service"),
     }
 
@@ -140,25 +149,7 @@ def videos(request):
 
 
 def media(request):
-    published_mentions = MediaMention.objects.filter(is_published=True)
-
-    category_counts = {
-        "all": published_mentions.count(),
-        "official": published_mentions.filter(
-            category=MediaMention.Category.OFFICIAL
-        ).count(),
-        "press": published_mentions.filter(
-            category=MediaMention.Category.PRESS
-        ).count(),
-    }
-
-    context = {
-        "mentions": published_mentions,
-        "category_counts": category_counts,
-        **_seo_context("media"),
-    }
-
-    return render(request, "pages/media.html", context)
+    return redirect("/service/#links")
 
 @ratelimit(
     key="ip",
@@ -194,13 +185,46 @@ def memories(request):
 
             return redirect("pages:memories")
 
+        else:
+            messages.error(
+                request,
+                "Щось пішло не так. Перевірте дані у формі та спробуйте ще раз.",
+            )
+
     else:
         form = MemoryForm()
 
+    memories_queryset = Memory.objects.filter(
+        status=Memory.Status.APPROVED,
+    )
+
+    featured_memory = memories_queryset.filter(
+        featured=True,
+    ).first()
+
+    regular_memories = list(
+        memories_queryset.filter(
+            featured=False,
+        )
+    )
+
+    if featured_memory and regular_memories:
+        memories_list = [
+            regular_memories[0],
+            featured_memory,
+            *regular_memories[1:],
+        ]
+    elif featured_memory:
+        memories_list = [featured_memory]
+    else:
+        memories_list = regular_memories
+
+    for memory in memories_list:
+        memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
+        memory.teaser = make_memory_teaser(memory.text)
+
     context = {
-        "memories": Memory.objects.filter(
-            status=Memory.Status.APPROVED,
-        ),
+        "memories": memories_list,
         "form": form,
         **_seo_context("memories"),
     }

@@ -4,7 +4,13 @@
     justify-content: space-between;
     gap: 24px;
 
+    width: 100%;
+    min-width: 0;
     margin-bottom: 24px;
+}
+
+.photo-admin-header > div {
+    min-width: 0;
 }
 
 .photo-admin-header h1 {
@@ -172,17 +178,25 @@
 @media (max-width: 767px) {
     .photo-admin-header {
         flex-direction: column;
+        gap: 12px;
+    }
+
+    .photo-add-button {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
     }
 
     .photo-grid {
         grid-template-columns: 1fr;
     }
 }
-
 .photo-quick-filters {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
 
+    width: 100%;
     margin-bottom: 24px;
 }
 

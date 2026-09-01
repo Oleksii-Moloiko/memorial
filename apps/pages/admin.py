@@ -3,11 +3,41 @@ from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect
 
-from .models import ServicePage
+from .models import (
+    ServicePage,
+    ServiceAward,
+    ServiceQuote,
+)
 
+class ServiceAwardInline(admin.StackedInline):
+    model = ServiceAward
+    extra = 0
+    fields = (
+        "title",
+        "subtitle",
+        "decree_date",
+        "decree_number",
+        "decree_source_name",
+        "decree_url",
+        "order",
+    )
+
+
+class ServiceQuoteInline(admin.StackedInline):
+    model = ServiceQuote
+    extra = 0
+    fields = (
+        "text",
+        "context",
+        "order",
+    )
 
 @admin.register(ServicePage)
 class ServicePageAdmin(admin.ModelAdmin):
+    inlines = [
+        ServiceAwardInline,
+        ServiceQuoteInline,
+    ]
     list_display = (
         "hero_title",
         "publication_status",
@@ -103,3 +133,4 @@ class ServicePageAdmin(admin.ModelAdmin):
 
         add_url = reverse("admin:pages_servicepage_add")
         return HttpResponseRedirect(add_url)
+

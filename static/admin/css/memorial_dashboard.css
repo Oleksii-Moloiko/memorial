@@ -75,6 +75,11 @@
         box-shadow .2s ease;
 }
 
+.memorial-admin-card > div:not(.memorial-admin-card__icon) {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
 .memorial-admin-card:hover {
     background: #f1f0e4;
 
@@ -120,6 +125,8 @@
     font-size: 16px;
     font-weight: 600;
     line-height: 1.35;
+
+    overflow-wrap: anywhere;
 }
 
 .memorial-admin-card p {
@@ -129,6 +136,8 @@
 
     font-size: 13px;
     line-height: 1.45;
+
+    overflow-wrap: anywhere;
 }
 
 .memorial-admin-card small {
@@ -188,4 +197,19 @@
 
         font-size: 21px;
     }
+}
+
+.home-admin-gallery-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.home-admin-gallery-preview__image {
+    display: block;
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
 }

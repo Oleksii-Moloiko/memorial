@@ -42,11 +42,6 @@
           {{ site_settings.videos_title }}
       </a>
 
-      {% url 'pages:media' as media_url %}
-      <a href="{{ media_url }}"
-         {% if request.path == media_url %}class="active" aria-current="page"{% endif %}>
-          {{ site_settings.media_title }}
-      </a>
 
       {% url 'pages:memories' as memories_url %}
       <a href="{{ memories_url }}"

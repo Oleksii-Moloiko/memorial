@@ -54,8 +54,8 @@ class MemoryForm(forms.ModelForm):
             "text": forms.Textarea(
                 attrs={
                     "rows": 6,
-                    "maxlength": 500,
-                    "placeholder": "Напишіть спогад — до 500 символів",
+                    "maxlength": 1500,
+                    "placeholder": "Напишіть спогад",
                 }
             ),
         }
@@ -89,7 +89,7 @@ class MemoryForm(forms.ModelForm):
         if len(text) < 10:
             raise forms.ValidationError("Спогад має містити щонайменше 10 символів.")
 
-        if len(text) > 500:
+        if len(text) > 1500:
             raise forms.ValidationError("Спогад не може перевищувати 500 символів.")
 
         return text

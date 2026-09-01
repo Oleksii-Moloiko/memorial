@@ -93,14 +93,27 @@
         new Date().getFullYear();
     });
 
-  /*
-   * Demo toast
-   */
+/*
+ * Toast messages
+ */
 
-  const toast =
-    document.querySelector(".toast");
+  const toasts =
+    document.querySelectorAll("[data-toast]");
+
+  toasts.forEach((toast, index) => {
+    setTimeout(() => {
+      toast.classList.add("show");
+    }, index * 150);
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 5000 + index * 150);
+  });
 
   const showToast = (message) => {
+    const toast =
+      document.querySelector("[data-toast]");
+
     if (!toast) {
       return;
     }
@@ -112,7 +125,7 @@
 
     window.__toastTimer = setTimeout(() => {
       toast.classList.remove("show");
-    }, 2400);
+    }, 5000);
   };
 
   document
@@ -146,42 +159,8 @@
 
     demoForm.reset();
 
-    const counter =
-      demoForm.querySelector(".counter");
 
-    if (counter) {
-      counter.textContent = "0 / 500";
-    }
   });
-
-  /*
-   * Generic textarea counter
-   */
-
-  document
-    .querySelectorAll("textarea[maxlength]")
-    .forEach((textarea) => {
-      const counter =
-        textarea.parentElement?.querySelector(
-          ".counter"
-        );
-
-      if (!counter) {
-        return;
-      }
-
-      const updateCounter = () => {
-        counter.textContent =
-          `${textarea.value.length} / ${textarea.maxLength}`;
-      };
-
-      textarea.addEventListener(
-        "input",
-        updateCounter
-      );
-
-      updateCounter();
-    });
 
   /*
  * Life biography sidebar
@@ -1122,4 +1101,42 @@ if (timelineCarousel) {
   buildTimelineTicks();
   handleBreakpointChange();
 }
+
+/*
+ * Memories: read more
+ */
+
+document.addEventListener("click", (event) => {
+  const button = event.target.closest(".read-more");
+
+  if (!button) {
+    return;
+  }
+
+  const card = button.closest(".memory-card");
+
+  if (!card) {
+    return;
+  }
+
+  const isOpen = card.classList.toggle("is-open");
+
+  button.setAttribute(
+    "aria-expanded",
+    String(isOpen)
+  );
+
+  button.textContent =
+    isOpen
+      ? "Згорнути"
+      : "Дивитись більше";
+
+  if (!isOpen) {
+    card.scrollIntoView({
+      block: "nearest",
+      behavior: "smooth",
+    });
+  }
+});
+
 })();

@@ -88,8 +88,8 @@ class VideoAdmin(admin.ModelAdmin):
             if not obj.thumbnail:
                 return "—"
             return format_html(
-                '<img src="{}" style="width:90px;height:50px;'
-                'object-fit:cover;border-radius:4px;">',
+                '<img src="{}" style="display:block;width:90px;max-width:100%;'
+                'height:50px;object-fit:cover;border-radius:4px;">',
                 obj.thumbnail.url,
             )
         except (ValueError, OSError):
@@ -102,8 +102,8 @@ class VideoAdmin(admin.ModelAdmin):
             if not obj.pk or not obj.thumbnail:
                 return "Обкладинку ще не додано."
             return format_html(
-                '<img src="{}" style="max-width:500px;max-height:280px;'
-                'object-fit:contain;">',
+                '<img src="{}" style="display:block;width:100%;max-width:500px;'
+                'height:auto;max-height:280px;object-fit:contain;">',
                 obj.thumbnail.url,
             )
         except (ValueError, OSError):
@@ -117,7 +117,7 @@ class VideoAdmin(admin.ModelAdmin):
                 return "Збережіть відео, щоб побачити перегляд."
             return format_html(
                 '<video controls preload="metadata" '
-                'style="max-width:600px;width:100%;">'
+                'style="display:block;width:100%;max-width:600px;height:auto;">'
                 '<source src="{}">'
                 "Ваш браузер не підтримує відео."
                 "</video>",

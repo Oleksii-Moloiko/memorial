@@ -25,9 +25,22 @@
   <div class="container">
     <div class="memories-grid">
       {% for memory in memories %}
-        <figure class="memory-card{% if memory.featured %} featured{% endif %}">
+        <figure
+          class="memory-card{% if memory.featured %} featured{% endif %}{% if not memory.is_long %} is-short{% endif %}"
+        >
           <blockquote>
-            «{{ memory.text }}»
+            {% if memory.is_long %}
+              <span
+                class="memory-text"
+                id="memory-text-{{ memory.id }}"
+              >
+                «<span class="teaser">{{ memory.teaser }}</span><span class="ellipsis">…</span><span class="full">{{ memory.text }}</span>»
+              </span>
+            {% else %}
+              <span class="memory-text">
+                «{{ memory.text }}»
+              </span>
+            {% endif %}
           </blockquote>
 
           <figcaption>
@@ -37,6 +50,17 @@
               {{ memory.author_name }}
             {% endif %}
           </figcaption>
+
+          {% if memory.text|length > 500 %}
+            <button
+              class="read-more"
+              type="button"
+              aria-expanded="false"
+              aria-controls="memory-text-{{ memory.id }}"
+            >
+              Дивитись більше
+            </button>
+          {% endif %}
         </figure>
       {% empty %}
         <div class="empty-state">
@@ -112,8 +136,8 @@
         {{ form.text.label }}
         {{ form.text }}
 
-        <span class="counter" data-memory-counter>
-          {{ form.text.value|default:""|length }} / 500
+        <span class="field-hint">
+          Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше».
         </span>
 
         {% if form.text.errors %}
