@@ -437,37 +437,35 @@
   };
 
   if (galleryMoreButton) {
-    galleryMoreButton.addEventListener(
-      "click",
-      () => {
-        const matchingCards =
-          Array.from(galleryCards).filter(
-            (card) =>
-              activeGalleryFilter === "all" ||
-              card.dataset.category ===
-                activeGalleryFilter
-          );
+    galleryMoreButton.addEventListener("click", () => {
+      const scrollYBefore = window.scrollY;
 
-        const firstNewCard =
-          matchingCards[galleryVisibleLimit];
+      galleryVisibleLimit += GALLERY_PAGE_SIZE;
 
-        galleryVisibleLimit +=
-          GALLERY_PAGE_SIZE;
+      updateGalleryVisibility();
 
-        updateGalleryVisibility();
+      // Повертаємо користувача рівно в ту саму
+      // позицію після перебудови галереї.
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: scrollYBefore,
+          left: 0,
+          behavior: "instant",
+        });
 
-        if (firstNewCard) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              firstNewCard.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            });
+        requestAnimationFrame(() => {
+          window.scrollTo({
+            top: scrollYBefore,
+            left: 0,
+            behavior: "instant",
           });
-        }
-      }
-    );
+
+          if (!galleryMoreButton.hidden) {
+            galleryMoreButton.focus({ preventScroll: true });
+          }
+        });
+      });
+    });
   }
 
   const galleryLayoutClasses = [
@@ -490,6 +488,8 @@
     "layout-portrait-right",
     "layout-full",
   ];
+  const galleryMobileMedia =
+    window.matchMedia("(max-width: 700px)");
 
   const applyGalleryLayout = () => {
     if (!galleryGrid || !galleryCards.length) {
@@ -525,8 +525,50 @@
 
     galleryGrid.classList.add("is-grouped");
 
-    let index = 0;
-    let mirrored = false;
+/*
+ * MOBILE
+ * 1 vertical → 3 horizontal → repeat
+ */
+    if (galleryMobileMedia.matches) {
+      let mobileIndex = 0;
+
+      while (mobileIndex < visibleCards.length) {
+        const group =
+          visibleCards.slice(
+          mobileIndex,
+          mobileIndex + 4
+        );
+
+      const band =
+        document.createElement("div");
+
+      band.className =
+        "gallery-band gallery-band--mobile";
+
+      group.forEach((card, indexInGroup) => {
+        if (indexInGroup === 0) {
+          card.classList.add(
+            "layout-portrait-left"
+          );
+        } else {
+          card.classList.add(
+            "layout-landscape-right"
+          );
+        }
+
+        band.appendChild(card);
+      });
+
+      galleryGrid.appendChild(band);
+
+      mobileIndex += group.length;
+    }
+
+    return;
+  }
+
+  let index = 0;
+  let mirrored = false;
 
     while (index < visibleCards.length) {
       const splitCards = visibleCards.slice(
@@ -657,6 +699,14 @@
       mirrored = !mirrored;
     }
   };
+
+  galleryMobileMedia.addEventListener(
+    "change",
+    () => {
+      applyGalleryLayout();
+    }
+  );
+
   const initialMatchingCount =
     Array.from(galleryCards).filter(
       (card) =>
@@ -719,55 +769,148 @@
    */
 
   const galleryDialog =
-    document.querySelector(
-      ".gallery-dialog"
-    );
+    document.querySelector(".gallery-dialog");
 
   const dialogImage =
-    galleryDialog?.querySelector(
-      "[data-dialog-image]"
-    );
+    galleryDialog?.querySelector("[data-dialog-image]");
 
   const dialogCaption =
-    galleryDialog?.querySelector(
-      ".dialog-caption"
-    );
+    galleryDialog?.querySelector(".dialog-caption");
 
-  document
-    .querySelectorAll(".gallery-open")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        if (
-          !galleryDialog ||
-          !dialogImage ||
-          !dialogCaption
-        ) {
-          return;
-        }
+  const dialogPrev =
+    galleryDialog?.querySelector(".dialog-nav.prev");
 
-        dialogImage.src =
-          button.dataset.image || "";
+  const dialogNext =
+    galleryDialog?.querySelector(".dialog-nav.next");
 
-        dialogImage.alt =
-          button.dataset.alt || "";
+  const dialogCounter =
+    galleryDialog?.querySelector(".dialog-counter");
 
-        dialogCaption.textContent =
-          button.dataset.caption || "";
+  const dialogClose =
+    galleryDialog?.querySelector(".dialog-close");
 
-        galleryDialog.showModal();
+  let dialogPhotoList = [];
+  let dialogPhotoIndex = 0;
+  let dialogScrollY = 0;
+
+  function getVisibleGalleryPhotos() {
+    return [
+      ...document.querySelectorAll(".gallery-open"),
+    ].filter((button) => button.offsetParent !== null);
+  }
+
+  function showDialogPhoto(index) {
+    if (
+      !dialogImage ||
+      !dialogPhotoList.length ||
+      index < 0 ||
+      index >= dialogPhotoList.length
+    ) {
+      return;
+    }
+
+    const button = dialogPhotoList[index];
+
+    dialogPhotoIndex = index;
+
+    dialogImage.src = button.dataset.image || "";
+    dialogImage.alt = button.dataset.alt || "";
+
+    if (dialogCaption) {
+      dialogCaption.textContent =
+        button.dataset.caption || "";
+    }
+
+    if (dialogCounter) {
+      dialogCounter.textContent =
+        `${index + 1} / ${dialogPhotoList.length}`;
+    }
+
+    if (dialogPrev) {
+      dialogPrev.disabled = index === 0;
+    }
+
+    if (dialogNext) {
+      dialogNext.disabled =
+        index === dialogPhotoList.length - 1;
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const button =
+      event.target.closest(".gallery-open");
+
+    if (!button || !galleryDialog) {
+      return;
+    }
+
+    dialogScrollY = window.scrollY;
+
+    dialogPhotoList =
+      getVisibleGalleryPhotos();
+
+    dialogPhotoIndex =
+      dialogPhotoList.indexOf(button);
+
+    if (dialogPhotoIndex === -1) {
+      return;
+    }
+
+    showDialogPhoto(dialogPhotoIndex);
+
+    if (!galleryDialog.open) {
+      galleryDialog.showModal();
+    }
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: dialogScrollY,
+        left: 0,
+        behavior: "instant",
       });
     });
+  });
 
-  galleryDialog
-    ?.querySelector(".dialog-close")
-    ?.addEventListener("click", () => {
-      galleryDialog.close();
-    });
+  dialogPrev?.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    showDialogPhoto(
+      dialogPhotoIndex - 1
+    );
+  });
+
+  dialogNext?.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    showDialogPhoto(
+      dialogPhotoIndex + 1
+    );
+  });
+
+  dialogClose?.addEventListener("click", () => {
+    galleryDialog?.close();
+  });
 
   galleryDialog?.addEventListener(
-    "click",
+    "keydown",
     (event) => {
-      if (event.target === galleryDialog) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+
+        showDialogPhoto(
+          dialogPhotoIndex - 1
+        );
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+
+        showDialogPhoto(
+          dialogPhotoIndex + 1
+        );
+      }
+
+      if (event.key === "Escape") {
         galleryDialog.close();
       }
     }
@@ -784,8 +927,19 @@
       if (dialogCaption) {
         dialogCaption.textContent = "";
       }
+
+      dialogPhotoList = [];
+
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: dialogScrollY,
+          left: 0,
+          behavior: "instant",
+        });
+      });
     }
   );
+
 /*
  * Hero scroll hint
  */
@@ -1138,5 +1292,66 @@ document.addEventListener("click", (event) => {
     });
   }
 });
+
+let dialogTouchStartX = null;
+let dialogTouchStartY = null;
+
+galleryDialog?.addEventListener(
+  "touchstart",
+  (event) => {
+    const touch = event.touches[0];
+
+    dialogTouchStartX = touch.clientX;
+    dialogTouchStartY = touch.clientY;
+  },
+  { passive: true }
+);
+
+galleryDialog?.addEventListener(
+  "touchend",
+  (event) => {
+    if (
+      dialogTouchStartX === null ||
+      dialogTouchStartY === null
+    ) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+
+    const deltaX =
+      touch.clientX - dialogTouchStartX;
+
+    const deltaY =
+      touch.clientY - dialogTouchStartY;
+
+    dialogTouchStartX = null;
+    dialogTouchStartY = null;
+
+    // Ігноруємо вертикальний жест.
+    if (
+      Math.abs(deltaY) >
+      Math.abs(deltaX)
+    ) {
+      return;
+    }
+
+    // Короткий рух не вважаємо свайпом.
+    if (Math.abs(deltaX) < 50) {
+      return;
+    }
+
+    if (deltaX < 0) {
+      showDialogPhoto(
+        dialogPhotoIndex + 1
+      );
+    } else {
+      showDialogPhoto(
+        dialogPhotoIndex - 1
+      );
+    }
+  },
+  { passive: true }
+);
 
 })();

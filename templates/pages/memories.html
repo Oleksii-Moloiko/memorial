@@ -51,7 +51,7 @@
             {% endif %}
           </figcaption>
 
-          {% if memory.text|length > 500 %}
+          {% if memory.is_long %}
             <button
               class="read-more"
               type="button"
@@ -71,10 +71,25 @@
         </div>
       {% endfor %}
     </div>
+    <div class="memories-progress">
+      <span class="memories-progress__bar">
+        <span class="memories-progress__fill"></span>
+      </span>
+
+      <span
+        class="memories-progress__count"
+        aria-live="polite"
+      >
+        1 / {{ memories|length }}
+      </span>
+    </div>
   </div>
 </section>
 
-<section class="section section-stone submission-section">
+<section
+  id="memory-form"
+  class="section section-stone submission-section"
+>
   <div class="container submission-grid">
     <div>
       <p class="eyebrow">{{ site_settings.memories_submit_eyebrow }}</p>
@@ -169,5 +184,24 @@
       </button>
     </form>
   </div>
+
+  {% if scroll_to_form %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const formSection = document.getElementById("memory-form");
+
+        if (!formSection) {
+          return;
+        }
+
+        requestAnimationFrame(function () {
+          formSection.scrollIntoView({
+            block: "start",
+            behavior: "smooth",
+          });
+        });
+      });
+    </script>
+  {% endif %}
 </section>
 {% endblock %}

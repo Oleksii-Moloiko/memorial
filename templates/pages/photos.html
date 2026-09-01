@@ -150,10 +150,9 @@
 </section>
 
 {% if photos %}
-  <dialog
-    class="gallery-dialog"
-    aria-labelledby="gallery-dialog-caption"
-  >
+  <dialog class="gallery-dialog">
+    <span class="dialog-counter" aria-live="polite"></span>
+
     <button
       class="dialog-close"
       type="button"
@@ -162,18 +161,27 @@
       ×
     </button>
 
+    <button
+      class="dialog-nav prev"
+      type="button"
+      aria-label="Попереднє фото"
+    >
+      ‹
+    </button>
+
+    <button
+      class="dialog-nav next"
+      type="button"
+      aria-label="Наступне фото"
+    >
+      ›
+    </button>
+
     <div class="dialog-image">
-      <img
-        src=""
-        alt=""
-        data-dialog-image
-      >
+      <img src="" alt="" data-dialog-image>
     </div>
 
-    <p
-      class="dialog-caption"
-      id="gallery-dialog-caption"
-    ></p>
+    <p class="dialog-caption"></p>
   </dialog>
 {% endif %}
 

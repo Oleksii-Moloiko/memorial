@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django_ratelimit.decorators import ratelimit
 
 from apps.biography.models import Biography, TimelineEvent
@@ -168,7 +169,9 @@ def memories(request):
                 ),
             )
 
-            return redirect("pages:memories")
+            return redirect(
+                f"{reverse('pages:memories')}?scroll=form"
+            )
 
         form = MemoryForm(request.POST)
 
@@ -183,7 +186,9 @@ def memories(request):
                 "Дякуємо. Ваш спогад надіслано на модерацію.",
             )
 
-            return redirect("pages:memories")
+            return redirect(
+                f"{reverse('pages:memories')}?scroll=form"
+            )
 
         else:
             messages.error(
@@ -223,9 +228,15 @@ def memories(request):
         memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
         memory.teaser = make_memory_teaser(memory.text)
 
+    scroll_to_form = (
+            request.GET.get("scroll") == "form"
+            or bool(form.errors)
+    )
+
     context = {
         "memories": memories_list,
         "form": form,
+        "scroll_to_form": scroll_to_form,
         **_seo_context("memories"),
     }
 
