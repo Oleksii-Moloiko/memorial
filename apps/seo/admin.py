@@ -1,7 +1,7 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
-from django.shortcuts import redirect
 
 from .models import SeoPage
 

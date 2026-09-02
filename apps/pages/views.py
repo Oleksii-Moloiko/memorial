@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django_ratelimit.decorators import ratelimit
 
 from apps.biography.models import Biography, TimelineEvent
@@ -16,13 +15,11 @@ from .constants import (
     MEMORY_TEASER_LIMIT,
     SERVICE_QUOTE_TEASER_LIMIT,
 )
+from .models import ServicePage
 from .utils import (
     make_memory_teaser,
     make_service_quote_teaser,
 )
-
-
-from .models import ServicePage
 
 
 def _seo_context(page_key):

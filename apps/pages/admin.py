@@ -1,14 +1,16 @@
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import redirect
+from django.urls import reverse
+
 from apps.media_mentions.models import MediaMention
 
 from .models import (
-    ServicePage,
     ServiceAward,
+    ServicePage,
     ServiceQuote,
 )
+
 
 class ServiceAwardInline(admin.StackedInline):
     model = ServiceAward

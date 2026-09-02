@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.http import HttpRequest
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
-from django.shortcuts import redirect
 
 from .models import Biography, TimelineEvent
 
-from django.template.response import TemplateResponse
-from django.urls import path, reverse
 
 @admin.register(Biography)
 class BiographyAdmin(admin.ModelAdmin):

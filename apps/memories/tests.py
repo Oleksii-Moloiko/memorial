@@ -1,12 +1,13 @@
 from django.contrib.admin.sites import AdminSite
-from django.test import RequestFactory, TestCase
-from django.urls import reverse
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
 
+from .admin import MemoryAdmin
 from .forms import MemoryForm
 from .models import Memory
-from .admin import MemoryAdmin
+
 
 class MemoryModelTests(TestCase):
     def test_memory_string_representation(self):

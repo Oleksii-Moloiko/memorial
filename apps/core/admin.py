@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import redirect
+from django.urls import reverse
+
 from apps.seo.models import SeoPage
 
 from .models import SiteSettings
