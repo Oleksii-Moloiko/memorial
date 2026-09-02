@@ -39,28 +39,22 @@ def _seo_context(page_key):
 def home(request):
     context = {
         "biography": Biography.objects.first(),
-
         "timeline_preview": TimelineEvent.objects.all(),
-
         "gallery_preview": Photo.objects.filter(
             is_published=True,
         )[:4],
-
         "featured_memory": Memory.objects.filter(
             status=Memory.Status.APPROVED,
             featured=True,
         ).first(),
-
         "featured_video": Video.objects.filter(
             is_published=True,
             is_featured=True,
         ).first(),
-
         "featured_mention": MediaMention.objects.filter(
             is_published=True,
             is_featured=True,
         ).first(),
-
         **_seo_context("home"),
     }
 
@@ -73,9 +67,7 @@ def home(request):
 
 def life(request):
     family_photos = list(
-        Photo.objects.filter(
-            category=Photo.Category.FAMILY, is_published=True
-        )[:2]
+        Photo.objects.filter(category=Photo.Category.FAMILY, is_published=True)[:2]
     )
     study_photo = Photo.objects.filter(
         category=Photo.Category.STUDY, is_published=True
@@ -105,12 +97,8 @@ def service(request):
         quotes = list(service_page.quotes.all())
 
         for quote in quotes:
-            quote.is_long = (
-                len(quote.text) > SERVICE_QUOTE_TEASER_LIMIT
-            )
-            quote.teaser = make_service_quote_teaser(
-                quote.text
-            )
+            quote.is_long = len(quote.text) > SERVICE_QUOTE_TEASER_LIMIT
+            quote.teaser = make_service_quote_teaser(quote.text)
     else:
         quotes = []
 
@@ -170,6 +158,7 @@ def videos(request):
 def media(request):
     return redirect("/service/#links")
 
+
 @ratelimit(
     key="ip",
     rate="3/h",
@@ -178,10 +167,7 @@ def media(request):
 )
 def memories(request):
     if request.method == "POST":
-        is_ajax = (
-                request.headers.get("X-Requested-With")
-                == "XMLHttpRequest"
-        )
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
         if getattr(request, "limited", False):
             limit_message = (
@@ -213,15 +199,15 @@ def memories(request):
             memory.featured = False
             memory.save()
 
-            success_message = (
-                "Дякуємо. Ваш спогад надіслано на модерацію."
-            )
+            success_message = "Дякуємо. Ваш спогад надіслано на модерацію."
 
             if is_ajax:
-                return JsonResponse({
-                    "success": True,
-                    "message": success_message,
-                })
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message": success_message,
+                    }
+                )
 
             messages.success(
                 request,
@@ -277,12 +263,9 @@ def memories(request):
         memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
         memory.teaser = make_memory_teaser(memory.text)
 
-
-
     context = {
         "memories": memories_list,
         "form": form,
-
         **_seo_context("memories"),
     }
 

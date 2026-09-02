@@ -12,6 +12,7 @@ from .models import Memory
 @admin.register(Memory)
 class MemoryAdmin(admin.ModelAdmin):
     """Admin configuration for reviewing and publishing memories."""
+
     change_list_template = "admin/memories/memory/change_list.html"
 
     list_display = (
@@ -90,9 +91,9 @@ class MemoryAdmin(admin.ModelAdmin):
         return redirect("admin:memories_memory_changelist")
 
     def reject_memory_view(
-            self,
-            request: HttpRequest,
-            memory_id: int,
+        self,
+        request: HttpRequest,
+        memory_id: int,
     ):
         if request.method != "POST":
             return redirect("admin:memories_memory_changelist")
@@ -121,9 +122,9 @@ class MemoryAdmin(admin.ModelAdmin):
         return redirect("admin:memories_memory_changelist")
 
     def changelist_view(
-            self,
-            request: HttpRequest,
-            extra_context=None,
+        self,
+        request: HttpRequest,
+        extra_context=None,
     ):
         extra_context = extra_context or {}
 
@@ -145,11 +146,11 @@ class MemoryAdmin(admin.ModelAdmin):
         )
 
     def save_model(
-            self,
-            request: HttpRequest,
-            obj: Memory,
-            form,
-            change: bool,
+        self,
+        request: HttpRequest,
+        obj: Memory,
+        form,
+        change: bool,
     ) -> None:
         if obj.featured:
             if obj.status != Memory.Status.APPROVED:
@@ -250,10 +251,10 @@ class MemoryAdmin(admin.ModelAdmin):
         self.message_user(request, "Спогад додано на головну сторінку.")
 
     def _update_status(
-            self,
-            request: HttpRequest,
-            queryset: QuerySet[Memory],
-            status: str,
+        self,
+        request: HttpRequest,
+        queryset: QuerySet[Memory],
+        status: str,
     ) -> None:
         """Update moderation status while keeping featured state consistent."""
 

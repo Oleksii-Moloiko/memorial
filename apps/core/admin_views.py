@@ -36,16 +36,13 @@ def home_admin_view(request: HttpRequest):
 
     context = {
         **admin.site.each_context(request),
-
         "title": "Головна",
-
         "biography": biography,
         "timeline_events": timeline_events,
         "gallery_photos": gallery_photos,
         "featured_video": featured_video,
         "featured_mention": featured_mention,
         "featured_memory": featured_memory,
-
         "biography_url": (
             reverse(
                 "admin:biography_biography_change",
@@ -56,23 +53,18 @@ def home_admin_view(request: HttpRequest):
                 "admin:biography_biography_add",
             )
         ),
-
         "life_url": reverse(
             "admin:biography_life",
         ),
-
         "photos_url": reverse(
             "admin:gallery_photo_changelist",
         ),
-
         "videos_url": reverse(
             "admin:videos_video_changelist",
         ),
-
         "publications_url": reverse(
             "admin:media_mentions_mediamention_changelist",
         ),
-
         "memories_url": reverse(
             "admin:memories_memory_changelist",
         ),

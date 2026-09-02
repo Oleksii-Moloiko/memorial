@@ -7,7 +7,6 @@ from .models import MediaMention
 
 
 class MediaMentionModelTests(TestCase):
-
     def test_default_order_is_zero(self):
         mention = MediaMention.objects.create(
             source_name="Офіційне джерело",

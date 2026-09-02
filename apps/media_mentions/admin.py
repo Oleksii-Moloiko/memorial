@@ -74,7 +74,6 @@ class MediaMentionAdmin(admin.ModelAdmin):
             return "—"
 
         return format_html(
-            '<a href="{}" target="_blank" '
-            'rel="noopener noreferrer">Відкрити</a>',
+            '<a href="{}" target="_blank" rel="noopener noreferrer">Відкрити</a>',
             obj.url,
         )

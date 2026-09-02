@@ -63,11 +63,7 @@ class VideoAdmin(admin.ModelAdmin):
         ),
         (
             "ДОСТУПНІСТЬ",
-            {
-                "fields": (
-                    "transcript",
-                )
-            },
+            {"fields": ("transcript",)},
         ),
         (
             "ПУБЛІКАЦІЯ",

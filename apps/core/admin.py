@@ -11,6 +11,7 @@ from .models import SiteSettings
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     """Admin configuration for global singleton site settings."""
+
     change_form_template = "admin/core/sitesettings/change_form.html"
 
     fieldsets = (
@@ -46,19 +47,15 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "home_hero_eyebrow",
                     "home_empty_title",
                     "home_empty_text",
-
                     "home_life_eyebrow",
                     "home_life_title",
                     "home_life_description",
                     "home_life_empty_text",
-
                     "home_gallery_eyebrow",
                     "home_gallery_title",
                     "home_gallery_empty_text",
-
                     "home_video_title",
                     "home_video_description",
-
                     "home_media_eyebrow",
                     "home_media_title",
                     "home_media_description",
@@ -73,13 +70,11 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "life_hero_description",
                     "life_empty_biography_text",
                     "life_empty_page_text",
-
                     "life_timeline_eyebrow",
                     "life_timeline_title",
                     "life_timeline_description",
                     "life_timeline_empty_title",
                     "life_timeline_empty_text",
-
                     "life_photos_eyebrow",
                     "life_photos_title",
                 )
@@ -95,7 +90,6 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "service_editorial_label",
                     "service_empty_text",
                     "service_decree_link_text",
-
                     "service_checklist_eyebrow",
                     "service_checklist_title",
                     "service_checklist_item_1",
@@ -126,14 +120,11 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "videos_hero_description",
                     "videos_featured_label",
                     "videos_transcript_label",
-
                     "videos_all_records_label",
                     "videos_archive_title",
                     "videos_admin_note",
-
                     "videos_empty_title",
                     "videos_empty_text",
-
                     "videos_accessibility_label",
                     "videos_accessibility_text",
                 )
@@ -159,14 +150,11 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                     "memories_hero_eyebrow",
                     "memories_hero_description",
                     "memories_moderation_note",
-
                     "memories_empty_title",
                     "memories_empty_text",
-
                     "memories_submit_eyebrow",
                     "memories_submit_title",
                     "memories_submit_description",
-
                     "memories_moderation_label",
                     "memories_moderator_text",
                 )
@@ -183,20 +171,16 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ),
         (
             "СЛУЖБОВІ НАЛАШТУВАННЯ",
-            {
-                "fields": (
-                    "demo_strip_enabled",
-                )
-            },
+            {"fields": ("demo_strip_enabled",)},
         ),
     )
 
     def change_view(
-            self,
-            request,
-            object_id,
-            form_url="",
-            extra_context=None,
+        self,
+        request,
+        object_id,
+        form_url="",
+        extra_context=None,
     ):
         extra_context = extra_context or {}
 
@@ -218,10 +202,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                             args=[seo_page.pk],
                         )
                         if seo_page
-                        else (
-                                reverse("admin:seo_seopage_add")
-                                + f"?page_key={key}"
-                        )
+                        else (reverse("admin:seo_seopage_add") + f"?page_key={key}")
                     ),
                 }
             )
@@ -236,9 +217,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         )
 
     def changelist_view(
-            self,
-            request: HttpRequest,
-            extra_context=None,
+        self,
+        request: HttpRequest,
+        extra_context=None,
     ):
         settings = SiteSettings.load()
 

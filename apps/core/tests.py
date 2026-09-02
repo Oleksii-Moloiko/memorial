@@ -181,7 +181,6 @@ class SiteSettingsTemplateTests(TestCase):
 
         self.assertContains(response, "ПАМ’ЯТЬ")
 
-
     def test_demo_strip_is_displayed_when_enabled(self):
         SiteSettings.objects.create(
             demo_strip_enabled=True,

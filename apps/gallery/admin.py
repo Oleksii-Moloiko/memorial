@@ -8,6 +8,7 @@ from .models import Photo
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
     """Admin configuration for memorial gallery photos."""
+
     change_list_template = "admin/gallery/photo/change_list.html"
 
     list_display = (
@@ -50,11 +51,7 @@ class PhotoAdmin(admin.ModelAdmin):
         ),
         (
             "ПУБЛІКАЦІЯ",
-            {
-                "fields": (
-                    "is_published",
-                )
-            },
+            {"fields": ("is_published",)},
         ),
     )
 

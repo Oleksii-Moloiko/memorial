@@ -93,9 +93,7 @@ class BiographyAdmin(admin.ModelAdmin):
                 if biography
                 else reverse("admin:biography_biography_add")
             ),
-            "timeline_add_url": reverse(
-                "admin:biography_timelineevent_add"
-            ),
+            "timeline_add_url": reverse("admin:biography_timelineevent_add"),
         }
 
         return TemplateResponse(
@@ -203,7 +201,5 @@ class TimelineEventAdmin(admin.ModelAdmin):
             return "—"
 
         return (
-            f"{obj.description[:80]}…"
-            if len(obj.description) > 80
-            else obj.description
+            f"{obj.description[:80]}…" if len(obj.description) > 80 else obj.description
         )

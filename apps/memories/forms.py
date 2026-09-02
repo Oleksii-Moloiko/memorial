@@ -74,9 +74,7 @@ class MemoryForm(forms.ModelForm):
         value = self.cleaned_data.get("website", "")
 
         if value:
-            raise forms.ValidationError(
-                "Не вдалося надіслати форму."
-            )
+            raise forms.ValidationError("Не вдалося надіслати форму.")
 
         return ""
 

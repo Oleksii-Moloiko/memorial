@@ -224,6 +224,7 @@ class MemoriesPageTests(TestCase):
             "Дякуємо. Ваш спогад надіслано на модерацію.",
         )
 
+
 class MemoryAdminStatusTests(TestCase):
     def setUp(self):
         self.admin = MemoryAdmin(Memory, AdminSite())

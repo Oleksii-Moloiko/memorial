@@ -13,6 +13,7 @@ def make_memory_teaser(text):
 
     return cut.rstrip()
 
+
 def make_service_quote_teaser(text):
     from .constants import SERVICE_QUOTE_TEASER_LIMIT
 

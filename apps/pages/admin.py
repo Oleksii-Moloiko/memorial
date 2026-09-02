@@ -50,6 +50,7 @@ class MediaMentionInline(admin.StackedInline):
         "order",
     )
 
+
 @admin.register(ServicePage)
 class ServicePageAdmin(admin.ModelAdmin):
     inlines = [
@@ -152,4 +153,3 @@ class ServicePageAdmin(admin.ModelAdmin):
 
         add_url = reverse("admin:pages_servicepage_add")
         return HttpResponseRedirect(add_url)
-
