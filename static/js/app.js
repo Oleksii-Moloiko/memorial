@@ -110,15 +110,34 @@
     }, 5000 + index * 150);
   });
 
-  const showToast = (message) => {
-    const toast =
-      document.querySelector("[data-toast]");
+  const showToast = (message, type = "success") => {
+    let toast =
+      document.querySelector("[data-toast-ajax]");
 
     if (!toast) {
-      return;
+      toast = document.createElement("div");
+
+      toast.className = "toast";
+      toast.setAttribute("data-toast-ajax", "");
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+
+      document.body.appendChild(toast);
     }
 
     toast.textContent = message;
+
+    toast.classList.remove(
+      "is-success",
+      "is-error"
+    );
+
+    toast.classList.add(
+      type === "error"
+        ? "is-error"
+        : "is-success"
+    );
+
     toast.classList.add("show");
 
     clearTimeout(window.__toastTimer);
@@ -1254,6 +1273,142 @@ if (timelineCarousel) {
 
   buildTimelineTicks();
   handleBreakpointChange();
+}
+
+/*
+ * Memories: submit without page reload
+ */
+
+const memorySubmitForm =
+  document.getElementById("memory-submit-form");
+
+if (memorySubmitForm) {
+  memorySubmitForm.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
+
+      const submitButton =
+        memorySubmitForm.querySelector(
+          '[type="submit"]'
+        );
+
+      submitButton?.setAttribute(
+        "disabled",
+        "disabled"
+      );
+
+      memorySubmitForm
+        .querySelectorAll(
+          ".field-error, .form-errors"
+        )
+        .forEach((element) => element.remove());
+
+      memorySubmitForm
+        .querySelectorAll(
+          '[aria-invalid="true"]'
+        )
+        .forEach((field) => {
+          field.removeAttribute("aria-invalid");
+        });
+
+      try {
+        const response = await fetch(
+          memorySubmitForm.action,
+          {
+            method: "POST",
+            body: new FormData(memorySubmitForm),
+            headers: {
+              "X-Requested-With": "XMLHttpRequest",
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          memorySubmitForm.reset();
+
+          showToast(
+            data.message ||
+              "Дякуємо. Ваш спогад надіслано на модерацію."
+          );
+
+          return;
+        }
+
+        if (data.message) {
+          showToast(
+            data.message,
+            "error"
+          );
+
+          return;
+        }
+
+        const errors = data.errors || {};
+
+        if (Object.keys(errors).length) {
+          showToast(
+            "Будь ласка, перевірте форму та заповніть обов’язкові поля.",
+           "error"
+          );
+        }
+
+        Object.entries(errors).forEach(
+          ([fieldName, fieldErrors]) => {
+            const field =
+              memorySubmitForm.elements[fieldName];
+
+            if (!field) {
+              return;
+            }
+
+            field.setAttribute(
+              "aria-invalid",
+              "true"
+            );
+
+            const errorElement =
+              document.createElement("span");
+
+            errorElement.className =
+              "field-error";
+
+            errorElement.setAttribute(
+              "role",
+              "alert"
+            );
+
+            errorElement.textContent =
+              fieldErrors[0]?.message ||
+              "Перевірте це поле.";
+
+            const label =
+              field.closest("label");
+
+            if (label) {
+              label.appendChild(errorElement);
+            } else {
+              field.insertAdjacentElement(
+                "afterend",
+                errorElement
+              );
+            }
+          }
+        );
+      } catch (error) {
+        showToast(
+          "Не вдалося надіслати спогад. Спробуйте ще раз.",
+          "error"
+        );
+      } finally {
+        submitButton?.removeAttribute(
+          "disabled"
+        );
+      }
+    }
+  );
 }
 
 /*

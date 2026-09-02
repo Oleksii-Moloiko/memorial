@@ -107,6 +107,7 @@
     </div>
 
     <form
+      id="memory-submit-form"
       class="memory-form"
       method="post"
       action="{% url 'pages:memories' %}"
@@ -185,23 +186,6 @@
     </form>
   </div>
 
-  {% if scroll_to_form %}
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const formSection = document.getElementById("memory-form");
 
-        if (!formSection) {
-          return;
-        }
-
-        requestAnimationFrame(function () {
-          formSection.scrollIntoView({
-            block: "start",
-            behavior: "smooth",
-          });
-        });
-      });
-    </script>
-  {% endif %}
 </section>
 {% endblock %}

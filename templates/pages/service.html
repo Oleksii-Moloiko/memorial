@@ -37,11 +37,11 @@
   </div>
 </section>
 
-<section class="section section-paper">
-  <div class="container service-layout">
-    <aside class="service-index">
-      <p class="eyebrow">На сторінці</p>
+<section class="section section-paper service-index-section">
+  <aside class="service-index">
+    <p class="eyebrow">На сторінці</p>
 
+    <div class="service-index__links">
       <a href="#awards">
         Нагороди
       </a>
@@ -53,7 +53,8 @@
       <a href="#links">
         Посилання
       </a>
-    </aside>
+    </div>
+  </aside>
 
   </div>
 </section>
@@ -128,36 +129,43 @@
 </section>
 {% endif %}
 
-{% if service_page.quotes.all %}
+{% if quotes %}
 <section class="section section-paper" id="quotes">
-    <div class="container">
+  <div class="container">
 
-        <div class="section-heading">
-            <p class="eyebrow">Цитати</p>
-            <h2>Слова, що залишилися</h2>
-        </div>
-
-        <div class="quotes-grid">
-            {% for quote in service_page.quotes.all %}
-
-                <figure
-                    class="quote-card{% if forloop.first %} featured{% endif %}"
-                >
-                    <blockquote>
-                        «{{ quote.text }}»
-                    </blockquote>
-
-                    {% if quote.context %}
-                        <figcaption>
-                            {{ quote.context }}
-                        </figcaption>
-                    {% endif %}
-                </figure>
-
-            {% endfor %}
-        </div>
-
+    <div class="section-heading">
+      <p class="eyebrow">Цитати</p>
+      <h2>Слова, що залишилися</h2>
     </div>
+
+    <div class="quotes-grid">
+      {% for quote in quotes %}
+
+        <figure
+          class="memory-card quote-memory-card
+                 {% if not quote.is_long %} is-short{% endif %}
+                 {% if forloop.first %} featured{% endif %}"
+        >
+          <blockquote>
+            <span class="memory-text" id="service-quote-{{ quote.id }}">{% if quote.is_long %}<span class="teaser">{{ quote.teaser }}</span><span class="ellipsis">…</span><span class="full">{{ quote.text }}</span>{% else %}<span class="teaser">{{ quote.text }}</span>{% endif %}</span>
+          </blockquote>
+
+          {% if quote.is_long %}
+            <button
+              class="read-more"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-quote-{{ quote.id }}"
+            >
+              Дивитись більше
+            </button>
+          {% endif %}
+        </figure>
+
+      {% endfor %}
+    </div>
+
+  </div>
 </section>
 {% endif %}
 

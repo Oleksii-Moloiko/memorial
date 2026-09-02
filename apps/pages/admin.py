@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect
+from apps.media_mentions.models import MediaMention
 
 from .models import (
     ServicePage,
@@ -32,11 +33,27 @@ class ServiceQuoteInline(admin.StackedInline):
         "order",
     )
 
+
+class MediaMentionInline(admin.StackedInline):
+    model = MediaMention
+    extra = 0
+    fields = (
+        "title",
+        "source_name",
+        "category",
+        "published_date",
+        "url",
+        "is_published",
+        "is_featured",
+        "order",
+    )
+
 @admin.register(ServicePage)
 class ServicePageAdmin(admin.ModelAdmin):
     inlines = [
         ServiceAwardInline,
         ServiceQuoteInline,
+        MediaMentionInline,
     ]
     list_display = (
         "hero_title",

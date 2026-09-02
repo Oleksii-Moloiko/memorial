@@ -6,6 +6,15 @@ class MediaMention(models.Model):
         OFFICIAL = "official", "Офіційне джерело"
         PRESS = "press", "ЗМІ"
 
+    service_page = models.ForeignKey(
+        "pages.ServicePage",
+        verbose_name="Подвиг і служба",
+        related_name="mentions",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
     title = models.CharField(
         "Заголовок матеріалу",
         max_length=255,

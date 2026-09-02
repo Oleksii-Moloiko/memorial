@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django_ratelimit.decorators import ratelimit
@@ -11,8 +12,14 @@ from apps.memories.models import Memory
 from apps.seo.models import SeoPage
 from apps.videos.models import Video
 
-from .constants import MEMORY_TEASER_LIMIT
-from .utils import make_memory_teaser
+from .constants import (
+    MEMORY_TEASER_LIMIT,
+    SERVICE_QUOTE_TEASER_LIMIT,
+)
+from .utils import (
+    make_memory_teaser,
+    make_service_quote_teaser,
+)
 
 
 from .models import ServicePage
@@ -97,8 +104,22 @@ def service(request):
         is_published=True,
     )
 
+    if service_page:
+        quotes = list(service_page.quotes.all())
+
+        for quote in quotes:
+            quote.is_long = (
+                len(quote.text) > SERVICE_QUOTE_TEASER_LIMIT
+            )
+            quote.teaser = make_service_quote_teaser(
+                quote.text
+            )
+    else:
+        quotes = []
+
     context = {
         "service_page": service_page,
+        "quotes": quotes,
         "mentions": mentions,
         **_seo_context("service"),
     }
@@ -160,18 +181,32 @@ def media(request):
 )
 def memories(request):
     if request.method == "POST":
+        is_ajax = (
+                request.headers.get("X-Requested-With")
+                == "XMLHttpRequest"
+        )
+
         if getattr(request, "limited", False):
-            messages.error(
-                request,
-                (
-                    "Ви надіслали кілька спогадів за короткий час. "
-                    "Спробуйте, будь ласка, пізніше."
-                ),
+            limit_message = (
+                "Ви надіслали кілька спогадів за короткий час. "
+                "Спробуйте, будь ласка, пізніше."
             )
 
-            return redirect(
-                f"{reverse('pages:memories')}?scroll=form"
+            if is_ajax:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "message": limit_message,
+                    },
+                    status=429,
+                )
+
+            messages.error(
+                request,
+                limit_message,
             )
+
+            return redirect("pages:memories")
 
         form = MemoryForm(request.POST)
 
@@ -181,13 +216,30 @@ def memories(request):
             memory.featured = False
             memory.save()
 
-            messages.success(
-                request,
-                "Дякуємо. Ваш спогад надіслано на модерацію.",
+            success_message = (
+                "Дякуємо. Ваш спогад надіслано на модерацію."
             )
 
-            return redirect(
-                f"{reverse('pages:memories')}?scroll=form"
+            if is_ajax:
+                return JsonResponse({
+                    "success": True,
+                    "message": success_message,
+                })
+
+            messages.success(
+                request,
+                success_message,
+            )
+
+            return redirect("pages:memories")
+
+        if is_ajax:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "errors": form.errors.get_json_data(),
+                },
+                status=400,
             )
 
         else:
@@ -228,15 +280,12 @@ def memories(request):
         memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
         memory.teaser = make_memory_teaser(memory.text)
 
-    scroll_to_form = (
-            request.GET.get("scroll") == "form"
-            or bool(form.errors)
-    )
+
 
     context = {
         "memories": memories_list,
         "form": form,
-        "scroll_to_form": scroll_to_form,
+
         **_seo_context("memories"),
     }
 
