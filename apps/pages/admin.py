@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from apps.media_mentions.models import MediaMention
 
@@ -12,7 +13,7 @@ from .models import (
 )
 
 
-class ServiceAwardInline(admin.StackedInline):
+class ServiceAwardInline(TranslationStackedInline):
     model = ServiceAward
     extra = 0
     fields = (
@@ -26,7 +27,7 @@ class ServiceAwardInline(admin.StackedInline):
     )
 
 
-class ServiceQuoteInline(admin.StackedInline):
+class ServiceQuoteInline(TranslationStackedInline):
     model = ServiceQuote
     extra = 0
     fields = (
@@ -36,7 +37,7 @@ class ServiceQuoteInline(admin.StackedInline):
     )
 
 
-class MediaMentionInline(admin.StackedInline):
+class MediaMentionInline(TranslationStackedInline):
     model = MediaMention
     extra = 0
     fields = (
@@ -52,7 +53,7 @@ class MediaMentionInline(admin.StackedInline):
 
 
 @admin.register(ServicePage)
-class ServicePageAdmin(admin.ModelAdmin):
+class ServicePageAdmin(TranslationAdmin):
     inlines = [
         ServiceAwardInline,
         ServiceQuoteInline,

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 
@@ -6,7 +7,7 @@ from .models import Photo
 
 
 @admin.register(Photo)
-class PhotoAdmin(admin.ModelAdmin):
+class PhotoAdmin(TranslationAdmin):
     """Admin configuration for memorial gallery photos."""
 
     change_list_template = "admin/gallery/photo/change_list.html"

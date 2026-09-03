@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 
@@ -6,7 +7,7 @@ from .models import MediaMention
 
 
 @admin.register(MediaMention)
-class MediaMentionAdmin(admin.ModelAdmin):
+class MediaMentionAdmin(TranslationAdmin):
     list_display = (
         "title",
         "source_name",

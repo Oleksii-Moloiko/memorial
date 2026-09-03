@@ -811,6 +811,40 @@
   let dialogPhotoList = [];
   let dialogPhotoIndex = 0;
   let dialogScrollY = 0;
+  function lockDialogScroll() {
+    dialogScrollY = window.scrollY;
+
+    document.documentElement.classList.add("dialog-open");
+    document.body.classList.add("dialog-open");
+
+    document.body.style.top = `-${dialogScrollY}px`;
+  }
+
+  function unlockDialogScroll() {
+    const html = document.documentElement;
+    const body = document.body;
+
+    /* Тимчасово вимикаємо smooth scroll,
+       щоб повернення позиції не було видно */
+    html.style.scrollBehavior = "auto";
+
+    html.classList.remove("dialog-open");
+    body.classList.remove("dialog-open");
+
+    body.style.top = "";
+
+    window.scrollTo({
+      top: dialogScrollY,
+      left: 0,
+      behavior: "auto",
+    });
+
+    /* Повертаємо звичайний smooth scroll сайту */
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = "";
+    });
+  }
+
 
   function getVisibleGalleryPhotos() {
     return [
@@ -863,8 +897,6 @@
       return;
     }
 
-    dialogScrollY = window.scrollY;
-
     dialogPhotoList =
       getVisibleGalleryPhotos();
 
@@ -878,6 +910,7 @@
     showDialogPhoto(dialogPhotoIndex);
 
     if (!galleryDialog.open) {
+      lockDialogScroll();
       galleryDialog.showModal();
     }
 
@@ -938,6 +971,8 @@
   galleryDialog?.addEventListener(
     "close",
     () => {
+      unlockDialogScroll();
+
       if (dialogImage) {
         dialogImage.src = "";
         dialogImage.alt = "";
@@ -948,14 +983,6 @@
       }
 
       dialogPhotoList = [];
-
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: dialogScrollY,
-          left: 0,
-          behavior: "instant",
-        });
-      });
     }
   );
 

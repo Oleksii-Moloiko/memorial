@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from django.shortcuts import redirect
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
@@ -7,7 +8,7 @@ from .models import SeoPage
 
 
 @admin.register(SeoPage)
-class SeoPageAdmin(admin.ModelAdmin):
+class SeoPageAdmin(TranslationAdmin):
     """Admin configuration for page SEO metadata."""
 
     list_display = ("page_key", "title", "description_length", "image_preview")

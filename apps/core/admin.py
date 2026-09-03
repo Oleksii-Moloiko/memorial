@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from modeltranslation.admin import TranslationAdmin
 
 from apps.seo.models import SeoPage
 
@@ -9,7 +10,7 @@ from .models import SiteSettings
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(TranslationAdmin):
     """Admin configuration for global singleton site settings."""
 
     change_form_template = "admin/core/sitesettings/change_form.html"

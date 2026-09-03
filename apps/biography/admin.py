@@ -3,6 +3,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
+from modeltranslation.admin import TranslationAdmin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 
@@ -10,7 +11,7 @@ from .models import Biography, TimelineEvent
 
 
 @admin.register(Biography)
-class BiographyAdmin(admin.ModelAdmin):
+class BiographyAdmin(TranslationAdmin):
     """Admin configuration for the memorial biography."""
 
     list_display = (
@@ -150,7 +151,7 @@ class BiographyAdmin(admin.ModelAdmin):
 
 
 @admin.register(TimelineEvent)
-class TimelineEventAdmin(admin.ModelAdmin):
+class TimelineEventAdmin(TranslationAdmin):
     """Admin configuration for biography timeline events."""
 
     list_display = (
