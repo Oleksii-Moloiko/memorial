@@ -1,0 +1,188 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<div class="life-admin">
+
+    <h1>📖 {{ site_settings.life_title }}</h1>
+
+    <section>
+        <h2>Основна інформація</h2>
+
+        {% if biography %}
+
+            <p>
+                <strong>ПІБ:</strong>
+                {{ biography.full_name }}
+            </p>
+
+            <p>
+                <strong>Звання:</strong>
+                {{ biography.rank|default:"—" }}
+            </p>
+
+            <p>
+                <strong>Дата народження:</strong>
+                {{ biography.birth_date|default:"—" }}
+            </p>
+
+            <p>
+                <strong>Дата смерті:</strong>
+                {{ biography.death_date|default:"—" }}
+            </p>
+
+            {% if biography.portrait %}
+                <p>
+                    <img
+                        src="{{ biography.portrait.url }}"
+                        alt="{{ biography.full_name }}"
+                        style="
+                            display: block;
+                            width: 120px;
+                            max-width: 100%;
+                            height: auto;
+                            aspect-ratio: 1 / 1;
+                            object-fit: cover;
+                            border-radius: 8px;
+                        "
+                    >
+                </p>
+            {% endif %}
+
+        {% else %}
+
+            <p>Основна інформація ще не заповнена.</p>
+
+        {% endif %}
+
+        <p>
+            <a
+                href="{{ biography_change_url }}"
+                class="button"
+            >
+                Редагувати інформацію
+            </a>
+        </p>
+
+    </section>
+
+
+    <hr>
+
+
+    <section>
+
+        <h2>Біографія</h2>
+
+        {% if biography %}
+
+            <p>
+                <strong>Вступ:</strong><br>
+                {{ biography.intro_text|default:"—"|linebreaksbr }}
+            </p>
+
+            <p>
+                <strong>Цитата:</strong><br>
+                {{ biography.signature_quote|default:"—" }}
+            </p>
+
+            <p>
+                <strong>Короткий опис:</strong><br>
+                {{ biography.summary|default:"—"|linebreaksbr }}
+            </p>
+
+            <p>
+                <strong>Повний текст:</strong><br>
+                {{ biography.full_text|default:"—"|truncatewords:60 }}
+            </p>
+
+        {% else %}
+
+            <p>Біографія ще не заповнена.</p>
+
+        {% endif %}
+
+        <p>
+            <a
+                href="{{ biography_change_url }}"
+                class="button"
+            >
+                Редагувати біографію
+            </a>
+        </p>
+
+    </section>
+
+
+    <hr>
+
+
+    <section>
+
+        <div class="life-admin__section-header">
+            <h2>Хронологія</h2>
+
+            <a
+                href="{{ timeline_add_url }}"
+                class="button life-admin__section-action"
+            >
+                + Додати подію
+            </a>
+        </div>
+
+        {% if timeline_events %}
+        <div class="admin-table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Дата / період</th>
+                        <th>Подія</th>
+                        <th>Опис</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for event in timeline_events %}
+
+                        <tr>
+                            <td>
+                                <strong>{{ event.date_label }}</strong>
+                            </td>
+
+                            <td>
+                                {{ event.title }}
+                            </td>
+
+                            <td>
+                                {{ event.description|default:"—" }}
+                            </td>
+
+                            <td>
+                                <a
+                                    href="{% url 'admin:biography_timelineevent_change' event.pk %}"
+                                >
+                                    Редагувати
+                                </a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+
+            <p>
+                Подій хронології ще немає.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

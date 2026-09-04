@@ -3,7 +3,7 @@
 {% block page_key %}photos{% endblock %}
 
 {% block title %}
-  Фото — Пам’ять про Олександра Мельника
+  {{ site_settings.photos_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
@@ -11,13 +11,13 @@
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Фотоархів</p>
-      <h1>Фото</h1>
+      <p class="eyebrow">{{ site_settings.photos_hero_title }}</p>
+      <h1>{{ site_settings.photos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Основний архів світлин, згрупований за періодами життя.
-      Кожне фото публікується лише після перевірки.
+      {{ site_settings.photos_hero_description }}
+      {{ site_settings.photos_verification_note }}
     </p>
   </div>
 </section>
@@ -82,11 +82,14 @@
         </button>
       </div>
 
-      <div class="gallery-grid">
+      <div class="gallery-mosaic">
+        <div class="gallery-grid">
         {% for photo in photos %}
           <figure
-            class="gallery-card {{ photo.layout_size }}"
+            class="gallery-card"
             data-category="{{ photo.category }}"
+            data-layout-size="{{ photo.layout_size }}"
+            data-gallery-index="{{ forloop.counter0 }}"
           >
             <button
               class="gallery-open"
@@ -112,6 +115,17 @@
             {% endif %}
           </figure>
         {% endfor %}
+        </div>
+      </div>
+
+      <div class="gallery-more">
+        <button
+          class="gallery-more__button"
+          type="button"
+          data-gallery-more
+        >
+          Показати більше
+        </button>
       </div>
 
       <p
@@ -119,16 +133,15 @@
         data-gallery-empty
         hidden
       >
-        У цій категорії поки немає фотографій.
+        {{ site_settings.photos_category_empty_text }}
       </p>
 
     {% else %}
       <div class="empty-state">
-        <h2>Фотоархів ще наповнюється</h2>
+        <h2>{{ site_settings.photos_empty_title }}</h2>
 
         <p>
-          Перевірені родиною фотографії з’являться тут
-          після публікації.
+          {{ site_settings.photos_empty_text }}
         </p>
       </div>
     {% endif %}
@@ -137,10 +150,9 @@
 </section>
 
 {% if photos %}
-  <dialog
-    class="gallery-dialog"
-    aria-labelledby="gallery-dialog-caption"
-  >
+  <dialog class="gallery-dialog">
+    <span class="dialog-counter" aria-live="polite"></span>
+
     <button
       class="dialog-close"
       type="button"
@@ -149,18 +161,27 @@
       ×
     </button>
 
+    <button
+      class="dialog-nav prev"
+      type="button"
+      aria-label="Попереднє фото"
+    >
+      ‹
+    </button>
+
+    <button
+      class="dialog-nav next"
+      type="button"
+      aria-label="Наступне фото"
+    >
+      ›
+    </button>
+
     <div class="dialog-image">
-      <img
-        src=""
-        alt=""
-        data-dialog-image
-      >
+      <img src="" alt="" data-dialog-image>
     </div>
 
-    <p
-      class="dialog-caption"
-      id="gallery-dialog-caption"
-    ></p>
+    <p class="dialog-caption"></p>
   </dialog>
 {% endif %}
 

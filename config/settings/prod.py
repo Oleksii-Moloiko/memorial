@@ -9,9 +9,15 @@ if not ALLOWED_HOSTS:
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS",
+    default=False,
+)
+SECURE_HSTS_PRELOAD = env.bool(
+    "SECURE_HSTS_PRELOAD",
+    default=False,
+)
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 STORAGES = {
@@ -19,6 +25,6 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }

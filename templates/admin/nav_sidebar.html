@@ -1,0 +1,70 @@
+{% load i18n %}
+
+<nav id="nav-sidebar" class="memorial-sidebar">
+
+    <div class="memorial-sidebar__section">
+        <div class="memorial-sidebar__title">
+            КОНТЕНТ
+        </div>
+
+        <a href="{% url 'admin_home' %}" class="memorial-sidebar__item">
+            <span>⌂</span>
+            Головна
+        </a>
+
+        <a href="{% url 'admin:biography_life' %}" class="memorial-sidebar__item">
+            <span>◈</span>
+            Життя
+        </a>
+
+        <a href="{% url 'admin:pages_servicepage_changelist' %}" class="memorial-sidebar__item">
+            <span>✦</span>
+            Подвиг і служба
+        </a>
+
+        <a href="{% url 'admin:gallery_photo_changelist' %}" class="memorial-sidebar__item">
+            <span>▧</span>
+            Фото
+        </a>
+
+        <a href="{% url 'admin:videos_video_changelist' %}" class="memorial-sidebar__item">
+            <span>▶</span>
+            Відео
+        </a>
+
+        <a href="{% url 'admin:media_mentions_mediamention_changelist' %}" class="memorial-sidebar__item">
+            <span>≡</span>
+            Публікації
+        </a>
+
+        <a href="{% url 'admin:memories_memory_changelist' %}" class="memorial-sidebar__item">
+            <span>♡</span>
+            Спогади
+        </a>
+    </div>
+
+
+    <div class="memorial-sidebar__section">
+
+        <div class="memorial-sidebar__title">
+            СИСТЕМА
+        </div>
+
+        <a href="{% url 'admin:core_sitesettings_changelist' %}" class="memorial-sidebar__item">
+            <span>⚙</span>
+            Налаштування
+        </a>
+
+        <a href="{% url 'admin:auth_user_changelist' %}" class="memorial-sidebar__item">
+            <span>○</span>
+            Користувачі
+        </a>
+
+        <a href="{% url 'admin:auth_group_changelist' %}" class="memorial-sidebar__item">
+            <span>◌</span>
+            Групи
+        </a>
+
+    </div>
+
+</nav>

@@ -116,12 +116,43 @@ wheels = [
 ]
 
 [[package]]
+name = "django-modeltranslation"
+version = "0.20.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/8b/f32f82c02bcd3ee9ed73309112eab6c1d296eec74ba9dd01cddbc0ce2b72/django_modeltranslation-0.20.4.tar.gz", hash = "sha256:105676e3afcb08dd51ae5e97ac61c74dd51cff9e0e0d2cd333cd16dd93e24315", size = 82189, upload-time = "2026-09-03T05:18:35.582Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7d/47/b8d17290de816930d4ebe83c18bba700010e652ac77fa6a110af95b058e2/django_modeltranslation-0.20.4-py3-none-any.whl", hash = "sha256:76871815982a136d722bf25407673d41c58e8421a904bfa87fd8fa4cadbdb510", size = 98826, upload-time = "2026-09-03T05:18:34.067Z" },
+]
+
+[[package]]
+name = "django-ratelimit"
+version = "4.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/8f/94038fe739b095aca3e4708ecc8a4e77f1fcfd87bed5d6baff43d4c80bc4/django-ratelimit-4.1.0.tar.gz", hash = "sha256:555943b283045b917ad59f196829530d63be2a39adb72788d985b90c81ba808b", size = 11551, upload-time = "2023-07-24T20:34:32.374Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fb/78/2c59b30cd8bc8068d02349acb6aeed5c4e05eb01cdf2107ccd76f2e81487/django_ratelimit-4.1.0-py2.py3-none-any.whl", hash = "sha256:d047a31cf94d83ef1465d7543ca66c6fc16695559b5f8d814d1b51df15110b92", size = 11608, upload-time = "2023-07-24T20:34:31.362Z" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.32.2"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f6/57/3ba6e6cb097f85b855b00163d169f35365f44277df044dcf96d55b8f62a3/filelock-3.32.2.tar.gz", hash = "sha256:c33351e1f49cae33414acbc6d56784e6ecee82514ec90795da1161fc4836b5b8", size = 217172, upload-time = "2026-07-29T22:46:04.895Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/e8/72f8cef9fdfeffe06213fe8508039396ee48daa0e3259457ed766173bfd6/filelock-3.32.2-py3-none-any.whl", hash = "sha256:87dd94cf281e586d135fa51132b8e3d9a598b316e90377a288663c9321036c82", size = 98830, upload-time = "2026-07-29T22:46:03.52Z" },
+]
+
+[[package]]
+name = "gunicorn"
+version = "26.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/8a/e4ef6ee11701b6cd64702848415ffb69eeff85cb388a3c6c7fe86f22f3f8/gunicorn-26.2.0.tar.gz", hash = "sha256:62b864895d9ebff0b2f9867ba04fe811c93121596540830c9c916d0769668447", size = 787921, upload-time = "2026-08-24T15:05:59.3Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/85/7522a52e5e2f42faf1a129113ab63e548c42e103e9af395b7bfe65e403e2/gunicorn-26.2.0-py3-none-any.whl", hash = "sha256:bd249d0b3f7972f7432f0a6b6ff3b3ee2d129f70cd1ff6c09a9dd9e29a2b88e3", size = 228389, upload-time = "2026-08-24T15:05:57.67Z" },
 ]
 
 [[package]]
@@ -149,8 +180,12 @@ source = { virtual = "." }
 dependencies = [
     { name = "django" },
     { name = "django-environ" },
+    { name = "django-modeltranslation" },
+    { name = "django-ratelimit" },
+    { name = "gunicorn" },
     { name = "pillow" },
     { name = "psycopg", extra = ["binary"] },
+    { name = "whitenoise" },
 ]
 
 [package.dev-dependencies]
@@ -166,8 +201,12 @@ dev = [
 requires-dist = [
     { name = "django", specifier = ">=6.0.7" },
     { name = "django-environ", specifier = ">=0.14.0" },
+    { name = "django-modeltranslation", specifier = ">=0.20.3" },
+    { name = "django-ratelimit", specifier = ">=4.1.0" },
+    { name = "gunicorn", specifier = ">=26.2.0" },
     { name = "pillow", specifier = ">=12.3.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
+    { name = "whitenoise", specifier = ">=6.12.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -460,6 +499,15 @@ wheels = [
 ]
 
 [[package]]
+name = "typing-extensions"
+version = "4.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
+]
+
+[[package]]
 name = "tzdata"
 version = "2026.3"
 source = { registry = "https://pypi.org/simple" }
@@ -481,4 +529,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ea/fa/18004e5cb15541ad2a68ff219c755233b012b12d4ec8663d06a258082bec/virtualenv-21.7.1.tar.gz", hash = "sha256:d0dbfaa5483487baea28d7210ef8d24c9d1bd0f10f449eeb215568825a9b334e", size = 5525237, upload-time = "2026-07-30T15:40:36.36Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4b/a7/ded126c19495158a05c7202b3389139839d4cf78d622d453867778e0f7a8/virtualenv-21.7.1-py3-none-any.whl", hash = "sha256:6394973f990536e34c05157179146c020284c42fe01da1dfeb0ba16c345280d9", size = 5504576, upload-time = "2026-07-30T15:40:34.512Z" },
+]
+
+[[package]]
+name = "whitenoise"
+version = "6.12.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cb/2a/55b3f3a4ec326cd077c1c3defeee656b9298372a69229134d930151acd01/whitenoise-6.12.0.tar.gz", hash = "sha256:f723ebb76a112e98816ff80fcea0a6c9b8ecde835f8ddda25df7a30a3c2db6ad", size = 26841, upload-time = "2026-02-27T00:05:42.028Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/db/eb/d5583a11486211f3ebd4b385545ae787f32363d453c19fffd81106c9c138/whitenoise-6.12.0-py3-none-any.whl", hash = "sha256:fc5e8c572e33ebf24795b47b6a7da8da3c00cff2349f5b04c02f28d0cc5a3cc2", size = 20302, upload-time = "2026-02-27T00:05:40.086Z" },
 ]

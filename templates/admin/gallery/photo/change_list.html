@@ -1,0 +1,151 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/photo_gallery.css' %}"
+    >
+{% endblock %}
+
+{% block result_list %}
+
+<div class="photo-admin-header">
+    <div>
+        <h1>📷 {{ site_settings.photos_title }}</h1>
+        <p>Керуйте фотографіями меморіального сайту.</p>
+    </div>
+
+    {% if has_add_permission %}
+        <a
+            href="{% url cl.opts|admin_urlname:'add' %}"
+            class="button photo-add-button"
+        >
+            + Додати фото
+        </a>
+    {% endif %}
+</div>
+
+<div class="photo-quick-filters">
+    <a
+        href="?"
+        class="photo-filter {% if not request.GET.is_published__exact %}photo-filter--active{% endif %}"
+    >
+        Усі
+    </a>
+
+    <a
+        href="?is_published__exact=1"
+        class="photo-filter {% if request.GET.is_published__exact == '1' %}photo-filter--active{% endif %}"
+    >
+        Опубліковані
+    </a>
+
+    <a
+        href="?is_published__exact=0"
+        class="photo-filter {% if request.GET.is_published__exact == '0' %}photo-filter--active{% endif %}"
+    >
+        Чернетки
+    </a>
+</div>
+
+{% if cl.result_list %}
+
+    <div class="photo-grid">
+
+        {% for photo in cl.result_list %}
+
+            <a
+                href="{% url cl.opts|admin_urlname:'change' photo.pk|admin_urlquote %}"
+                class="photo-card"
+            >
+
+                <div class="photo-card__image">
+
+                    {% if photo.image %}
+                        <img
+                            src="{{ photo.image.url }}"
+                            alt="{{ photo.alt_text|default:photo.caption }}"
+                        >
+                    {% else %}
+                        <div class="photo-card__empty">
+                            Немає фото
+                        </div>
+                    {% endif %}
+
+                    <div
+                        class="
+                            photo-card__status
+                            {% if photo.is_published %}
+                                photo-card__status--published
+                            {% else %}
+                                photo-card__status--draft
+                            {% endif %}
+                        "
+                    >
+                        {% if photo.is_published %}
+                            Опубліковано
+                        {% else %}
+                            Чернетка
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="photo-card__content">
+
+                    <h3>
+                        {{ photo.caption|default:"Без підпису" }}
+                    </h3>
+
+                    <div class="photo-card__meta">
+
+                        <span>
+                            {{ photo.get_category_display|default:photo.category }}
+                        </span>
+
+                        <span>
+                            Порядок: {{ photo.order }}
+                        </span>
+
+                    </div>
+
+                    {% if photo.layout_size %}
+                        <div class="photo-card__layout">
+                            {{ photo.get_layout_size_display|default:photo.layout_size }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </a>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <div class="photo-empty-state">
+        <div class="photo-empty-state__icon">📷</div>
+
+        <h2>Фото ще немає</h2>
+
+        <p>
+            Додайте перше фото до меморіального сайту.
+        </p>
+
+        {% if has_add_permission %}
+            <a
+                href="{% url cl.opts|admin_urlname:'add' %}"
+                class="button"
+            >
+                + Додати фото
+            </a>
+        {% endif %}
+    </div>
+
+{% endif %}
+
+{% endblock %}

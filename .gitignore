@@ -9,7 +9,7 @@ venv/
 
 # Django
 db.sqlite3
-media/
+
 staticfiles/
 
 # Environment variables
@@ -32,3 +32,12 @@ htmlcov/
 
 media/*
 !media/.gitkeep
+
+# Hosting / production runtime
+ecosystem.config.js
+gunicorn.pid
+memorial.zip
+__MACOSX/
+index.html
+index.php
+logo_white.png

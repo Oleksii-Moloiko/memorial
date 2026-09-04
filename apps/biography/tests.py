@@ -18,7 +18,11 @@ class BiographyModelTests(TestCase):
         )
 
     def test_timeline_event_string_representation(self):
+        biography = Biography.objects.create(
+            full_name="Олександр Мельник",
+        )
         event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="1994",
             title="Народився",
             order=10,
@@ -30,13 +34,18 @@ class BiographyModelTests(TestCase):
         )
 
     def test_timeline_events_are_ordered(self):
+        biography = Biography.objects.create(
+            full_name="Олександр Мельник",
+        )
         second_event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="2010",
             title="Друга подія",
             order=20,
         )
 
         first_event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="2000",
             title="Перша подія",
             order=10,
@@ -95,6 +104,7 @@ class LifePageTests(TestCase):
 
     def test_life_page_displays_timeline(self):
         event = TimelineEvent.objects.create(
+            biography=self.biography,
             date_label="2001–2011",
             title="Навчання у школі",
             description="Підтверджений опис події.",

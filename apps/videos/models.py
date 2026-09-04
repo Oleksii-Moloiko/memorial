@@ -108,6 +108,14 @@ class Video(models.Model):
         auto_now_add=True,
     )
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.is_featured:
+            Video.objects.exclude(pk=self.pk).filter(
+                is_featured=True,
+            ).update(is_featured=False)
+
     class Meta:
         verbose_name = "Відео"
         verbose_name_plural = "Відео"

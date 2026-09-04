@@ -7,17 +7,6 @@ from .models import MediaMention
 
 
 class MediaMentionModelTests(TestCase):
-    def test_string_representation(self):
-        mention = MediaMention.objects.create(
-            source_name="Українська правда",
-            url="https://example.com/article/",
-        )
-
-        self.assertEqual(
-            str(mention),
-            "Українська правда",
-        )
-
     def test_default_order_is_zero(self):
         mention = MediaMention.objects.create(
             source_name="Офіційне джерело",
@@ -44,6 +33,75 @@ class MediaMentionModelTests(TestCase):
         self.assertEqual(
             list(MediaMention.objects.all()),
             [first, second],
+        )
+
+    def test_string_representation_uses_title(self):
+        mention = MediaMention.objects.create(
+            title="Матеріал про військового",
+            source_name="Українська правда",
+            url="https://example.com/article/",
+        )
+
+        self.assertEqual(
+            str(mention),
+            "Матеріал про військового",
+        )
+
+    def test_category_default_is_press(self):
+        mention = MediaMention.objects.create(
+            title="Новина",
+            source_name="Видання",
+            url="https://example.com/article/",
+        )
+
+        self.assertEqual(
+            mention.category,
+            MediaMention.Category.PRESS,
+        )
+
+    def test_hidden_mentions_are_not_displayed(self):
+        MediaMention.objects.create(
+            title="Прихований матеріал",
+            source_name="Тестове видання",
+            url="https://example.com/hidden/",
+            is_published=False,
+        )
+
+        response = self.client.get(
+            reverse("pages:media"),
+        )
+
+        self.assertNotContains(
+            response,
+            "Прихований матеріал",
+        )
+
+    def test_category_counts_are_added_to_context(self):
+        MediaMention.objects.create(
+            title="Офіційний документ",
+            source_name="Президент України",
+            category=MediaMention.Category.OFFICIAL,
+            url="https://example.com/official/",
+        )
+
+        MediaMention.objects.create(
+            title="Стаття у виданні",
+            source_name="Українська правда",
+            category=MediaMention.Category.PRESS,
+            url="https://example.com/press/",
+        )
+
+        response = self.client.get(
+            reverse("pages:media"),
+        )
+
+        self.assertEqual(
+            response.context["category_counts"],
+            {
+                "all": 2,
+                "official": 1,
+                "press": 1,
+            },
         )
 
     def test_mentions_with_same_order_are_sorted_by_newest_date(self):

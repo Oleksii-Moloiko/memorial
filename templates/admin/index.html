@@ -1,0 +1,136 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'admin/css/memorial_dashboard.css' %}">
+{% endblock %}
+
+
+{% block content_title %}
+{% endblock %}
+
+{% block content %}
+<div class="memorial-admin-dashboard">
+
+    <div class="memorial-admin-header">
+        <h1>Керування меморіальним сайтом</h1>
+        <p>Оберіть розділ, який хочете редагувати.</p>
+    </div>
+
+    <section class="memorial-admin-section">
+        <h2>Контент</h2>
+
+        <div class="memorial-admin-grid">
+
+            <a
+                href="{% url 'admin_home' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">🏠</div>
+
+                <div>
+                    <h3>{{ site_settings.home_title }}</h3>
+                    <p>Контент головної сторінки</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:biography_life' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">📖</div>
+
+                <div>
+                    <h3>{{ site_settings.life_title }}</h3>
+                    <p>Біографія та хронологія</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:pages_servicepage_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">🏅</div>
+
+                <div>
+                    <h3>{{ site_settings.service_title }}</h3>
+                    <p>Служба, нагорода та публікація</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:gallery_photo_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">📷</div>
+
+                <div>
+                    <h3>{{ site_settings.photos_title }}</h3>
+                    <p>Фотографії меморіального сайту</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:videos_video_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">🎬</div>
+
+                <div>
+                    <h3>{{ site_settings.videos_title }}</h3>
+                    <p>Відеоматеріали та обкладинки</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:media_mentions_mediamention_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">📰</div>
+
+                <div>
+                    <h3>{{ site_settings.media_title }}</h3>
+                    <p>Матеріали та згадки у медіа</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:memories_memory_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">🕯️</div>
+
+                <div>
+                    <h3>{{ site_settings.memories_title }}</h3>
+                    <p>Спогади та модерація</p>
+                </div>
+            </a>
+
+
+            <a
+                href="{% url 'admin:core_sitesettings_changelist' %}"
+                class="memorial-admin-card"
+            >
+                <div class="memorial-admin-card__icon">⚙️</div>
+
+                <div>
+                    <h3>Налаштування</h3>
+                    <p>Загальні параметри сайту та SEO</p>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
+from modeltranslation.admin import TranslationAdmin
 
 from .models import Video
 
 
 @admin.register(Video)
-class VideoAdmin(admin.ModelAdmin):
+class VideoAdmin(TranslationAdmin):
     """Admin configuration for memorial videos."""
 
     list_display = (
@@ -14,7 +15,6 @@ class VideoAdmin(admin.ModelAdmin):
         "title",
         "category",
         "recorded_at",
-        "duration",
         "is_featured",
         "is_published",
         "order",
@@ -26,7 +26,6 @@ class VideoAdmin(admin.ModelAdmin):
     readonly_fields = (
         "large_thumbnail_preview",
         "video_preview",
-        "created_at",
     )
     date_hierarchy = "created_at"
     ordering = ("order", "id")
@@ -34,19 +33,7 @@ class VideoAdmin(admin.ModelAdmin):
     save_on_top = True
     fieldsets = (
         (
-            "Основна інформація",
-            {
-                "fields": (
-                    "title",
-                    "description",
-                    "category",
-                    "recorded_at",
-                    "duration",
-                )
-            },
-        ),
-        (
-            "Файли",
+            "ВІДЕО",
             {
                 "fields": (
                     "video_file",
@@ -57,17 +44,35 @@ class VideoAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "Доступність",
+            "ОСНОВНА ІНФОРМАЦІЯ",
+            {
+                "fields": (
+                    "title",
+                    "description",
+                )
+            },
+        ),
+        (
+            "КЛАСИФІКАЦІЯ",
+            {
+                "fields": (
+                    "category",
+                    "recorded_at",
+                    "duration",
+                )
+            },
+        ),
+        (
+            "ДОСТУПНІСТЬ",
             {"fields": ("transcript",)},
         ),
         (
-            "Публікація",
+            "ПУБЛІКАЦІЯ",
             {
                 "fields": (
                     "is_featured",
                     "is_published",
                     "order",
-                    "created_at",
                 )
             },
         ),
@@ -80,8 +85,8 @@ class VideoAdmin(admin.ModelAdmin):
             if not obj.thumbnail:
                 return "—"
             return format_html(
-                '<img src="{}" style="width:90px;height:50px;'
-                'object-fit:cover;border-radius:4px;">',
+                '<img src="{}" style="display:block;width:90px;max-width:100%;'
+                'height:50px;object-fit:cover;border-radius:4px;">',
                 obj.thumbnail.url,
             )
         except (ValueError, OSError):
@@ -94,8 +99,8 @@ class VideoAdmin(admin.ModelAdmin):
             if not obj.pk or not obj.thumbnail:
                 return "Обкладинку ще не додано."
             return format_html(
-                '<img src="{}" style="max-width:500px;max-height:280px;'
-                'object-fit:contain;">',
+                '<img src="{}" style="display:block;width:100%;max-width:500px;'
+                'height:auto;max-height:280px;object-fit:contain;">',
                 obj.thumbnail.url,
             )
         except (ValueError, OSError):
@@ -109,7 +114,7 @@ class VideoAdmin(admin.ModelAdmin):
                 return "Збережіть відео, щоб побачити перегляд."
             return format_html(
                 '<video controls preload="metadata" '
-                'style="max-width:600px;width:100%;">'
+                'style="display:block;width:100%;max-width:600px;height:auto;">'
                 '<source src="{}">'
                 "Ваш браузер не підтримує відео."
                 "</video>",

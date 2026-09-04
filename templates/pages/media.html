@@ -2,40 +2,49 @@
 
 {% block page_key %}media{% endblock %}
 
-{% block title %}У ЗМІ та статтях — Пам’ять про Олександра Мельника{% endblock %}
+{% block title %}
+  {{ site_settings.media_title }} — {{ site_settings.site_title }}
+{% endblock %}
 
 {% block content %}
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
-    <div><p class="eyebrow">Зовнішні джерела</p><h1>У ЗМІ<br>та статтях</h1></div>
-    <p class="page-lead">Перевірені посилання на публікації, офіційні документи й матеріали вшанування — без копіювання повних текстів.</p>
+    <div>
+      <p class="eyebrow">{{ site_settings.media_hero_eyebrow }}</p>
+      <h1>{{ site_settings.media_title }}</h1>
+    </div>
+
+    <p class="page-lead">
+      {{ site_settings.media_hero_description }}
+    </p>
   </div>
 </section>
+
 <section class="section section-paper media-page">
   <div class="container media-layout">
     <aside class="media-sidebar">
-      <p class="eyebrow">Фільтр</p>
-      <button class="media-filter active" data-media-filter="all">Усі матеріали <span>{{ mentions|length }}</span></button>
-      <button class="media-filter" data-media-filter="official">Офіційні <span>{{ mentions|length }}</span></button>
-      <button class="media-filter" data-media-filter="press">ЗМІ <span>{{ mentions|length }}</span></button>
-      <div class="link-check"><strong>Перевірка посилань</strong><p>Рекомендовано 1–2 рази на рік.</p><span>Остання: [дата]</span></div>
+      <p class="eyebrow">{{ site_settings.media_section_title }}</p>
+
+      <div class="link-check">
+        <strong>{{ mentions|length }} джерел{{ mentions|length|pluralize:",а," }}</strong>
+        <p>{{ site_settings.media_verification_note }}</p>
+      </div>
     </aside>
+
     <div class="article-list">
       {% for mention in mentions %}
         <article class="article-row">
           <div class="article-date">
-            <time>
+            <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
               {% if mention.published_date %}
                 {{ mention.published_date|date:"d.m.Y" }}
               {% else %}
                 Дата не вказана
               {% endif %}
             </time>
-
-            <span>{{ mention.source_name }}</span>
           </div>
 
-          <div>
+          <div class="article-content">
             <h2>{{ mention.source_name }}</h2>
           </div>
 
@@ -50,8 +59,10 @@
         </article>
       {% empty %}
         <div class="empty-state">
-          <h2>Матеріалів поки немає</h2>
-          <p>Перевірені публікації та офіційні джерела з’являться тут пізніше.</p>
+          <h2>{{ site_settings.media_empty_title }}</h2>
+          <p>
+            {{ site_settings.media_empty_text }}
+          </p>
         </div>
       {% endfor %}
     </div>

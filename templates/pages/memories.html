@@ -3,20 +3,20 @@
 {% block page_key %}memories{% endblock %}
 
 {% block title %}
-  Спогади — Пам’ять про Олександра Мельника
+  {{ site_settings.memories_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
 <section class="page-hero section-dark memories-hero">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Слова близьких</p>
-      <h1>Спогади</h1>
+      <p class="eyebrow">{{ site_settings.memories_hero_eyebrow }}</p>
+      <h1>{{ site_settings.memories_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Слова родини, побратимів, друзів і однокласників.
-      Кожен текст публікується лише після ручної модерації.
+      {{ site_settings.memories_hero_description }}
+      {{ site_settings.memories_moderation_note }}
     </p>
   </div>
 </section>
@@ -25,9 +25,22 @@
   <div class="container">
     <div class="memories-grid">
       {% for memory in memories %}
-        <figure class="memory-card{% if memory.featured %} featured{% endif %}">
+        <figure
+          class="memory-card{% if memory.featured %} featured{% endif %}{% if not memory.is_long %} is-short{% endif %}"
+        >
           <blockquote>
-            «{{ memory.text }}»
+            {% if memory.is_long %}
+              <span
+                class="memory-text"
+                id="memory-text-{{ memory.id }}"
+              >
+                «<span class="teaser">{{ memory.teaser }}</span><span class="ellipsis">…</span><span class="full">{{ memory.text }}</span>»
+              </span>
+            {% else %}
+              <span class="memory-text">
+                «{{ memory.text }}»
+              </span>
+            {% endif %}
           </blockquote>
 
           <figcaption>
@@ -37,39 +50,64 @@
               {{ memory.author_name }}
             {% endif %}
           </figcaption>
+
+          {% if memory.is_long %}
+            <button
+              class="read-more"
+              type="button"
+              aria-expanded="false"
+              aria-controls="memory-text-{{ memory.id }}"
+            >
+              Дивитись більше
+            </button>
+          {% endif %}
         </figure>
       {% empty %}
         <div class="empty-state">
-          <h2>Спогадів поки немає</h2>
+          <h2>{{ site_settings.memories_empty_title }}</h2>
           <p>
-            Після перевірки модератором опубліковані спогади
-            з’являться тут.
+            {{ site_settings.memories_empty_text }}
           </p>
         </div>
       {% endfor %}
     </div>
+    <div class="memories-progress">
+      <span class="memories-progress__bar">
+        <span class="memories-progress__fill"></span>
+      </span>
+
+      <span
+        class="memories-progress__count"
+        aria-live="polite"
+      >
+        1 / {{ memories|length }}
+      </span>
+    </div>
   </div>
 </section>
 
-<section class="section section-stone submission-section">
+<section
+  id="memory-form"
+  class="section section-stone submission-section"
+>
   <div class="container submission-grid">
     <div>
-      <p class="eyebrow">Поділитися спогадом</p>
+      <p class="eyebrow">{{ site_settings.memories_submit_eyebrow }}</p>
 
-      <h2>Залиште кілька слів</h2>
+      <h2>{{ site_settings.memories_submit_title }}</h2>
 
       <p>
-        Кожне повідомлення потрапляє на ручну модерацію
-        й не з’являється на сайті автоматично.
+        {{ site_settings.memories_submit_description }}
       </p>
 
       <div class="moderation-note">
-        <strong>Модерація</strong>
-        <span>Відповідальна особа від родини</span>
+        <strong>{{ site_settings.memories_moderation_label }}</strong>
+        <span>{{ site_settings.memories_moderator_text }}</span>
       </div>
     </div>
 
     <form
+      id="memory-submit-form"
       class="memory-form"
       method="post"
       action="{% url 'pages:memories' %}"
@@ -114,8 +152,8 @@
         {{ form.text.label }}
         {{ form.text }}
 
-        <span class="counter" data-memory-counter>
-          {{ form.text.value|default:""|length }} / 500
+        <span class="field-hint">
+          Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше».
         </span>
 
         {% if form.text.errors %}
@@ -147,5 +185,7 @@
       </button>
     </form>
   </div>
+
+
 </section>
 {% endblock %}
