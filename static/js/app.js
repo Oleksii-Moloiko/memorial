@@ -1536,4 +1536,61 @@ galleryDialog?.addEventListener(
   { passive: true }
 );
 
+  /*
+   * Language switcher
+   */
+
+  document
+    .querySelectorAll("[data-language-switcher]")
+    .forEach((switcher) => {
+      const trigger =
+        switcher.querySelector("[data-language-trigger]");
+
+      const menu =
+        switcher.querySelector("[data-language-menu]");
+
+      if (!trigger || !menu) {
+        return;
+      }
+
+      const close = () => {
+        menu.hidden = true;
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      };
+
+      const open = () => {
+        menu.hidden = false;
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+      };
+
+      trigger.addEventListener("click", () => {
+        if (menu.hidden) {
+          open();
+        } else {
+          close();
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!switcher.contains(event.target)) {
+          close();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          close();
+          trigger.focus();
+        }
+      });
+    });
+
 })();

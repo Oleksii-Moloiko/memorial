@@ -17,12 +17,11 @@ urlpatterns = [
         name="admin_home",
     ),
     path("admin/", admin.site.urls),
-    # Службовий endpoint Django для перемикання мови
-    path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 
 urlpatterns += i18n_patterns(
+    path("i18n/", include("django.conf.urls.i18n")),
     path("", include("apps.pages.urls")),
     prefix_default_language=False,
 )
