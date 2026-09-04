@@ -3,9 +3,9 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
-from modeltranslation.admin import TranslationAdmin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
+from modeltranslation.admin import TranslationAdmin
 
 from .models import Biography, TimelineEvent
 
