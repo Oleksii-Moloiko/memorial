@@ -19,7 +19,6 @@ CSRF_TRUSTED_ORIGINS = env.list(
 
 INSTALLED_APPS = [
     "modeltranslation",
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -108,9 +107,7 @@ MODELTRANSLATION_LANGUAGES = (
     "en",
 )
 
-MODELTRANSLATION_FALLBACK_LANGUAGES = (
-    "uk",
-)
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("uk",)
 
 LOCALE_PATHS = [
     BASE_DIR / "locale",

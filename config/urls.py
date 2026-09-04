@@ -17,7 +17,6 @@ urlpatterns = [
         name="admin_home",
     ),
     path("admin/", admin.site.urls),
-
     # Службовий endpoint Django для перемикання мови
     path("i18n/", include("django.conf.urls.i18n")),
 ]

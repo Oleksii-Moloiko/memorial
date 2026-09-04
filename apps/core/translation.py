@@ -10,7 +10,8 @@ class SiteSettingsTranslationOptions(TranslationOptions):
         field.name
         for field in SiteSettings._meta.fields
         if isinstance(field, (models.CharField, models.TextField))
-        and field.name not in {
+        and field.name
+        not in {
             "brand_letter",
         }
     )
