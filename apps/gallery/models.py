@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -43,6 +44,20 @@ class Photo(models.Model):
         max_length=20,
         choices=LayoutSize.choices,
         blank=True,
+    )
+
+    preview_focus_x = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по горизонталі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — лівий край, 100 — правий край.",
+    )
+
+    preview_focus_y = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по вертикалі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — верхній край, 100 — нижній край.",
     )
 
     is_published = models.BooleanField(

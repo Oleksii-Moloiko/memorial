@@ -67,6 +67,7 @@
                         <img
                             src="{{ photo.image.url }}"
                             alt="{{ photo.alt_text|default:photo.caption }}"
+                            style="object-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%;"
                         >
                     {% else %}
                         <div class="photo-card__empty">

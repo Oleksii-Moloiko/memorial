@@ -267,6 +267,7 @@
               loading="lazy"
               width="{{ photo.image.width }}"
               height="{{ photo.image.height }}"
+              style="object-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%;"
             >
             {% if photo.caption %}
               <span>{{ photo.caption }}</span>
