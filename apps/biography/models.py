@@ -6,7 +6,7 @@ class Biography(models.Model):
 
     full_name = models.CharField("ПІБ", max_length=255)
     rank = models.CharField(
-        "Звання / роль",
+        "Звання",
         max_length=255,
         blank=True,
         help_text="Наприклад: «Старший лейтенант, командир взводу»",
@@ -23,7 +23,7 @@ class Biography(models.Model):
         help_text="Наприклад: «Герой України»",
     )
     intro_text = models.TextField("Вступний текст на головній", blank=True)
-    signature_quote = models.CharField("Ключова цитата", max_length=500, blank=True)
+    signature_quote = models.CharField("Головна цитата", max_length=500, blank=True)
     summary = models.TextField("Короткий опис (для головної)", blank=True)
     full_text = models.TextField("Повний життєпис", blank=True)
 
@@ -36,13 +36,35 @@ class Biography(models.Model):
 
 
 class TimelineEvent(models.Model):
-    """Подія хронології життя. date_label — текст, не строга дата
-    (в макеті трапляються діапазони на кшталт «2001–2011»)."""
+    """Подія хронології життя."""
 
-    date_label = models.CharField("Дата / період", max_length=50)
-    title = models.CharField("Заголовок події", max_length=255)
-    description = models.CharField("Опис", max_length=500, blank=True)
-    order = models.PositiveIntegerField("Порядок", default=0)
+    biography = models.ForeignKey(
+        Biography,
+        on_delete=models.CASCADE,
+        related_name="timeline_events",
+        verbose_name="Життєпис",
+    )
+
+    date_label = models.CharField(
+        "Дата / період",
+        max_length=50,
+    )
+
+    title = models.CharField(
+        "Заголовок події",
+        max_length=255,
+    )
+
+    description = models.CharField(
+        "Опис",
+        max_length=500,
+        blank=True,
+    )
+
+    order = models.PositiveIntegerField(
+        "Порядок",
+        default=0,
+    )
 
     class Meta:
         verbose_name = "Подія хронології"

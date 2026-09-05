@@ -1,52 +1,95 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="{{ LANGUAGE_CODE }}" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Memorial{% endblock %}</title>
+    <script>
+      document.documentElement.classList.remove("no-js");
+    </script>
+
+    <title>
+        {% block title %}
+            {{ seo_title|default:site_settings.site_title }}
+        {% endblock %}
+    </title>
 
     {% include "includes/seo_meta.html" %}
 
+    <!-- Favicons -->
+    <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="{% static 'images/apple-touch-icon.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="{% static 'images/favicon-32x32.png' %}"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="{% static 'images/favicon-16x16.png' %}"
+    >
+
+    <link
+        rel="icon"
+        href="{% static 'images/favicon.ico' %}"
+        sizes="any"
+    >
+
+    <link
+        rel="manifest"
+        href="{% static 'images/site.webmanifest' %}"
+    >
+
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block extra_head %}{% endblock %}
 </head>
+
 <body data-page="{% block page_key %}{% endblock %}">
     <a class="skip-link" href="#main-content">
         Перейти до основного вмісту
     </a>
 
     {% if debug and site_settings.demo_strip_enabled|default:True %}
-    <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-      <span>Прототип</span>
-      <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-      <a class="mode-link mode-wireframe" href="?view=wireframe">Wireframe</a>
-      <button class="grid-toggle" type="button" aria-pressed="false">Сітка</button>
-    </div>
+        <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
+            <span>Прототип</span>
+            <a class="mode-link mode-design" href="?view=design">Дизайн</a>
+            <a class="mode-link mode-wireframe" href="?view=wireframe">
+                Wireframe
+            </a>
+            <button
+                class="grid-toggle"
+                type="button"
+                aria-pressed="false"
+            >
+                Сітка
+            </button>
+        </div>
     {% endif %}
 
     {% include "includes/header.html" %}
 
     {% if site_settings.demo_strip_enabled %}
-      <div class="demo-strip">
-        <div class="container">
-          <strong>Демонстраційний макет.</strong>
-          Усі персональні дані та матеріали умовні й мають бути замінені
-          після перевірки родиною.
+        <div class="demo-strip">
+            <div class="container">
+                <strong>Демонстраційний макет.</strong>
+                Усі персональні дані та матеріали умовні й мають бути
+                замінені після перевірки родиною.
+            </div>
         </div>
-      </div>
     {% endif %}
 
-    {% if messages %}
-      <div class="container form-messages" aria-live="polite">
-        {% for message in messages %}
-          <div class="form-message form-message-{{ message.tags }}">
-            {{ message }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
 
     <main id="main-content">
         {% block content %}{% endblock %}
@@ -54,7 +97,25 @@
 
     {% include "includes/footer.html" %}
 
-    <div class="toast" role="status" aria-live="polite"></div>
+    {% if messages %}
+        {% for message in messages %}
+            <div
+                class="toast is-{{ message.tags }}"
+                role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}"
+                aria-live="polite"
+                data-toast
+            >
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div
+        class="toast"
+        role="status"
+        aria-live="polite"
+        data-toast-ajax
+    ></div>
 
     <script src="{% static 'js/app.js' %}" defer></script>
 </body>

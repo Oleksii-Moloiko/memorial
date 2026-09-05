@@ -54,6 +54,14 @@ class PhotoModelTests(TestCase):
             [first_photo, second_photo],
         )
 
+    def test_preview_focus_defaults_to_center(self):
+        photo = Photo.objects.create(
+            image=create_test_image("focus-default.gif"),
+        )
+
+        self.assertEqual(photo.preview_focus_x, 50)
+        self.assertEqual(photo.preview_focus_y, 50)
+
 
 class PhotosPageTests(TestCase):
     def setUp(self):
@@ -114,6 +122,22 @@ class PhotosPageTests(TestCase):
         self.assertContains(
             response,
             'data-category="service"',
+        )
+
+    def test_saved_preview_focus_is_rendered_on_photo(self):
+        Photo.objects.create(
+            image=create_test_image("focus.gif"),
+            caption="Фото з власним фокусом",
+            preview_focus_x=28,
+            preview_focus_y=71,
+            is_published=True,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertContains(
+            response,
+            "object-position: 28% 71%;",
         )
 
     def test_empty_state_is_displayed(self):

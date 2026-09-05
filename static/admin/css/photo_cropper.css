@@ -1,0 +1,176 @@
+.field-preview_focus_x,
+.field-preview_focus_y {
+    display: none;
+}
+
+.photo-crop-editor {
+    width: min(100%, 860px);
+    box-sizing: border-box;
+}
+
+.photo-crop-editor__intro {
+    margin-bottom: 14px;
+}
+
+.photo-crop-editor__intro strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--body-fg);
+    font-size: 14px;
+}
+
+.photo-crop-editor__intro p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--body-quiet-color);
+    line-height: 1.5;
+}
+
+.photo-crop-editor__previews {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px;
+    align-items: start;
+    gap: 18px;
+}
+
+.photo-crop-editor__preview-group {
+    min-width: 0;
+}
+
+.photo-crop-editor__preview-group--portrait {
+    width: 180px;
+}
+
+.photo-crop-editor__label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--body-quiet-color);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.photo-crop-editor__stage {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+    background:
+        linear-gradient(45deg, rgba(127, 127, 127, .08) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(127, 127, 127, .08) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(127, 127, 127, .08) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(127, 127, 127, .08) 75%);
+    background-size: 18px 18px;
+    background-position: 0 0, 0 9px, 9px -9px, -9px 0;
+    border: 1px solid var(--hairline-color);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
+}
+
+.photo-crop-editor__stage--landscape {
+    aspect-ratio: 16 / 9;
+}
+
+.photo-crop-editor__stage--portrait {
+    aspect-ratio: 9 / 16;
+}
+
+.photo-crop-editor__stage:focus-visible {
+    outline: 2px solid var(--link-fg);
+    outline-offset: 3px;
+}
+
+.photo-crop-editor__stage.is-dragging {
+    cursor: grabbing;
+}
+
+.photo-crop-editor__stage img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    object-fit: cover;
+}
+
+.photo-crop-editor__stage.is-empty img {
+    display: none;
+}
+
+.photo-crop-editor__grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .5;
+    background:
+        linear-gradient(to right,
+            transparent calc(33.333% - .5px),
+            rgba(255, 255, 255, .62) calc(33.333% - .5px),
+            rgba(255, 255, 255, .62) calc(33.333% + .5px),
+            transparent calc(33.333% + .5px),
+            transparent calc(66.666% - .5px),
+            rgba(255, 255, 255, .62) calc(66.666% - .5px),
+            rgba(255, 255, 255, .62) calc(66.666% + .5px),
+            transparent calc(66.666% + .5px)),
+        linear-gradient(to bottom,
+            transparent calc(33.333% - .5px),
+            rgba(255, 255, 255, .62) calc(33.333% - .5px),
+            rgba(255, 255, 255, .62) calc(33.333% + .5px),
+            transparent calc(33.333% + .5px),
+            transparent calc(66.666% - .5px),
+            rgba(255, 255, 255, .62) calc(66.666% - .5px),
+            rgba(255, 255, 255, .62) calc(66.666% + .5px),
+            transparent calc(66.666% + .5px));
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18);
+}
+
+.photo-crop-editor__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    color: #fff;
+    background: rgba(0, 0, 0, .58);
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.photo-crop-editor__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    color: var(--body-quiet-color);
+    font-size: 12px;
+}
+
+.photo-crop-editor__footer .button {
+    min-height: 32px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.photo-crop-editor__empty {
+    margin: 10px 0 0;
+    color: var(--body-quiet-color);
+    font-size: 12px;
+}
+
+.photo-crop-editor__empty[hidden] {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .photo-crop-editor__previews {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-crop-editor__preview-group--portrait {
+        width: min(220px, 55%);
+    }
+}

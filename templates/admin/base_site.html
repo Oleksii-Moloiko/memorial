@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/admin_theme.css' %}"
+    >
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+
+    <script
+        src="{% static 'admin/js/content_language.js' %}"
+        defer
+    ></script>
+{% endblock %}
+
+{% block branding %}
+    <div class="admin-branding">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">
+                Керування меморіальним сайтом
+            </a>
+        </h1>
+
+        <div
+            class="admin-language-switcher"
+            data-admin-language-switcher
+        >
+            <span class="admin-language-switcher__label">
+                Мова контенту
+            </span>
+
+            <div
+                class="admin-language-switcher__options"
+                role="group"
+                aria-label="Мова редагованого контенту"
+            >
+                <button
+                    type="button"
+                    data-admin-content-language="uk"
+                >
+                    UA
+                </button>
+
+                <button
+                    type="button"
+                    data-admin-content-language="en"
+                >
+                    EN
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

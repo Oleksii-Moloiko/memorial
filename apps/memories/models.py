@@ -16,7 +16,7 @@ class Memory(models.Model):
     )
     text = models.TextField(
         "Текст спогаду",
-        max_length=500,
+        max_length=1500,
     )
     featured = models.BooleanField(
         "Показувати на головній",

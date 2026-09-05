@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -9,9 +10,9 @@ class Photo(models.Model):
         MEMORY = "memory", "Вшанування"
 
     class LayoutSize(models.TextChoices):
-        NORMAL = "", "Звичайний"
-        TALL = "span-tall", "Високий"
-        WIDE = "span-wide", "Широкий"
+        NORMAL = "", "Автоматично"
+        TALL = "span-tall", "Вертикальне 9:16"
+        WIDE = "span-wide", "Горизонтальне 16:9"
 
     image = models.ImageField(
         "Фото",
@@ -45,6 +46,20 @@ class Photo(models.Model):
         blank=True,
     )
 
+    preview_focus_x = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по горизонталі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — лівий край, 100 — правий край.",
+    )
+
+    preview_focus_y = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по вертикалі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — верхній край, 100 — нижній край.",
+    )
+
     is_published = models.BooleanField(
         "Опубліковано",
         default=False,
@@ -58,7 +73,7 @@ class Photo(models.Model):
 
     class Meta:
         verbose_name = "Фото"
-        verbose_name_plural = "Фотогалерея"
+        verbose_name_plural = "Фото"
         ordering = ["order", "id"]
 
     def __str__(self):

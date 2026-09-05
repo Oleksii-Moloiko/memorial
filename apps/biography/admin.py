@@ -1,13 +1,17 @@
 from django.contrib import admin
 from django.http import HttpRequest
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
+from modeltranslation.admin import TranslationAdmin
 
 from .models import Biography, TimelineEvent
 
 
 @admin.register(Biography)
-class BiographyAdmin(admin.ModelAdmin):
+class BiographyAdmin(TranslationAdmin):
     """Admin configuration for the memorial biography."""
 
     list_display = (
@@ -21,33 +25,89 @@ class BiographyAdmin(admin.ModelAdmin):
     readonly_fields = ("large_portrait_preview",)
     fieldsets = (
         (
-            "Основна інформація",
+            "ГОЛОВНА — ПЕРШИЙ ЕКРАН",
             {
+                "description": (
+                    "Поля цього блоку відображаються у першому екрані "
+                    "головної сторінки."
+                ),
                 "fields": (
+                    "portrait",
+                    "large_portrait_preview",
                     "full_name",
                     "rank",
                     "birth_date",
                     "death_date",
                     "award_title",
-                )
+                    "intro_text",
+                ),
             },
         ),
         (
-            "Портрет",
-            {"fields": ("portrait", "large_portrait_preview")},
+            "ГОЛОВНА — ЦИТАТА",
+            {
+                "description": "Окремий блок-цитата під першим екраном.",
+                "fields": ("signature_quote",),
+            },
         ),
         (
-            "Тексти",
+            "ЖИТТЯ — БІОГРАФІЯ",
             {
+                "description": (
+                    "Тексти основного біографічного блоку на сторінці «Життя»."
+                ),
                 "fields": (
-                    "intro_text",
-                    "signature_quote",
                     "summary",
                     "full_text",
-                )
+                ),
             },
         ),
     )
+
+    def get_urls(self):
+        urls = super().get_urls()
+
+        custom_urls = [
+            path(
+                "life/",
+                self.admin_site.admin_view(self.life_view),
+                name="biography_life",
+            ),
+        ]
+
+        return custom_urls + urls
+
+    def life_view(self, request: HttpRequest) -> TemplateResponse:
+        biography = Biography.objects.first()
+        timeline_events = TimelineEvent.objects.all()
+
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Життя",
+            "biography": biography,
+            "timeline_events": timeline_events,
+            "biography_change_url": (
+                reverse(
+                    "admin:biography_biography_change",
+                    args=[biography.pk],
+                )
+                if biography
+                else reverse("admin:biography_biography_add")
+            ),
+            "timeline_add_url": reverse("admin:biography_timelineevent_add"),
+        }
+
+        return TemplateResponse(
+            request,
+            "admin/biography/life.html",
+            context,
+        )
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:biography_life")
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Allow only one biography record."""
@@ -91,20 +151,56 @@ class BiographyAdmin(admin.ModelAdmin):
 
 
 @admin.register(TimelineEvent)
-class TimelineEventAdmin(admin.ModelAdmin):
+class TimelineEventAdmin(TranslationAdmin):
     """Admin configuration for biography timeline events."""
 
-    list_display = ("date_label", "title", "short_description", "order")
+    list_display = (
+        "date_label",
+        "title",
+        "short_description",
+        "order",
+    )
     list_editable = ("order",)
-    search_fields = ("date_label", "title", "description")
+    search_fields = (
+        "date_label",
+        "title",
+        "description",
+    )
     ordering = ("order", "id")
     list_per_page = 30
 
+    def get_model_perms(self, request: HttpRequest) -> dict[str, bool]:
+        """
+        Hide TimelineEvent from the standard admin navigation.
+
+        CRUD URLs remain available.
+        """
+        return {}
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:biography_life")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:biography_life")
+
+    def response_delete(self, request, obj_display, obj_id):
+        return redirect("admin:biography_life")
+
     @admin.display(description="Опис")
     def short_description(self, obj: TimelineEvent) -> str:
-        """Return a shortened timeline description."""
         if not obj.description:
             return "—"
+
         return (
             f"{obj.description[:80]}…" if len(obj.description) > 80 else obj.description
         )
