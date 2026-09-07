@@ -16,7 +16,7 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "{{ biography.full_name|escapejs }}",
-  {% if biography.portrait %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ biography.portrait.url }}",{% endif %}
+  {% if biography.portrait %}"image": "{{ biography.portrait.url }}",{% endif %}
   {% if biography.birth_date %}"birthDate": "{{ biography.birth_date|date:'Y-m-d' }}",{% endif %}
   {% if biography.death_date %}"deathDate": "{{ biography.death_date|date:'Y-m-d' }}",{% endif %}
   {% if biography.rank %}"jobTitle": "{{ biography.rank|escapejs }}",{% endif %}
