@@ -45,15 +45,16 @@ class MediaMentionAdmin(TranslationAdmin):
         (
             "ПУБЛІКАЦІЯ",
             {
-                "fields": (
-                    "title",
-                    "source_name",
-                    "category",
-                    "published_date",
-                    "url",
-                )
-            },
-        ),
+            "fields": (
+                "service_page",
+                "title",
+                "source_name",
+                "category",
+                "published_date",
+                "url",
+            )
+        },
+    ),
         (
             "ВІДОБРАЖЕННЯ",
             {

@@ -57,12 +57,80 @@
       return;
     }
 
-    const open = nav.classList.toggle("open");
+    const isOpen = nav.classList.contains("open");
+
+    if (!isOpen) {
+      // OPEN
+      nav.classList.remove("is-closing");
+      nav.classList.add("open");
+
+      navToggle.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+      return;
+    }
+
+    // CLOSE
+    nav.classList.add("is-closing");
+    nav.classList.remove("open");
 
     navToggle.setAttribute(
       "aria-expanded",
-      String(open)
+      "false"
     );
+
+    const finishClosing = (event) => {
+      if (event.propertyName !== "clip-path") {
+        return;
+      }
+
+      nav.classList.remove("is-closing");
+      nav.removeEventListener(
+        "transitionend",
+        finishClosing
+      );
+    };
+
+    nav.addEventListener(
+      "transitionend",
+      finishClosing
+    );
+  });
+
+  nav?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (!nav.classList.contains("open")) {
+        return;
+      }
+
+      nav.classList.add("is-closing");
+      nav.classList.remove("open");
+
+      navToggle?.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+      const finishClosing = (event) => {
+        if (event.propertyName !== "clip-path") {
+          return;
+        }
+
+        nav.classList.remove("is-closing");
+
+        nav.removeEventListener(
+          "transitionend",
+          finishClosing
+        );
+      };
+
+      nav.addEventListener(
+        "transitionend",
+        finishClosing
+      );
+    });
   });
 
   /*

@@ -36,7 +36,6 @@ class SiteSettingsAdmin(TranslationAdmin):
                     "service_title",
                     "photos_title",
                     "videos_title",
-                    "media_title",
                     "memories_title",
                 )
             },
@@ -128,19 +127,6 @@ class SiteSettingsAdmin(TranslationAdmin):
                     "videos_empty_text",
                     "videos_accessibility_label",
                     "videos_accessibility_text",
-                )
-            },
-        ),
-        (
-            "СТОРІНКА «МАТЕРІАЛИ»",
-            {
-                "fields": (
-                    "media_hero_eyebrow",
-                    "media_hero_description",
-                    "media_section_title",
-                    "media_verification_note",
-                    "media_empty_title",
-                    "media_empty_text",
                 )
             },
         ),

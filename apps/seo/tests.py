@@ -70,7 +70,6 @@ class SeoPageModelTests(TestCase):
             "service",
             "photos",
             "videos",
-            "media",
             "memories",
         }
 
@@ -173,7 +172,6 @@ class SeoMetaTests(TestCase):
             SeoPage.PageKey.SERVICE: "pages:service",
             SeoPage.PageKey.PHOTOS: "pages:photos",
             SeoPage.PageKey.VIDEOS: "pages:videos",
-            SeoPage.PageKey.MEDIA: "pages:media",
             SeoPage.PageKey.MEMORIES: "pages:memories",
         }
 

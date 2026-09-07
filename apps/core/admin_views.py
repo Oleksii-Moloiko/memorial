@@ -25,6 +25,7 @@ def home_admin_view(request: HttpRequest):
     ).first()
 
     featured_mention = MediaMention.objects.filter(
+        service_page__is_published=True,
         is_published=True,
         is_featured=True,
     ).first()
@@ -63,7 +64,7 @@ def home_admin_view(request: HttpRequest):
             "admin:videos_video_changelist",
         ),
         "publications_url": reverse(
-            "admin:media_mentions_mediamention_changelist",
+            "admin:pages_servicepage_changelist",
         ),
         "memories_url": reverse(
             "admin:memories_memory_changelist",

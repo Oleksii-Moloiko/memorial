@@ -26,56 +26,93 @@ class ServicePage(models.Model):
         "Опис у першому екрані",
         blank=True,
     )
+    # Навігація по сторінці
+
+    index_eyebrow = models.CharField(
+        "Підпис навігації",
+        max_length=100,
+        default="На сторінці",
+    )
+
+
+    # Блок «Нагороди»
+
+    awards_eyebrow = models.CharField(
+        "Підпис блоку нагород",
+        max_length=100,
+        default="Нагороди",
+    )
+
+    awards_title = models.CharField(
+        "Заголовок блоку нагород",
+        max_length=255,
+        default="Нагороди та відзнаки",
+    )
+
+    award_date_label = models.CharField(
+        "Підпис дати указу",
+        max_length=100,
+        default="Дата указу",
+    )
+
+    award_number_label = models.CharField(
+        "Підпис номера указу",
+        max_length=100,
+        default="Номер",
+    )
+
+    award_source_label = models.CharField(
+        "Підпис джерела",
+        max_length=100,
+        default="Джерело",
+    )
+
+
+    # Блок «Цитати»
+
+    quotes_eyebrow = models.CharField(
+        "Підпис блоку цитат",
+        max_length=100,
+        default="Цитати",
+    )
+
+    quotes_title = models.CharField(
+        "Заголовок блоку цитат",
+        max_length=255,
+        default="Слова, що залишилися",
+    )
+
+    quote_more_label = models.CharField(
+        "Текст кнопки розгортання цитати",
+        max_length=100,
+        default="Дивитись більше",
+    )
+
+
+    # Блок «Посилання»
+
+    links_eyebrow = models.CharField(
+        "Підпис блоку посилань",
+        max_length=100,
+        default="Посилання",
+    )
+
+    links_title = models.CharField(
+        "Заголовок блоку посилань",
+        max_length=255,
+        default="Матеріали та джерела",
+    )
+
+    links_missing_date_label = models.CharField(
+        "Текст, якщо дата не вказана",
+        max_length=100,
+        default="Дата не вказана",
+    )
     publication_status = models.CharField(
         "Статус публікації",
         max_length=30,
         choices=PublicationStatus.choices,
         default=PublicationStatus.NEEDS_APPROVAL,
-    )
-
-    service_intro = models.TextField(
-        "Основний опис служби",
-        blank=True,
-    )
-    service_text = models.TextField(
-        "Додатковий текст",
-        blank=True,
-    )
-    editorial_note = models.TextField(
-        "Редакційна примітка",
-        blank=True,
-    )
-
-    award_title = models.CharField(
-        "Назва нагороди",
-        max_length=255,
-        blank=True,
-    )
-    award_subtitle = models.CharField(
-        "Уточнення про нагороду",
-        max_length=255,
-        blank=True,
-        help_text="Наприклад: Орден «Золота Зірка» (посмертно)",
-    )
-    decree_date = models.DateField(
-        "Дата указу",
-        null=True,
-        blank=True,
-    )
-    decree_number = models.CharField(
-        "Номер указу",
-        max_length=100,
-        blank=True,
-    )
-    decree_source_name = models.CharField(
-        "Назва офіційного джерела",
-        max_length=255,
-        blank=True,
-        default="president.gov.ua",
-    )
-    decree_url = models.URLField(
-        "Посилання на текст указу",
-        blank=True,
     )
 
     is_published = models.BooleanField(

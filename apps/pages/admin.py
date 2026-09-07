@@ -78,30 +78,47 @@ class ServicePageAdmin(TranslationAdmin):
             },
         ),
         (
-            "2. ОПИС СЛУЖБИ",
+            "2. НАВІГАЦІЯ ПО СТОРІНЦІ",
             {
                 "fields": (
-                    "service_intro",
-                    "service_text",
-                    "editorial_note",
+                    "index_eyebrow",
                 )
             },
         ),
         (
-            "3. НАГОРОДА",
+            "3. ТЕКСТИ БЛОКУ «НАГОРОДИ»",
             {
                 "fields": (
-                    "award_title",
-                    "award_subtitle",
-                    "decree_date",
-                    "decree_number",
-                    "decree_source_name",
-                    "decree_url",
+                    "awards_eyebrow",
+                    "awards_title",
+                    "award_date_label",
+                    "award_number_label",
+                    "award_source_label",
                 )
             },
         ),
         (
-            "4. ПУБЛІКАЦІЯ СТОРІНКИ",
+            "4. ТЕКСТИ БЛОКУ «ЦИТАТИ»",
+            {
+                "fields": (
+                    "quotes_eyebrow",
+                    "quotes_title",
+                    "quote_more_label",
+                )
+            },
+        ),
+        (
+            "5. ТЕКСТИ БЛОКУ «ПОСИЛАННЯ»",
+            {
+                "fields": (
+                    "links_eyebrow",
+                    "links_title",
+                    "links_missing_date_label",
+                )
+            },
+        ),
+        (
+            "6. ПУБЛІКАЦІЯ СТОРІНКИ",
             {
                 "fields": (
                     "publication_status",

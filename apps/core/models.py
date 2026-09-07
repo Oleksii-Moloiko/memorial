@@ -61,11 +61,6 @@ class SiteSettings(models.Model):
         default="Відео",
     )
 
-    media_title = models.CharField(
-        "Назва розділу «Посилання»",
-        max_length=100,
-        default="Посилання",
-    )
 
     memories_title = models.CharField(
         "Назва розділу «Спогади»",
@@ -414,43 +409,7 @@ class SiteSettings(models.Model):
         "Відео — текст примітки про доступність",
         default=("за можливості до відео додається текстовий опис або розшифровка."),
     )
-    # Сторінка «Матеріали»
 
-    media_hero_eyebrow = models.CharField(
-        "Матеріали — надзаголовок",
-        max_length=100,
-        default="Зовнішні джерела",
-    )
-
-    media_hero_description = models.TextField(
-        "Матеріали — опис сторінки",
-        default=(
-            "Перевірені посилання на публікації, офіційні документи "
-            "й матеріали вшанування — без копіювання повних текстів."
-        ),
-    )
-
-    media_section_title = models.CharField(
-        "Матеріали — заголовок розділу",
-        max_length=200,
-        default="Матеріали",
-    )
-
-    media_verification_note = models.TextField(
-        "Матеріали — примітка про перевірку посилань",
-        default="Перевірка посилань рекомендована 1–2 рази на рік.",
-    )
-
-    media_empty_title = models.CharField(
-        "Матеріали — заголовок порожнього стану",
-        max_length=200,
-        default="Матеріалів поки немає",
-    )
-
-    media_empty_text = models.TextField(
-        "Матеріали — текст порожнього стану",
-        default=("Перевірені публікації та офіційні джерела з’являться тут пізніше."),
-    )
     # Сторінка «Спогади»
 
     memories_hero_eyebrow = models.CharField(

@@ -9,12 +9,22 @@ class ServicePageTranslationOptions(TranslationOptions):
         "hero_eyebrow",
         "hero_title",
         "hero_description",
-        "service_intro",
-        "service_text",
-        "editorial_note",
-        "award_title",
-        "award_subtitle",
-        "decree_source_name",
+
+        "index_eyebrow",
+
+        "awards_eyebrow",
+        "awards_title",
+        "award_date_label",
+        "award_number_label",
+        "award_source_label",
+
+        "quotes_eyebrow",
+        "quotes_title",
+        "quote_more_label",
+
+        "links_eyebrow",
+        "links_title",
+        "links_missing_date_label",
     )
 
 

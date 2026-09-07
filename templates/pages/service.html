@@ -40,19 +40,21 @@
 <section class="section section-paper service-index-section">
   <div class="container service-layout">
     <aside class="service-index">
-      <p class="eyebrow">На сторінці</p>
+      <p class="eyebrow">
+        {{ service_page.index_eyebrow|default:"На сторінці" }}
+      </p>
 
       <div class="service-index__links">
         <a href="#awards">
-          Нагороди
+          {{ service_page.awards_eyebrow|default:"Нагороди" }}
         </a>
 
         <a href="#quotes">
-          Цитати
+          {{ service_page.quotes_eyebrow|default:"Цитати" }}
         </a>
 
         <a href="#links">
-          Посилання
+          {{ service_page.links_eyebrow|default:"Посилання" }}
         </a>
       </div>
     </aside>
@@ -64,8 +66,13 @@
   <div class="container">
 
     <div class="section-heading">
-      <p class="eyebrow">Нагороди</p>
-      <h2>Нагороди та відзнаки</h2>
+      <p class="eyebrow">
+        {{ service_page.awards_eyebrow|default:"Нагороди" }}
+      </p>
+
+      <h2>
+        {{ service_page.awards_title|default:"Нагороди та відзнаки" }}
+      </h2>
     </div>
 
     <div class="awards-list">
@@ -89,21 +96,27 @@
           <dl class="award-list-item__meta">
             {% if award.decree_date %}
               <div>
-                <dt>Дата указу</dt>
+                <dt>
+                  {{ service_page.award_date_label|default:"Дата указу" }}
+                </dt>
                 <dd>{{ award.decree_date|date:"d.m.Y" }}</dd>
               </div>
             {% endif %}
 
             {% if award.decree_number %}
               <div>
-                <dt>Номер</dt>
+                <dt>
+                  {{ service_page.award_number_label|default:"Номер" }}
+                </dt>
                 <dd>№ {{ award.decree_number }}</dd>
               </div>
             {% endif %}
 
             {% if award.decree_source_name %}
               <div>
-                <dt>Джерело</dt>
+                <dt>
+                  {{ service_page.award_source_label|default:"Джерело" }}
+                </dt>
                 <dd>{{ award.decree_source_name }}</dd>
               </div>
             {% endif %}
@@ -134,8 +147,13 @@
   <div class="container">
 
     <div class="section-heading">
-      <p class="eyebrow">Цитати</p>
-      <h2>Слова, що залишилися</h2>
+      <p class="eyebrow">
+        {{ service_page.quotes_eyebrow|default:"Цитати" }}
+      </p>
+
+      <h2>
+        {{ service_page.quotes_title|default:"Слова, що залишилися" }}
+      </h2>
     </div>
 
     <div class="quotes-grid">
@@ -157,7 +175,7 @@
               aria-expanded="false"
               aria-controls="service-quote-{{ quote.id }}"
             >
-              Дивитись більше
+              {{ service_page.quote_more_label|default:"Дивитись більше" }}
             </button>
           {% endif %}
         </figure>
@@ -174,8 +192,13 @@
   <div class="container">
 
     <div class="section-heading">
-      <p class="eyebrow">Посилання</p>
-      <h2>Матеріали та джерела</h2>
+      <p class="eyebrow">
+        {{ service_page.links_eyebrow|default:"Посилання" }}
+      </p>
+
+      <h2>
+        {{ service_page.links_title|default:"Матеріали та джерела" }}
+      </h2>
     </div>
 
     <div class="service-links">
@@ -188,7 +211,9 @@
                 {{ mention.published_date|date:"d.m.Y" }}
               </time>
             {% else %}
-              <span>Дата не вказана</span>
+              <span>
+                {{ service_page.links_missing_date_label|default:"Дата не вказана" }}
+              </span>
             {% endif %}
 
             {% if mention.source_name %}
@@ -200,10 +225,6 @@
 
           <div class="service-link-item__content">
             <h3>{{ mention.title }}</h3>
-
-            {% if mention.description %}
-              <p>{{ mention.description }}</p>
-            {% endif %}
           </div>
 
           <a

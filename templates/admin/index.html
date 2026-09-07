@@ -57,7 +57,7 @@
 
                 <div>
                     <h3>{{ site_settings.service_title }}</h3>
-                    <p>Служба, нагорода та публікація</p>
+                    <p>Служба, нагороди, цитати та посилання</p>
                 </div>
             </a>
 
@@ -84,19 +84,6 @@
                 <div>
                     <h3>{{ site_settings.videos_title }}</h3>
                     <p>Відеоматеріали та обкладинки</p>
-                </div>
-            </a>
-
-
-            <a
-                href="{% url 'admin:media_mentions_mediamention_changelist' %}"
-                class="memorial-admin-card"
-            >
-                <div class="memorial-admin-card__icon">📰</div>
-
-                <div>
-                    <h3>{{ site_settings.media_title }}</h3>
-                    <p>Матеріали та згадки у медіа</p>
                 </div>
             </a>
 

@@ -52,6 +52,7 @@ def home(request):
             is_featured=True,
         ).first(),
         "featured_mention": MediaMention.objects.filter(
+            service_page__is_published=True,
             is_published=True,
             is_featured=True,
         ).first(),
@@ -89,18 +90,27 @@ def service(request):
         is_published=True,
     ).first()
 
-    mentions = MediaMention.objects.filter(
-        is_published=True,
-    )
-
     if service_page:
-        quotes = list(service_page.quotes.all())
+        quotes = list(
+            service_page.quotes.all()
+        )
+
+        mentions = service_page.mentions.filter(
+            is_published=True,
+        )
 
         for quote in quotes:
-            quote.is_long = len(quote.text) > SERVICE_QUOTE_TEASER_LIMIT
-            quote.teaser = make_service_quote_teaser(quote.text)
+            quote.is_long = (
+                len(quote.text)
+                > SERVICE_QUOTE_TEASER_LIMIT
+            )
+
+            quote.teaser = make_service_quote_teaser(
+                quote.text
+            )
     else:
         quotes = []
+        mentions = MediaMention.objects.none()
 
     context = {
         "service_page": service_page,
