@@ -25,6 +25,11 @@ class ServicePageTranslationOptions(TranslationOptions):
         "links_eyebrow",
         "links_title",
         "links_missing_date_label",
+        "links_nav_label",
+        "links_description",
+        "links_verification_note",
+        "links_empty_title",
+        "links_empty_text",
     )
 
 

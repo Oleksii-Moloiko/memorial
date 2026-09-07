@@ -108,6 +108,41 @@ class ServicePage(models.Model):
         max_length=100,
         default="Дата не вказана",
     )
+    links_nav_label = models.CharField(
+        "Назва в навігації",
+        max_length=100,
+        default="Посилання",
+    )
+
+    links_description = models.TextField(
+        "Опис блоку посилань",
+        blank=True,
+        default=(
+            "Перевірені посилання на публікації, офіційні документи "
+            "й матеріали вшанування — без копіювання повних текстів."
+        ),
+    )
+
+    links_verification_note = models.TextField(
+        "Примітка про перевірку посилань",
+        blank=True,
+        default="Перевірка посилань рекомендована 1–2 рази на рік.",
+    )
+
+    links_empty_title = models.CharField(
+        "Заголовок, якщо посилань немає",
+        max_length=255,
+        default="Матеріалів поки немає",
+    )
+
+    links_empty_text = models.TextField(
+        "Текст, якщо посилань немає",
+        blank=True,
+        default=(
+            "Перевірені публікації та офіційні джерела "
+            "з’являться тут пізніше."
+        ),
+    )
     publication_status = models.CharField(
         "Статус публікації",
         max_length=30,

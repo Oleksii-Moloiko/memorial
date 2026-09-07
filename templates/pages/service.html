@@ -54,7 +54,7 @@
         </a>
 
         <a href="#links">
-          {{ service_page.links_eyebrow|default:"Посилання" }}
+          {{ service_page.links_nav_label|default:"Посилання" }}
         </a>
       </div>
     </aside>
@@ -199,47 +199,77 @@
       <h2>
         {{ service_page.links_title|default:"Матеріали та джерела" }}
       </h2>
+
+      {% if service_page.links_description %}
+        <p>
+          {{ service_page.links_description }}
+        </p>
+      {% endif %}
     </div>
 
-    <div class="service-links">
-      {% for mention in mentions %}
-        <article class="service-link-item">
+    {% if service_page.links_verification_note %}
+      <div class="link-check">
+        <strong>{{ mentions|length }} джерел</strong>
+        <p>
+          {{ service_page.links_verification_note }}
+        </p>
+      </div>
+    {% endif %}
 
-          <div class="service-link-item__date">
-            {% if mention.published_date %}
-              <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
-                {{ mention.published_date|date:"d.m.Y" }}
-              </time>
-            {% else %}
-              <span>
-                {{ service_page.links_missing_date_label|default:"Дата не вказана" }}
-              </span>
-            {% endif %}
+    {% if mentions %}
+      <div class="service-links">
+        {% for mention in mentions %}
+          <article class="service-link-item">
 
-            {% if mention.source_name %}
-              <span class="service-link-item__source">
-                {{ mention.source_name }}
-              </span>
-            {% endif %}
-          </div>
+            <div class="service-link-item__date">
+              {% if mention.published_date %}
+                <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
+                  {{ mention.published_date|date:"d.m.Y" }}
+                </time>
+              {% else %}
+                <span>
+                  {{ service_page.links_missing_date_label|default:"Дата не вказана" }}
+                </span>
+              {% endif %}
 
-          <div class="service-link-item__content">
-            <h3>{{ mention.title }}</h3>
-          </div>
+              {% if mention.source_name %}
+                <span class="service-link-item__source">
+                  {{ mention.source_name }}
+                </span>
+              {% endif %}
+            </div>
 
-          <a
-            class="service-link-item__link"
-            href="{{ mention.url }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Відкрити джерело: {{ mention.title }}"
-          >
-            ↗
-          </a>
+            <div class="service-link-item__content">
+              <h3>{{ mention.title }}</h3>
+            </div>
 
-        </article>
-      {% endfor %}
-    </div>
+            <a
+              class="service-link-item__link"
+              href="{{ mention.url }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Відкрити джерело: {{ mention.title }}"
+            >
+              ↗
+            </a>
+
+          </article>
+        {% endfor %}
+      </div>
+
+    {% else %}
+
+      <div class="empty-state">
+        <h3>
+          {{ service_page.links_empty_title|default:"Матеріалів поки немає" }}
+        </h3>
+
+        <p>
+          {{ service_page.links_empty_text }}
+        </p>
+      </div>
+
+    {% endif %}
 
   </div>
 </section>

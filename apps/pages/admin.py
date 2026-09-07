@@ -111,8 +111,13 @@ class ServicePageAdmin(TranslationAdmin):
             "5. ТЕКСТИ БЛОКУ «ПОСИЛАННЯ»",
             {
                 "fields": (
+                    "links_nav_label",
                     "links_eyebrow",
                     "links_title",
+                    "links_description",
+                    "links_verification_note",
+                    "links_empty_title",
+                    "links_empty_text",
                     "links_missing_date_label",
                 )
             },
