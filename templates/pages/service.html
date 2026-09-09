@@ -187,7 +187,7 @@
 </section>
 {% endif %}
 
-{% if mentions %}
+{% if service_page %}
 <section class="section section-stone" id="links">
   <div class="container">
 
@@ -207,7 +207,7 @@
       {% endif %}
     </div>
 
-    {% if service_page.links_verification_note %}
+    {% if mentions and service_page.links_verification_note %}
       <div class="link-check">
         <strong>{{ mentions|length }} джерел</strong>
         <p>

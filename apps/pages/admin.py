@@ -12,10 +12,84 @@ from .models import (
     ServiceQuote,
 )
 
+class ClientFriendlyAdminLabelsMixin:
+    """Прибирає технічні позначки мов і пояснює службові поля."""
 
-class ServiceAwardInline(TranslationStackedInline):
+    client_field_labels = {}
+    client_field_help_texts = {}
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_dbfield(
+            db_field,
+            request,
+            **kwargs,
+        )
+
+        if formfield is None:
+            return None
+
+        field_name = db_field.name
+        base_field_name = field_name
+
+        for language in ("uk", "en"):
+            suffix = f"_{language}"
+
+            if field_name.endswith(suffix):
+                base_field_name = field_name.removesuffix(suffix)
+
+                if formfield.label:
+                    label_suffix = f" [{language}]"
+
+                    if formfield.label.endswith(label_suffix):
+                        formfield.label = formfield.label.removesuffix(
+                            label_suffix
+                        )
+
+                break
+
+        if base_field_name == "order":
+            formfield.label = "Порядок відображення"
+            formfield.help_text = (
+                "Менше число — елемент буде показаний вище."
+            )
+
+        if base_field_name in self.client_field_labels:
+            formfield.label = self.client_field_labels[
+                base_field_name
+            ]
+
+        if base_field_name in self.client_field_help_texts:
+            formfield.help_text = self.client_field_help_texts[
+                base_field_name
+            ]
+
+        return formfield
+
+
+class ServiceAwardInline(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationStackedInline,
+):
     model = ServiceAward
     extra = 0
+    verbose_name = "нагорода"
+    verbose_name_plural = "Список нагород"
+    client_field_labels = {
+        "subtitle": "Уточнення до нагороди",
+        "decree_source_name": "Офіційне джерело",
+    }
+
+    client_field_help_texts = {
+        "subtitle": (
+            "Наприклад: «II ступеня» або «посмертно»."
+        ),
+        "decree_source_name": (
+            "Назва установи або сайту, де опубліковано указ."
+        ),
+        "decree_url": (
+            "Повне посилання на офіційний текст указу."
+        ),
+    }
     fields = (
         "title",
         "subtitle",
@@ -27,9 +101,24 @@ class ServiceAwardInline(TranslationStackedInline):
     )
 
 
-class ServiceQuoteInline(TranslationStackedInline):
+class ServiceQuoteInline(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationStackedInline,
+):
     model = ServiceQuote
     extra = 0
+    verbose_name = "цитата"
+    verbose_name_plural = "Список цитат"
+    client_field_labels = {
+        "text": "Текст цитати",
+        "context": "Підпис / контекст",
+    }
+
+    client_field_help_texts = {
+        "context": (
+            "Наприклад: «із розмови з побратимами»."
+        ),
+    }
     fields = (
         "text",
         "context",
@@ -37,9 +126,35 @@ class ServiceQuoteInline(TranslationStackedInline):
     )
 
 
-class MediaMentionInline(TranslationStackedInline):
+class MediaMentionInline(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationStackedInline,
+):
     model = MediaMention
     extra = 0
+    verbose_name = "посилання"
+    verbose_name_plural = "Список посилань"
+    client_field_labels = {
+        "title": "Назва матеріалу",
+        "category": "Тип джерела",
+        "url": "Посилання на матеріал",
+        "is_published": "Показувати посилання на сайті",
+        "is_featured": (
+            "Показувати посилання на головній сторінці"
+        ),
+    }
+
+    client_field_help_texts = {
+        "published_date": (
+            "Якщо дата невідома, залиште поле порожнім."
+        ),
+        "is_featured": (
+            "На головній сторінці може бути лише одне "
+            "посилання. Якщо вибрати інше, попереднє "
+            "буде знято автоматично."
+        ),
+    }
+
     fields = (
         "title",
         "source_name",
@@ -53,7 +168,24 @@ class MediaMentionInline(TranslationStackedInline):
 
 
 @admin.register(ServicePage)
-class ServicePageAdmin(TranslationAdmin):
+class ServicePageAdmin(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationAdmin,
+):
+    change_form_template = "admin/pages/servicepage/change_form.html"
+    client_field_labels = {
+        "publication_status": "Стан погодження",
+        "is_published": "Показувати сторінку на сайті",
+    }
+
+    client_field_help_texts = {
+        "publication_status": (
+            "Внутрішній статус матеріалів перед публікацією."
+        ),
+        "is_published": (
+            "Увімкніть, коли сторінка готова до показу відвідувачам."
+        ),
+    }
     inlines = [
         ServiceAwardInline,
         ServiceQuoteInline,
@@ -86,7 +218,7 @@ class ServicePageAdmin(TranslationAdmin):
             },
         ),
         (
-            "3. ТЕКСТИ БЛОКУ «НАГОРОДИ»",
+            "3. НАГОРОДИ",
             {
                 "fields": (
                     "awards_eyebrow",
@@ -98,7 +230,7 @@ class ServicePageAdmin(TranslationAdmin):
             },
         ),
         (
-            "4. ТЕКСТИ БЛОКУ «ЦИТАТИ»",
+            "4. ЦИТАТИ",
             {
                 "fields": (
                     "quotes_eyebrow",
@@ -108,22 +240,34 @@ class ServicePageAdmin(TranslationAdmin):
             },
         ),
         (
-            "5. ТЕКСТИ БЛОКУ «ПОСИЛАННЯ»",
+            "5. ПОСИЛАННЯ",
             {
                 "fields": (
                     "links_nav_label",
                     "links_eyebrow",
                     "links_title",
                     "links_description",
-                    "links_verification_note",
-                    "links_empty_title",
-                    "links_empty_text",
-                    "links_missing_date_label",
                 )
             },
         ),
         (
-            "6. ПУБЛІКАЦІЯ СТОРІНКИ",
+            "ДОДАТКОВІ ТЕКСТИ ПОСИЛАНЬ",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Рідко змінювані тексти для перевірки посилань, "
+                    "порожнього стану та відсутньої дати."
+                ),
+                "fields": (
+                    "links_verification_note",
+                    "links_empty_title",
+                    "links_empty_text",
+                    "links_missing_date_label",
+                ),
+            },
+        ),
+        (
+            "6. ПУБЛІКАЦІЯ",
             {
                 "fields": (
                     "publication_status",
