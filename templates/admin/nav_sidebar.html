@@ -1,6 +1,17 @@
 {% load i18n %}
 
-<nav id="nav-sidebar" class="memorial-sidebar">
+<button
+    class="sticky toggle-nav-sidebar"
+    id="toggle-nav-sidebar"
+    type="button"
+    aria-label="{% translate 'Toggle navigation' %}"
+></button>
+
+<nav
+    id="nav-sidebar"
+    class="memorial-sidebar"
+    aria-label="{% translate 'Sidebar' %}"
+>
 
     <div class="memorial-sidebar__section">
         <div class="memorial-sidebar__title">
