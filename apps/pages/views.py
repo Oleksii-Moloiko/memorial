@@ -15,7 +15,13 @@ from .constants import (
     MEMORY_TEASER_LIMIT,
     SERVICE_QUOTE_TEASER_LIMIT,
 )
-from .models import HomePage, LifePage, PhotoPage, ServicePage
+from .models import (
+    HomePage,
+    LifePage,
+    PhotoPage,
+    ServicePage,
+    VideoPage,
+)
 from .utils import (
     make_memory_teaser,
     make_service_quote_teaser,
@@ -180,6 +186,8 @@ def photos(request):
 
 
 def videos(request):
+    video_page = VideoPage.objects.first() or VideoPage()
+
     published_videos = Video.objects.filter(is_published=True)
 
     featured_video = published_videos.filter(is_featured=True).first()
@@ -190,6 +198,7 @@ def videos(request):
         regular_videos = regular_videos.exclude(pk=featured_video.pk)
 
     context = {
+        "video_page": video_page,
         "featured_video": featured_video,
         "videos": regular_videos,
         **_seo_context("videos"),

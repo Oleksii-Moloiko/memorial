@@ -11,12 +11,12 @@
 <section class="page-hero section-dark">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">{{ site_settings.videos_hero_eyebrow }}</p>
+      <p class="eyebrow">{{ video_page.hero_eyebrow }}</p>
       <h1>{{ site_settings.videos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      {{ site_settings.videos_hero_description }}
+      {{ video_page.hero_description }}
     </p>
   </div>
 </section>
@@ -49,7 +49,7 @@
 
         <div class="featured-video-copy">
           <p class="eyebrow">
-            {{ site_settings.videos_featured_label }}
+            {{ video_page.featured_label }}
           </p>
 
           <h2>{{ featured_video.title }}</h2>
@@ -86,7 +86,7 @@
           {% if featured_video.transcript %}
             <details class="video-transcript">
               <summary>
-                {{ site_settings.videos_transcript_label }}
+                {{ video_page.transcript_label }}
               </summary>
 
               <div>
@@ -106,12 +106,12 @@
 
     <div class="section-heading split-heading">
       <div>
-        <p class="eyebrow">{{ site_settings.videos_all_records_label }}</p>
-        <h2>{{ site_settings.videos_archive_title }}</h2>
+        <p class="eyebrow">{{ video_page.archive_eyebrow }}</p>
+        <h2>{{ video_page.archive_title }}</h2>
       </div>
 
       <p>
-        {{ site_settings.videos_admin_note }}
+        {{ video_page.archive_note }}
       </p>
     </div>
 
@@ -152,10 +152,10 @@
       </div>
     {% elif not featured_video %}
       <div class="empty-state">
-        <h2>{{ site_settings.videos_empty_title }}</h2>
+        <h2>{{ video_page.empty_title }}</h2>
 
         <p>
-          {{ site_settings.videos_empty_text }}
+          {{ video_page.empty_text }}
         </p>
       </div>
     {% endif %}
@@ -164,8 +164,8 @@
       <span aria-hidden="true">CC</span>
 
       <p>
-        <strong>{{ site_settings.videos_accessibility_label }}</strong>
-        {{ site_settings.videos_accessibility_text }}
+        <strong>{{ video_page.accessibility_label }}</strong>
+        {{ video_page.accessibility_text }}
       </p>
     </div>
 

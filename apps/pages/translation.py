@@ -7,6 +7,7 @@ from .models import (
     ServiceAward,
     ServicePage,
     ServiceQuote,
+    VideoPage,
 )
 
 
@@ -127,4 +128,20 @@ class PhotoPageTranslationOptions(TranslationOptions):
         "category_empty_text",
         "empty_title",
         "empty_text",
+    )
+
+@register(VideoPage)
+class VideoPageTranslationOptions(TranslationOptions):
+    fields = (
+        "hero_eyebrow",
+        "hero_description",
+        "featured_label",
+        "transcript_label",
+        "archive_eyebrow",
+        "archive_title",
+        "archive_note",
+        "empty_title",
+        "empty_text",
+        "accessibility_label",
+        "accessibility_text",
     )

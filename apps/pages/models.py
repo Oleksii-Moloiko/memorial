@@ -482,6 +482,106 @@ class PhotoPage(models.Model):
     def __str__(self) -> str:
         return "Фото"
 
+class VideoPage(models.Model):
+    """Контент сторінки «Відео».
+
+    На сайті має існувати лише один запис.
+    """
+
+    # Перший екран
+
+    hero_eyebrow = models.CharField(
+        "Текст над заголовком",
+        max_length=100,
+        default="Архівні записи",
+    )
+
+    hero_description = models.TextField(
+        "Опис першого екрану",
+        default=(
+            "Сімейні записи, інтерв’ю, матеріали зі служби "
+            "та відео вшанування."
+        ),
+    )
+
+    # Рекомендоване відео
+
+    featured_label = models.CharField(
+        "Підпис рекомендованого відео",
+        max_length=150,
+        default="Рекомендоване відео",
+    )
+
+    transcript_label = models.CharField(
+        "Заголовок розшифровки відео",
+        max_length=150,
+        default="Текстовий опис відео",
+    )
+
+    # Архів
+
+    archive_eyebrow = models.CharField(
+        "Підпис блоку відеоархіву",
+        max_length=100,
+        default="Усі записи",
+    )
+
+    archive_title = models.CharField(
+        "Заголовок відеоархіву",
+        max_length=200,
+        default="Відеоархів",
+    )
+
+    archive_note = models.TextField(
+        "Примітка біля відеоархіву",
+        default=(
+            "Усі матеріали додаються та публікуються "
+            "тільки через адміністративну панель."
+        ),
+    )
+
+    # Додаткові тексти
+
+    empty_title = models.CharField(
+        "Заголовок, якщо відеоархів порожній",
+        max_length=200,
+        default="Відеоархів ще наповнюється",
+    )
+
+    empty_text = models.TextField(
+        "Текст, якщо відеоархів порожній",
+        default=(
+            "Перевірені відеоматеріали з’являться тут "
+            "після публікації адміністратором."
+        ),
+    )
+
+    accessibility_label = models.CharField(
+        "Заголовок примітки про доступність",
+        max_length=100,
+        default="Доступність:",
+    )
+
+    accessibility_text = models.TextField(
+        "Текст примітки про доступність",
+        default=(
+            "за можливості до відео додається "
+            "текстовий опис або розшифровка."
+        ),
+    )
+
+    updated_at = models.DateTimeField(
+        "Оновлено",
+        auto_now=True,
+    )
+
+    class Meta:
+        verbose_name = "Відео"
+        verbose_name_plural = "Відео"
+
+    def __str__(self) -> str:
+        return "Відео"
+
 
 class ServicePage(models.Model):
     """Контент сторінки «Подвиг і служба».

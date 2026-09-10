@@ -16,6 +16,7 @@ from .models import (
     ServiceAward,
     ServicePage,
     ServiceQuote,
+    VideoPage,
 )
 
 class ClientFriendlyAdminLabelsMixin:
@@ -748,6 +749,125 @@ class PhotoPageAdmin(
             reverse("admin:pages_photopage_add")
         )
 
+@admin.register(VideoPage)
+class VideoPageAdmin(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationAdmin,
+):
+    readonly_fields = ("videos_content_link",)
+
+    fieldsets = (
+        (
+            "1. ПЕРШИЙ ЕКРАН",
+            {
+                "fields": (
+                    "hero_eyebrow",
+                    "hero_description",
+                )
+            },
+        ),
+        (
+            "2. РЕКОМЕНДОВАНЕ ВІДЕО",
+            {
+                "description": (
+                    "Тексти блоку рекомендованого відео. "
+                    "Саме відео вибирається у списку відеозаписів."
+                ),
+                "fields": (
+                    "featured_label",
+                    "transcript_label",
+                ),
+            },
+        ),
+        (
+            "3. ВІДЕОАРХІВ",
+            {
+                "fields": (
+                    "archive_eyebrow",
+                    "archive_title",
+                    "archive_note",
+                )
+            },
+        ),
+        (
+            "4. ВІДЕОЗАПИСИ",
+            {
+                "fields": (
+                    "videos_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Рідко змінювані тексти для порожнього "
+                    "відеоархіву та примітки про доступність."
+                ),
+                "fields": (
+                    "empty_title",
+                    "empty_text",
+                    "accessibility_label",
+                    "accessibility_text",
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description="Відеозаписи")
+    def videos_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати відео"
+            "</a>",
+            reverse("admin:videos_video_changelist"),
+        )
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return not VideoPage.objects.exists()
+
+    def has_delete_permission(
+        self,
+        request: HttpRequest,
+        obj: VideoPage | None = None,
+    ) -> bool:
+        return False
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:index")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:index")
+
+    def changelist_view(
+        self,
+        request: HttpRequest,
+        extra_context=None,
+    ):
+        page = VideoPage.objects.first()
+
+        if page:
+            return HttpResponseRedirect(
+                reverse(
+                    "admin:pages_videopage_change",
+                    args=[page.pk],
+                )
+            )
+
+        return HttpResponseRedirect(
+            reverse("admin:pages_videopage_add")
+        )
 
 @admin.register(ServicePage)
 class ServicePageAdmin(

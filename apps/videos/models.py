@@ -64,6 +64,10 @@ class Video(models.Model):
         max_length=20,
         choices=Category.choices,
         default=Category.OTHER,
+        help_text=(
+            "Допомагає класифікувати відео та показує його тип "
+            "у відповідних блоках сайту."
+        ),
     )
 
     recorded_at = models.CharField(
@@ -87,20 +91,27 @@ class Video(models.Model):
     )
 
     is_featured = models.BooleanField(
-        "Рекомендоване відео",
+        "Показувати як рекомендоване",
         default=False,
-        help_text=("На сторінці бажано мати лише одне рекомендоване відео."),
+        help_text=(
+            "Рекомендованим може бути лише одне відео. "
+            "Якщо вибрати інше, попереднє перестане бути рекомендованим."
+        ),
     )
 
     is_published = models.BooleanField(
-        "Опубліковано",
+        "Показувати відео на сайті",
         default=False,
-        help_text=("Неопубліковане відео не відображається на сайті."),
+        help_text=(
+            "Якщо вимкнено, відео зберігається в адмінці, "
+            "але не відображається на сайті."
+        ),
     )
 
     order = models.PositiveIntegerField(
-        "Порядок",
+        "Порядок відображення",
         default=0,
+        help_text="Менше число — відео буде показане раніше.",
     )
 
     created_at = models.DateTimeField(
@@ -109,12 +120,14 @@ class Video(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if self.is_featured:
+        if not self.is_published:
+            self.is_featured = False
+        elif self.is_featured:
             Video.objects.exclude(pk=self.pk).filter(
                 is_featured=True,
             ).update(is_featured=False)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Відео"
