@@ -1,9 +1,11 @@
 from datetime import date
 
-from django.test import TestCase
+from django.contrib import admin
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
 from .models import Biography, TimelineEvent
+from .admin import BiographyAdmin, TimelineEventAdmin
 
 
 class BiographyModelTests(TestCase):
@@ -134,4 +136,75 @@ class LifePageTests(TestCase):
         self.assertContains(
             response,
             "Хронологія ще наповнюється",
+        )
+
+class BiographyAdminRedirectTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_biography_change_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+        biography = Biography(
+            full_name="Тест",
+        )
+
+        response = model_admin.response_change(
+            request,
+            biography,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
+        )
+
+    def test_biography_add_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+        biography = Biography(
+            full_name="Тест",
+        )
+
+        response = model_admin.response_add(
+            request,
+            biography,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
+        )
+
+    def test_timeline_change_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = TimelineEventAdmin(
+            TimelineEvent,
+            admin.site,
+        )
+
+        event = TimelineEvent(
+            date_label="2000",
+            title="Подія",
+        )
+
+        response = model_admin.response_change(
+            request,
+            event,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
         )

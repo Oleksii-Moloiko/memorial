@@ -45,11 +45,11 @@
         role="img"
         aria-label="Місце для головного портрета"
       >
-        <span>Головне фото ще не додано</span>
+        <span>{{ home_page.hero_portrait_empty_label }}</span>
       </div>
     {% endif %}
     <div class="hero-copy">
-      <p class="eyebrow">{{ site_settings.home_hero_eyebrow }}</p>
+      <p class="eyebrow">{{ home_page.hero_eyebrow }}</p>
 
       {% if biography %}
         <h1 class="hero-name">
@@ -91,27 +91,27 @@
           </p>
         {% endif %}
       {% else %}
-        <h1>{{ site_settings.home_empty_title }}</h1>
+        <h1>{{ home_page.empty_title }}</h1>
 
         <p class="hero-intro">
-          {{ site_settings.home_empty_text }}
+          {{ home_page.empty_text }}
         </p>
       {% endif %}
 
       <div class="button-row">
         <a class="button button-primary" href="{% url 'pages:life' %}">
-          Прочитати історію
+          {{ home_page.hero_primary_button_label }}
         </a>
 
         <a class="button button-ghost" href="{% url 'pages:photos' %}">
-          Переглянути фото
+          {{ home_page.hero_secondary_button_label }}
         </a>
       </div>
     </div>
   </div>
     <div class="hero-scroll">
       <span class="hero-scroll__label">
-        Гортайте, щоб дізнатися більше
+        {{ home_page.hero_scroll_label }}
       </span>
 
       <button
@@ -134,7 +134,7 @@
 
     <div class="quote-row">
       <p class="quote-subtitle">
-        Цитати, що склалися в характер.
+        {{ home_page.quote_subtitle }}
       </p>
 
       <a
@@ -169,8 +169,12 @@
 <section class="section section-paper">
   <div class="container">
     <div class="section-heading split-heading">
-      <div><p class="eyebrow">{{ site_settings.home_life_eyebrow }}</p><h2>{{ site_settings.home_life_title }}</h2></div>
-      <p>{{ site_settings.home_life_description }}</p>
+      <div>
+        <p class="eyebrow">{{ home_page.life_eyebrow }}</p>
+        <h2>{{ home_page.life_title }}</h2>
+      </div>
+
+      <p>{{ home_page.life_description }}</p>
     </div>
     <div class="timeline-carousel" data-timeline-carousel>
       <div class="timeline-carousel__sticky" data-timeline-sticky>
@@ -201,12 +205,12 @@
                   class="timeline-carousel__more"
                   href="{% url 'pages:life' %}#timeline-event-{{ event.id }}"
                 >
-                  Читати далі
+                  {{ home_page.life_more_label }}
                 </a>
               </article>
 
             {% empty %}
-              <p>{{ site_settings.home_life_empty_text }}</p>
+              <p>{{ home_page.life_empty_text }}</p>
             {% endfor %}
 
           </div>
@@ -241,14 +245,18 @@
       class="text-link"
       href="{% url 'pages:life' %}#timeline"
     >
-      Читати далі <span aria-hidden="true">→</span>
+      {{ home_page.life_more_label }}
+      <span aria-hidden="true">→</span>
     </a>
   </div>
 </section>
 
 <section class="section section-stone">
   <div class="container">
-    <div class="section-heading"><p class="eyebrow">{{ site_settings.home_gallery_eyebrow }}</p><h2>{{ site_settings.home_gallery_title }}</h2></div>
+    <div class="section-heading">
+      <p class="eyebrow">{{ home_page.gallery_eyebrow }}</p>
+      <h2>{{ home_page.gallery_title }}</h2>
+    </div>
     <div class="home-photo-mosaic">
       <div class="home-photo-mosaic__grid">
         {% for photo in gallery_preview %}
@@ -275,12 +283,17 @@
           </a>
         {% empty %}
           <div class="home-photo-mosaic__empty media-placeholder tone-a">
-            <span>{{ site_settings.home_gallery_empty_text }}</span>
+            <span>{{ home_page.gallery_empty_text }}</span>
           </div>
         {% endfor %}
       </div>
     </div>
-    <a class="button button-secondary" href="{% url 'pages:photos' %}">Відкрити весь фотоархів</a>
+    <a
+      class="button button-secondary"
+      href="{% url 'pages:photos' %}"
+    >
+      {{ home_page.gallery_button_label }}
+    </a>
   </div>
 </section>
 
@@ -303,7 +316,7 @@
           >
         {% else %}
           <div class="feature-media-fallback video-placeholder media-placeholder">
-            <span>Відео</span>
+            <span>{{ home_page.video_eyebrow }}</span>
           </div>
         {% endif %}
 
@@ -311,7 +324,7 @@
       </a>
 
       <div class="feature-copy">
-        <p class="eyebrow">Відео</p>
+        <p class="eyebrow">{{ home_page.video_eyebrow }}</p>
 
         {% if featured_video %}
           <h3>{{ featured_video.title }}</h3>
@@ -338,26 +351,27 @@
             </p>
           {% endif %}
         {% else %}
-          <h3>{{ site_settings.home_video_title }}</h3>
+          <h3>{{ home_page.video_empty_title }}</h3>
 
           <p>
-            {{ site_settings.home_video_description }}
+            {{ home_page.video_empty_description }}
           </p>
         {% endif %}
 
         <a class="text-link" href="{% url 'pages:videos' %}">
-          Дивитися відео →
+          {{ home_page.video_button_label }}
+          <span aria-hidden="true">→</span>
         </a>
       </div>
     </article>
 
     <article class="feature-card">
       <div class="feature-media document-placeholder media-placeholder">
-        <span>ЗМІ</span>
+        <span>{{ home_page.links_eyebrow }}</span>
       </div>
 
       <div class="feature-copy">
-        <p class="eyebrow">{{ site_settings.home_media_eyebrow }}</p>
+        <p class="eyebrow">{{ home_page.links_eyebrow }}</p>
 
         {% if featured_mention %}
           <h3>{{ featured_mention.title }}</h3>
@@ -376,17 +390,19 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Відкрити джерело ↗
+            {{ home_page.links_source_button_label }}
+            <span aria-hidden="true">↗</span>
           </a>
         {% else %}
-          <h3>{{ site_settings.home_media_title }}</h3>
+          <h3>{{ home_page.links_empty_title }}</h3>
 
           <p>
-            {{ site_settings.home_media_description }}
+            {{ home_page.links_empty_description }}
           </p>
 
           <a class="text-link" href="{% url 'pages:service' %}#links">
-            Перейти до матеріалів →
+            {{ home_page.links_archive_button_label }}
+            <span aria-hidden="true">→</span>
           </a>
         {% endif %}
       </div>
@@ -398,12 +414,17 @@
 {% if featured_memory %}
 <section class="section memory-banner section-dark">
   <div class="container memory-banner-grid">
-    <p class="eyebrow">Спогади</p>
+    <p class="eyebrow">{{ home_page.memories_eyebrow }}</p>
     <blockquote>«{{ featured_memory.text }}»</blockquote>
     <p class="memory-author">
       — {% if featured_memory.author_role %}{{ featured_memory.author_role }}, {% endif %}«{{ featured_memory.author_name }}»
     </p>
-    <a class="button button-light" href="{% url 'pages:memories' %}">Читати спогади</a>
+    <a
+      class="button button-light"
+      href="{% url 'pages:memories' %}"
+    >
+      {{ home_page.memories_button_label }}
+    </a>
   </div>
 </section>
 {% endif %}

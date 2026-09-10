@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.http import HttpRequest
 from django.shortcuts import redirect
-from django.template.response import TemplateResponse
-from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 from modeltranslation.admin import TranslationAdmin
@@ -64,50 +62,26 @@ class BiographyAdmin(TranslationAdmin):
         ),
     )
 
-    def get_urls(self):
-        urls = super().get_urls()
-
-        custom_urls = [
-            path(
-                "life/",
-                self.admin_site.admin_view(self.life_view),
-                name="biography_life",
-            ),
-        ]
-
-        return custom_urls + urls
-
-    def life_view(self, request: HttpRequest) -> TemplateResponse:
-        biography = Biography.objects.first()
-        timeline_events = TimelineEvent.objects.all()
-
-        context = {
-            **self.admin_site.each_context(request),
-            "title": "Життя",
-            "biography": biography,
-            "timeline_events": timeline_events,
-            "biography_change_url": (
-                reverse(
-                    "admin:biography_biography_change",
-                    args=[biography.pk],
-                )
-                if biography
-                else reverse("admin:biography_biography_add")
-            ),
-            "timeline_add_url": reverse("admin:biography_timelineevent_add"),
-        }
-
-        return TemplateResponse(
-            request,
-            "admin/biography/life.html",
-            context,
-        )
-
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:biography_life")
+        return redirect("admin:pages_lifepage_changelist")
+
+    def response_add(
+            self,
+            request,
+            obj,
+            post_url_continue=None,
+    ):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:pages_lifepage_changelist")
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Allow only one biography record."""
@@ -185,16 +159,16 @@ class TimelineEventAdmin(TranslationAdmin):
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:biography_life")
+        return redirect("admin:pages_lifepage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:biography_life")
+        return redirect("admin:pages_lifepage_changelist")
 
     def response_delete(self, request, obj_display, obj_id):
-        return redirect("admin:biography_life")
+        return redirect("admin:pages_lifepage_changelist")
 
     @admin.display(description="Опис")
     def short_description(self, obj: TimelineEvent) -> str:

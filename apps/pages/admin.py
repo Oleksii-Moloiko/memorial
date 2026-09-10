@@ -2,11 +2,16 @@ from django.contrib import admin
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.html import format_html
+
+from apps.biography.models import Biography
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
 
 from apps.media_mentions.models import MediaMention
 
 from .models import (
+    HomePage,
+    LifePage,
     ServiceAward,
     ServicePage,
     ServiceQuote,
@@ -165,6 +170,477 @@ class MediaMentionInline(
         "is_featured",
         "order",
     )
+
+@admin.register(HomePage)
+class HomePageAdmin(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationAdmin,
+):
+    readonly_fields = (
+        "hero_content_link",
+        "quote_content_link",
+        "life_content_link",
+        "gallery_content_link",
+        "video_content_link",
+        "links_content_link",
+        "memories_content_link",
+    )
+    fieldsets = (
+        (
+            "1. ПЕРШИЙ ЕКРАН",
+            {
+                "fields": (
+                    "hero_eyebrow",
+                    "hero_primary_button_label",
+                    "hero_secondary_button_label",
+                    "hero_scroll_label",
+                    "hero_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ ПЕРШОГО ЕКРАНУ",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Ці тексти показуються, якщо основна "
+                    "інформація про людину ще не заповнена."
+                ),
+                "fields": (
+                    "hero_portrait_empty_label",
+                    "empty_title",
+                    "empty_text",
+                ),
+            },
+        ),
+        (
+            "2. ЦИТАТА",
+            {
+                "fields": (
+                    "quote_subtitle",
+                    "quote_content_link",
+                )
+            },
+        ),
+        (
+            "3. ЖИТТЯ",
+            {
+                "fields": (
+                    "life_eyebrow",
+                    "life_title",
+                    "life_description",
+                    "life_more_label",
+                    "life_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ БЛОКУ «ЖИТТЯ»",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Текст, який показується, якщо хронологію "
+                    "ще не заповнено."
+                ),
+                "fields": (
+                    "life_empty_text",
+                ),
+            },
+        ),
+        (
+            "4. ФОТО",
+            {
+                "fields": (
+                    "gallery_eyebrow",
+                    "gallery_title",
+                    "gallery_button_label",
+                    "gallery_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ БЛОКУ «ФОТО»",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Текст, який показується, якщо фотоархів "
+                    "ще порожній."
+                ),
+                "fields": (
+                    "gallery_empty_text",
+                ),
+            },
+        ),
+        (
+            "5. ВІДЕО",
+            {
+                "fields": (
+                    "video_eyebrow",
+                    "video_button_label",
+                    "video_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ БЛОКУ «ВІДЕО»",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Ці тексти показуються, якщо рекомендоване "
+                    "відео для головної сторінки не вибране."
+                ),
+                "fields": (
+                    "video_empty_title",
+                    "video_empty_description",
+                ),
+            },
+        ),
+        (
+            "6. ПОСИЛАННЯ",
+            {
+                "fields": (
+                    "links_eyebrow",
+                    "links_source_button_label",
+                    "links_archive_button_label",
+                    "links_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ БЛОКУ «ПОСИЛАННЯ»",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Ці тексти показуються, якщо рекомендоване "
+                    "посилання для головної сторінки не вибране."
+                ),
+                "fields": (
+                    "links_empty_title",
+                    "links_empty_description",
+                ),
+            },
+        ),
+        (
+            "7. СПОГАДИ",
+            {
+                "fields": (
+                    "memories_eyebrow",
+                    "memories_button_label",
+                    "memories_content_link",
+                )
+            },
+        ),
+    )
+
+    def _biography_url(self):
+        biography = Biography.objects.first()
+
+        if biography:
+            return reverse(
+                "admin:biography_biography_change",
+                args=[biography.pk],
+            )
+
+        return reverse("admin:biography_biography_add")
+
+    @admin.display(description="Основний контент першого екрану")
+    def hero_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Редагувати портрет і основну інформацію"
+            "</a>",
+            self._biography_url(),
+        )
+
+    @admin.display(description="Головна цитата")
+    def quote_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Редагувати головну цитату"
+            "</a>",
+            self._biography_url(),
+        )
+
+    @admin.display(description="Контент блоку життя")
+    def life_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати біографією та хронологією"
+            "</a>",
+            reverse("admin:pages_lifepage_changelist")
+        )
+
+    @admin.display(description="Фотографії")
+    def gallery_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати фото"
+            "</a>",
+            reverse("admin:gallery_photo_changelist"),
+        )
+
+    @admin.display(description="Відео")
+    def video_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати відео"
+            "</a>",
+            reverse("admin:videos_video_changelist"),
+        )
+
+    @admin.display(description="Матеріали та джерела")
+    def links_content_link(self, obj):
+        service_page = ServicePage.objects.first()
+
+        if service_page:
+            url = reverse(
+                "admin:pages_servicepage_change",
+                args=[service_page.pk],
+            )
+        else:
+            url = reverse("admin:pages_servicepage_add")
+
+        return format_html(
+            '<a class="button" href="{}#mentions-group">'
+            "Керувати посиланнями"
+            "</a>",
+            url,
+        )
+
+    @admin.display(description="Спогади")
+    def memories_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати спогадами"
+            "</a>",
+            reverse("admin:memories_memory_changelist"),
+        )
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return not HomePage.objects.exists()
+
+    def has_delete_permission(
+        self,
+        request: HttpRequest,
+        obj: HomePage | None = None,
+    ) -> bool:
+        return False
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:index")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:index")
+
+    def changelist_view(
+        self,
+        request: HttpRequest,
+        extra_context=None,
+    ):
+        page = HomePage.objects.first()
+
+        if page:
+            change_url = reverse(
+                "admin:pages_homepage_change",
+                args=[page.pk],
+            )
+            return HttpResponseRedirect(change_url)
+
+        add_url = reverse("admin:pages_homepage_add")
+        return HttpResponseRedirect(add_url)
+
+@admin.register(LifePage)
+class LifePageAdmin(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationAdmin,
+):
+    readonly_fields = (
+        "hero_content_link",
+        "biography_content_link",
+        "timeline_content_link",
+        "photos_content_link",
+    )
+
+    fieldsets = (
+        (
+            "1. ПЕРШИЙ ЕКРАН",
+            {
+                "fields": (
+                    "hero_eyebrow",
+                    "hero_description",
+                    "hero_content_link",
+                )
+            },
+        ),
+        (
+            "2. БІОГРАФІЯ",
+            {
+                "fields": (
+                    "birth_date_label",
+                    "death_date_label",
+                    "rank_label",
+                    "award_label",
+                    "principle_label",
+                    "biography_content_link",
+                )
+            },
+        ),
+        (
+            "3. ХРОНОЛОГІЯ",
+            {
+                "fields": (
+                    "timeline_eyebrow",
+                    "timeline_title",
+                    "timeline_description",
+                    "timeline_content_link",
+                )
+            },
+        ),
+        (
+            "4. ФОТО ДО ІСТОРІЇ",
+            {
+                "fields": (
+                    "photos_eyebrow",
+                    "photos_title",
+
+                    "childhood_photo",
+                    "photos_childhood_label",
+
+                    "study_photo",
+                    "photos_study_label",
+
+                    "family_photo",
+                    "photos_family_label",
+
+                    "photos_more_label",
+                    "photos_archive_label",
+                    "photos_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Рідко змінювані тексти, які показуються, "
+                    "коли частина контенту ще не заповнена."
+                ),
+                "fields": (
+                    "page_title_fallback",
+                    "portrait_empty_label",
+                    "empty_biography_text",
+                    "empty_page_text",
+                    "timeline_empty_title",
+                    "timeline_empty_text",
+                ),
+            },
+        ),
+    )
+
+    def _biography_url(self):
+        biography = Biography.objects.first()
+
+        if biography:
+            return reverse(
+                "admin:biography_biography_change",
+                args=[biography.pk],
+            )
+
+        return reverse("admin:biography_biography_add")
+
+    @admin.display(description="Основний контент першого екрану")
+    def hero_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Редагувати портрет і основну інформацію"
+            "</a>",
+            self._biography_url(),
+        )
+
+    @admin.display(description="Біографічні дані")
+    def biography_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Редагувати біографію"
+            "</a>",
+            self._biography_url(),
+        )
+
+    @admin.display(description="Події життя")
+    def timeline_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати хронологією"
+            "</a>",
+            reverse(
+                "admin:biography_timelineevent_changelist"
+            ),
+        )
+
+    @admin.display(description="Фотографії")
+    def photos_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати фото"
+            "</a>",
+            reverse("admin:gallery_photo_changelist"),
+        )
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return not LifePage.objects.exists()
+
+    def has_delete_permission(
+        self,
+        request: HttpRequest,
+        obj: LifePage | None = None,
+    ) -> bool:
+        return False
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:index")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:index")
+
+    def changelist_view(
+        self,
+        request: HttpRequest,
+        extra_context=None,
+    ):
+        page = LifePage.objects.first()
+
+        if page:
+            return HttpResponseRedirect(
+                reverse(
+                    "admin:pages_lifepage_change",
+                    args=[page.pk],
+                )
+            )
+
+        return HttpResponseRedirect(
+            reverse("admin:pages_lifepage_add")
+        )
 
 
 @admin.register(ServicePage)

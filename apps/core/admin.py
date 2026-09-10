@@ -41,46 +41,6 @@ class SiteSettingsAdmin(TranslationAdmin):
             },
         ),
         (
-            "ГОЛОВНА СТОРІНКА",
-            {
-                "fields": (
-                    "home_hero_eyebrow",
-                    "home_empty_title",
-                    "home_empty_text",
-                    "home_life_eyebrow",
-                    "home_life_title",
-                    "home_life_description",
-                    "home_life_empty_text",
-                    "home_gallery_eyebrow",
-                    "home_gallery_title",
-                    "home_gallery_empty_text",
-                    "home_video_title",
-                    "home_video_description",
-                    "home_media_eyebrow",
-                    "home_media_title",
-                    "home_media_description",
-                )
-            },
-        ),
-        (
-            "СТОРІНКА «ЖИТТЯ»",
-            {
-                "fields": (
-                    "life_hero_eyebrow",
-                    "life_hero_description",
-                    "life_empty_biography_text",
-                    "life_empty_page_text",
-                    "life_timeline_eyebrow",
-                    "life_timeline_title",
-                    "life_timeline_description",
-                    "life_timeline_empty_title",
-                    "life_timeline_empty_text",
-                    "life_photos_eyebrow",
-                    "life_photos_title",
-                )
-            },
-        ),
-        (
             "СТОРІНКА «ПОДВИГ І СЛУЖБА»",
             {
                 "fields": (

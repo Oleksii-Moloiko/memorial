@@ -15,7 +15,7 @@ from .constants import (
     MEMORY_TEASER_LIMIT,
     SERVICE_QUOTE_TEASER_LIMIT,
 )
-from .models import ServicePage
+from .models import HomePage, LifePage, ServicePage
 from .utils import (
     make_memory_teaser,
     make_service_quote_teaser,
@@ -37,7 +37,9 @@ def _seo_context(page_key):
 
 
 def home(request):
+    home_page = HomePage.objects.first() or HomePage()
     context = {
+        "home_page": home_page,
         "biography": Biography.objects.first(),
         "timeline_preview": TimelineEvent.objects.all(),
         "gallery_preview": Photo.objects.filter(
@@ -67,22 +69,43 @@ def home(request):
 
 
 def life(request):
-    family_photos = list(
-        Photo.objects.filter(category=Photo.Category.FAMILY, is_published=True)[:2]
+    life_page = (
+        LifePage.objects.select_related(
+            "childhood_photo",
+            "study_photo",
+            "family_photo",
+        ).first()
+        or LifePage()
     )
-    study_photo = Photo.objects.filter(
-        category=Photo.Category.STUDY, is_published=True
-    ).first()
+
+    childhood_photo = life_page.childhood_photo
+    study_photo = life_page.study_photo
+    family_photo = life_page.family_photo
+
+    if childhood_photo and not childhood_photo.is_published:
+        childhood_photo = None
+
+    if study_photo and not study_photo.is_published:
+        study_photo = None
+
+    if family_photo and not family_photo.is_published:
+        family_photo = None
 
     context = {
+        "life_page": life_page,
         "biography": Biography.objects.first(),
         "timeline": TimelineEvent.objects.all(),
-        "childhood_photo": family_photos[0] if len(family_photos) > 0 else None,
-        "family_photo": family_photos[1] if len(family_photos) > 1 else None,
+        "childhood_photo": childhood_photo,
         "study_photo": study_photo,
+        "family_photo": family_photo,
         **_seo_context("life"),
     }
-    return render(request, "pages/life.html", context)
+
+    return render(
+        request,
+        "pages/life.html",
+        context,
+    )
 
 
 def service(request):
