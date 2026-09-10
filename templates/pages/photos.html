@@ -11,13 +11,13 @@
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">{{ site_settings.photos_hero_title }}</p>
+      <p class="eyebrow">{{ photo_page.hero_eyebrow }}</p>
       <h1>{{ site_settings.photos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      {{ site_settings.photos_hero_description }}
-      {{ site_settings.photos_verification_note }}
+      {{ photo_page.hero_description }}
+      {{ photo_page.verification_note }}
     </p>
   </div>
 </section>
@@ -41,45 +41,17 @@
           <span>{{ category_counts.all }}</span>
         </button>
 
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="family"
-          aria-pressed="false"
-        >
-          Сім’я та дитинство
-          <span>{{ category_counts.family }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="study"
-          aria-pressed="false"
-        >
-          Навчання
-          <span>{{ category_counts.study }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="service"
-          aria-pressed="false"
-        >
-          Служба та побратими
-          <span>{{ category_counts.service }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="memory"
-          aria-pressed="false"
-        >
-          Вшанування
-          <span>{{ category_counts.memory }}</span>
-        </button>
+        {% for item in photo_filters %}
+          <button
+            class="filter-chip"
+            type="button"
+            data-filter="{{ item.value }}"
+            aria-pressed="false"
+          >
+            {{ item.label }}
+            <span>{{ item.count }}</span>
+          </button>
+        {% endfor %}
       </div>
 
       <div class="gallery-mosaic">
@@ -125,7 +97,7 @@
           type="button"
           data-gallery-more
         >
-          Показати більше
+          {{ photo_page.show_more_label }}
         </button>
       </div>
 
@@ -134,15 +106,15 @@
         data-gallery-empty
         hidden
       >
-        {{ site_settings.photos_category_empty_text }}
+        {{ photo_page.category_empty_text }}
       </p>
 
     {% else %}
       <div class="empty-state">
-        <h2>{{ site_settings.photos_empty_title }}</h2>
+        <h2>{{ photo_page.empty_title }}</h2>
 
         <p>
-          {{ site_settings.photos_empty_text }}
+          {{ photo_page.empty_text }}
         </p>
       </div>
     {% endif %}

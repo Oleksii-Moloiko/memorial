@@ -15,7 +15,7 @@ from .constants import (
     MEMORY_TEASER_LIMIT,
     SERVICE_QUOTE_TEASER_LIMIT,
 )
-from .models import HomePage, LifePage, ServicePage
+from .models import HomePage, LifePage, PhotoPage, ServicePage
 from .utils import (
     make_memory_teaser,
     make_service_quote_teaser,
@@ -146,19 +146,33 @@ def service(request):
 
 
 def photos(request):
+    photo_page = PhotoPage.objects.first() or PhotoPage()
+
     published_photos = Photo.objects.filter(is_published=True)
 
     category_counts = {
         "all": published_photos.count(),
-        "family": published_photos.filter(category=Photo.Category.FAMILY).count(),
-        "study": published_photos.filter(category=Photo.Category.STUDY).count(),
-        "service": published_photos.filter(category=Photo.Category.SERVICE).count(),
-        "memory": published_photos.filter(category=Photo.Category.MEMORY).count(),
     }
 
+    for value, _label in Photo.Category.choices:
+        category_counts[value] = published_photos.filter(
+            category=value,
+        ).count()
+
+    photo_filters = [
+        {
+            "value": value,
+            "label": label,
+            "count": category_counts[value],
+        }
+        for value, label in Photo.Category.choices
+    ]
+
     context = {
+        "photo_page": photo_page,
         "photos": published_photos,
         "category_counts": category_counts,
+        "photo_filters": photo_filters,
         **_seo_context("photos"),
     }
 

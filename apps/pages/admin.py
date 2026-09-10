@@ -12,6 +12,7 @@ from apps.media_mentions.models import MediaMention
 from .models import (
     HomePage,
     LifePage,
+    PhotoPage,
     ServiceAward,
     ServicePage,
     ServiceQuote,
@@ -640,6 +641,111 @@ class LifePageAdmin(
 
         return HttpResponseRedirect(
             reverse("admin:pages_lifepage_add")
+        )
+
+@admin.register(PhotoPage)
+class PhotoPageAdmin(
+    ClientFriendlyAdminLabelsMixin,
+    TranslationAdmin,
+):
+    readonly_fields = ("photos_content_link",)
+
+    fieldsets = (
+        (
+            "1. ПЕРШИЙ ЕКРАН",
+            {
+                "fields": (
+                    "hero_eyebrow",
+                    "hero_description",
+                )
+            },
+        ),
+        (
+            "2. ГАЛЕРЕЯ",
+            {
+                "fields": (
+                    "show_more_label",
+                )
+            },
+        ),
+        (
+            "3. ФОТОГРАФІЇ",
+            {
+                "fields": (
+                    "photos_content_link",
+                )
+            },
+        ),
+        (
+            "ДОДАТКОВІ ТЕКСТИ",
+            {
+                "classes": ("collapse",),
+                "description": (
+                    "Рідко змінювані тексти для перевірки фото "
+                    "та порожніх станів галереї."
+                ),
+                "fields": (
+                    "verification_note",
+                    "category_empty_text",
+                    "empty_title",
+                    "empty_text",
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description="Фотографії")
+    def photos_content_link(self, obj):
+        return format_html(
+            '<a class="button" href="{}">'
+            "Керувати фото"
+            "</a>",
+            reverse("admin:gallery_photo_changelist"),
+        )
+
+    def has_add_permission(self, request: HttpRequest) -> bool:
+        return not PhotoPage.objects.exists()
+
+    def has_delete_permission(
+        self,
+        request: HttpRequest,
+        obj: PhotoPage | None = None,
+    ) -> bool:
+        return False
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:index")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:index")
+
+    def changelist_view(
+        self,
+        request: HttpRequest,
+        extra_context=None,
+    ):
+        page = PhotoPage.objects.first()
+
+        if page:
+            return HttpResponseRedirect(
+                reverse(
+                    "admin:pages_photopage_change",
+                    args=[page.pk],
+                )
+            )
+
+        return HttpResponseRedirect(
+            reverse("admin:pages_photopage_add")
         )
 
 

@@ -415,6 +415,74 @@ class LifePage(models.Model):
     def __str__(self) -> str:
         return "Життя"
 
+class PhotoPage(models.Model):
+    """Контент сторінки «Фото».
+
+    На сайті має існувати лише один запис.
+    """
+
+    # Перший екран
+
+    hero_eyebrow = models.CharField(
+        "Текст над заголовком",
+        max_length=200,
+        default="Фотоархів",
+    )
+
+    hero_description = models.TextField(
+        "Опис першого екрану",
+        default="Основний архів світлин, згрупований за періодами життя.",
+    )
+
+    verification_note = models.TextField(
+        "Примітка про перевірку фото",
+        blank=True,
+        default="Кожне фото публікується лише після перевірки.",
+    )
+
+    # Галерея
+
+    show_more_label = models.CharField(
+        "Текст кнопки завантаження наступних фото",
+        max_length=100,
+        default="Показати більше",
+    )
+
+    # Додаткові тексти
+
+    category_empty_text = models.CharField(
+        "Текст, якщо у вибраній категорії немає фото",
+        max_length=250,
+        default="У цій категорії поки немає фотографій.",
+    )
+
+    empty_title = models.CharField(
+        "Заголовок, якщо фотоархів порожній",
+        max_length=200,
+        default="Фотоархів ще наповнюється",
+    )
+
+    empty_text = models.TextField(
+        "Текст, якщо фотоархів порожній",
+        default=(
+            "Перевірені родиною фотографії "
+            "з’являться тут після публікації."
+        ),
+    )
+
+    updated_at = models.DateTimeField(
+        "Оновлено",
+        auto_now=True,
+    )
+
+    class Meta:
+        verbose_name = "Фото"
+        verbose_name_plural = "Фото"
+
+    def __str__(self) -> str:
+        return "Фото"
+
+
 class ServicePage(models.Model):
     """Контент сторінки «Подвиг і служба».
 

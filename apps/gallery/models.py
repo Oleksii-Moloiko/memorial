@@ -37,13 +37,21 @@ class Photo(models.Model):
         max_length=20,
         choices=Category.choices,
         default=Category.FAMILY,
+        help_text=(
+            "Визначає, у якій категорії фото буде показане "
+            "на сторінці."
+        ),
     )
 
     layout_size = models.CharField(
-        "Розмір у сітці",
+        "Формат у галереї",
         max_length=20,
         choices=LayoutSize.choices,
         blank=True,
+        help_text=(
+            "Визначає форму прев’ю фото в галереї. "
+            "У більшості випадків залишайте «Автоматично»."
+        ),
     )
 
     preview_focus_x = models.PositiveSmallIntegerField(
@@ -61,14 +69,18 @@ class Photo(models.Model):
     )
 
     is_published = models.BooleanField(
-        "Опубліковано",
+        "Показувати фото на сайті",
         default=False,
-        help_text="Неопубліковане фото не відображається на сайті.",
+        help_text=(
+            "Якщо вимкнено, фото зберігається в адмінці, "
+            "але не відображається на сайті."
+        ),
     )
 
     order = models.PositiveIntegerField(
-        "Порядок",
+        "Порядок відображення",
         default=0,
+        help_text="Менше число — фото буде показане раніше.",
     )
 
     class Meta:

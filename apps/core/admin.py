@@ -60,19 +60,6 @@ class SiteSettingsAdmin(TranslationAdmin):
             },
         ),
         (
-            "СТОРІНКА «ФОТО»",
-            {
-                "fields": (
-                    "photos_hero_title",
-                    "photos_hero_description",
-                    "photos_verification_note",
-                    "photos_category_empty_text",
-                    "photos_empty_title",
-                    "photos_empty_text",
-                )
-            },
-        ),
-        (
             "СТОРІНКА «ВІДЕО»",
             {
                 "fields": (

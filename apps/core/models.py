@@ -140,40 +140,7 @@ class SiteSettings(models.Model):
         max_length=300,
         default="Формулювання схвалені родиною.",
     )
-    # Сторінка «Фото»
 
-    photos_hero_title = models.CharField(
-        "Фото — заголовок сторінки",
-        max_length=200,
-        default="Фотоархів",
-    )
-
-    photos_hero_description = models.TextField(
-        "Фото — опис сторінки",
-        default="Основний архів світлин, згрупований за періодами життя.",
-    )
-
-    photos_verification_note = models.TextField(
-        "Фото — примітка про перевірку",
-        default="Кожне фото публікується лише після перевірки.",
-    )
-
-    photos_category_empty_text = models.CharField(
-        "Фото — текст порожньої категорії",
-        max_length=250,
-        default="У цій категорії поки немає фотографій.",
-    )
-
-    photos_empty_title = models.CharField(
-        "Фото — заголовок порожнього архіву",
-        max_length=200,
-        default="Фотоархів ще наповнюється",
-    )
-
-    photos_empty_text = models.TextField(
-        "Фото — текст порожнього архіву",
-        default=("Перевірені родиною фотографії з’являться тут після публікації."),
-    )
     # Сторінка «Відео»
 
     videos_hero_eyebrow = models.CharField(

@@ -45,7 +45,7 @@ class PhotoAdmin(TranslationAdmin):
             },
         ),
         (
-            "ВІДОБРАЖЕННЯ",
+            "ВІДОБРАЖЕННЯ В ГАЛЕРЕЇ",
             {
                 "fields": (
                     "category",

@@ -3,6 +3,7 @@ from modeltranslation.translator import TranslationOptions, register
 from .models import (
     HomePage,
     LifePage,
+    PhotoPage,
     ServiceAward,
     ServicePage,
     ServiceQuote,
@@ -114,4 +115,16 @@ class LifePageTranslationOptions(TranslationOptions):
         "photos_family_label",
         "photos_more_label",
         "photos_archive_label",
+    )
+
+@register(PhotoPage)
+class PhotoPageTranslationOptions(TranslationOptions):
+    fields = (
+        "hero_eyebrow",
+        "hero_description",
+        "verification_note",
+        "show_more_label",
+        "category_empty_text",
+        "empty_title",
+        "empty_text",
     )
