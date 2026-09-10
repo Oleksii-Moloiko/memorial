@@ -60,24 +60,6 @@ class SiteSettingsAdmin(TranslationAdmin):
             },
         ),
         (
-            "СТОРІНКА «ВІДЕО»",
-            {
-                "fields": (
-                    "videos_hero_eyebrow",
-                    "videos_hero_description",
-                    "videos_featured_label",
-                    "videos_transcript_label",
-                    "videos_all_records_label",
-                    "videos_archive_title",
-                    "videos_admin_note",
-                    "videos_empty_title",
-                    "videos_empty_text",
-                    "videos_accessibility_label",
-                    "videos_accessibility_text",
-                )
-            },
-        ),
-        (
             "СТОРІНКА «СПОГАДИ»",
             {
                 "fields": (
