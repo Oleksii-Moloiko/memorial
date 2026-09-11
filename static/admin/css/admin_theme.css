@@ -1028,14 +1028,17 @@ body.login {
 @media (max-width: 767px) {
     #toggle-nav-sidebar {
         display: flex !important;
-        position: fixed;
-        left: 16px;
-        bottom: 16px;
+        position: fixed !important;
+        top: auto !important;
+        left: 24px;
+        bottom: 24px;
         z-index: 1001;
 
         width: 44px;
         height: 44px;
         flex: 0 0 44px;
+
+        box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
 
         border: 1px solid var(--hairline-color);
         border-radius: 50%;
