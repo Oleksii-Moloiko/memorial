@@ -1,0 +1,230 @@
+{% extends "admin/change_list.html" %}
+{% load static admin_list %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/memories_admin.css' %}"
+    >
+{% endblock %}
+
+
+{% block content_title %}
+
+<div class="memories-header">
+
+    <div>
+        <h1>🕯️ {{ site_settings.memories_title }}</h1>
+
+        {% if pending_count %}
+            <div class="memories-pending">
+                <span class="memories-pending__dot"></span>
+
+                {{ pending_count }} на модерації
+            </div>
+        {% else %}
+            <p class="memories-all-reviewed">
+                Усі спогади перевірені
+            </p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+<div class="memory-filters">
+
+    <a
+        href="?"
+        class="memory-filter {% if not request.GET.status__exact %}memory-filter--active{% endif %}"
+    >
+        Усі
+    </a>
+
+    <a
+        href="?status__exact=pending"
+        class="memory-filter {% if request.GET.status__exact == 'pending' %}memory-filter--active{% endif %}"
+    >
+        На модерації
+
+        {% if pending_count %}
+            <span>{{ pending_count }}</span>
+        {% endif %}
+    </a>
+
+    <a
+        href="?status__exact=approved"
+        class="memory-filter {% if request.GET.status__exact == 'approved' %}memory-filter--active{% endif %}"
+    >
+        Опубліковані
+    </a>
+
+    <a
+        href="?status__exact=rejected"
+        class="memory-filter {% if request.GET.status__exact == 'rejected' %}memory-filter--active{% endif %}"
+    >
+        Відхилені
+    </a>
+
+</div>
+
+{% endblock %}
+
+
+{% block result_list %}
+
+    {% if action_form and actions_on_top and cl.show_admin_actions %}
+        {% admin_actions %}
+    {% endif %}
+
+
+    {% if cl.result_list %}
+
+        <div class="memory-list">
+
+            {% for memory in cl.result_list %}
+
+                <article class="memory-card">
+
+                    <div class="memory-card__select">
+                        <input
+                            type="checkbox"
+                            name="_selected_action"
+                            value="{{ memory.pk }}"
+                            class="action-select"
+                            aria-label="Вибрати спогад"
+                        >
+                    </div>
+
+
+                    <div class="memory-card__content">
+
+                        <div class="memory-card__header">
+
+                            <div>
+                                <a
+                                    href="{% url 'admin:memories_memory_change' memory.pk %}"
+                                    class="memory-card__author"
+                                >
+                                    {{ memory.author_name }}
+                                </a>
+
+                                {% if memory.author_role %}
+                                    <div class="memory-card__role">
+                                        {{ memory.author_role }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <div
+                                class="
+                                    memory-status
+                                    memory-status--{{ memory.status }}
+                                "
+                            >
+                                {{ memory.get_status_display }}
+                            </div>
+
+                        </div>
+
+
+                        <blockquote class="memory-card__text">
+                            “{{ memory.text }}”
+                        </blockquote>
+
+
+                        <div class="memory-card__footer">
+
+                            <div class="memory-card__meta">
+
+                                <span>
+                                    {{ memory.created_at|date:"d.m.Y" }}
+                                </span>
+
+                                {% if memory.featured %}
+                                    <span class="memory-featured">
+                                        ★ На головній
+                                    </span>
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="memory-card__actions">
+
+                                {% if memory.status == "pending" %}
+
+                                    <button
+                                        type="submit"
+                                        formaction="{% url 'admin:memories_memory_approve' memory.pk %}"
+                                        formmethod="post"
+                                        class="memory-action memory-action--approve"
+                                    >
+                                        ✓ Опублікувати
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        formaction="{% url 'admin:memories_memory_reject' memory.pk %}"
+                                        formmethod="post"
+                                        class="memory-action memory-action--reject"
+                                    >
+                                        ✕ Відхилити
+                                    </button>
+
+                                {% else %}
+
+                                    <a
+                                        href="{% url 'admin:memories_memory_change' memory.pk %}"
+                                        class="memory-action memory-action--edit"
+                                    >
+                                        Редагувати
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="memory-empty">
+
+            <div class="memory-empty__icon">
+                🕯️
+            </div>
+
+            <h2>Спогадів немає</h2>
+
+            {% if request.GET.status__exact %}
+                <p>
+                    У цьому розділі зараз немає спогадів.
+                </p>
+            {% else %}
+                <p>
+                    Нові спогади з'являться тут після надсилання.
+                </p>
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+
+    {% if action_form and actions_on_bottom and cl.show_admin_actions %}
+        {% admin_actions %}
+    {% endif %}
+
+{% endblock %}

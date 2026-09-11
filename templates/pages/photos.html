@@ -3,7 +3,7 @@
 {% block page_key %}photos{% endblock %}
 
 {% block title %}
-  Фото — Пам’ять про Олександра Мельника
+  {{ site_settings.photos_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
@@ -11,13 +11,13 @@
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Фотоархів</p>
-      <h1>Фото</h1>
+      <p class="eyebrow">{{ photo_page.hero_eyebrow }}</p>
+      <h1>{{ site_settings.photos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Основний архів світлин, згрупований за періодами життя.
-      Кожне фото публікується лише після перевірки.
+      {{ photo_page.hero_description }}
+      {{ photo_page.verification_note }}
     </p>
   </div>
 </section>
@@ -41,52 +41,27 @@
           <span>{{ category_counts.all }}</span>
         </button>
 
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="family"
-          aria-pressed="false"
-        >
-          Сім’я та дитинство
-          <span>{{ category_counts.family }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="study"
-          aria-pressed="false"
-        >
-          Навчання
-          <span>{{ category_counts.study }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="service"
-          aria-pressed="false"
-        >
-          Служба та побратими
-          <span>{{ category_counts.service }}</span>
-        </button>
-
-        <button
-          class="filter-chip"
-          type="button"
-          data-filter="memory"
-          aria-pressed="false"
-        >
-          Вшанування
-          <span>{{ category_counts.memory }}</span>
-        </button>
+        {% for item in photo_filters %}
+          <button
+            class="filter-chip"
+            type="button"
+            data-filter="{{ item.value }}"
+            aria-pressed="false"
+          >
+            {{ item.label }}
+            <span>{{ item.count }}</span>
+          </button>
+        {% endfor %}
       </div>
 
-      <div class="gallery-grid">
+      <div class="gallery-mosaic">
+        <div class="gallery-grid">
         {% for photo in photos %}
           <figure
-            class="gallery-card {{ photo.layout_size }}"
+            class="gallery-card"
             data-category="{{ photo.category }}"
+            data-layout-size="{{ photo.layout_size }}"
+            data-gallery-index="{{ forloop.counter0 }}"
           >
             <button
               class="gallery-open"
@@ -102,6 +77,7 @@
                 loading="lazy"
                 width="900"
                 height="700"
+                style="object-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%;"
               >
             </button>
 
@@ -112,6 +88,17 @@
             {% endif %}
           </figure>
         {% endfor %}
+        </div>
+      </div>
+
+      <div class="gallery-more">
+        <button
+          class="gallery-more__button"
+          type="button"
+          data-gallery-more
+        >
+          {{ photo_page.show_more_label }}
+        </button>
       </div>
 
       <p
@@ -119,16 +106,15 @@
         data-gallery-empty
         hidden
       >
-        У цій категорії поки немає фотографій.
+        {{ photo_page.category_empty_text }}
       </p>
 
     {% else %}
       <div class="empty-state">
-        <h2>Фотоархів ще наповнюється</h2>
+        <h2>{{ photo_page.empty_title }}</h2>
 
         <p>
-          Перевірені родиною фотографії з’являться тут
-          після публікації.
+          {{ photo_page.empty_text }}
         </p>
       </div>
     {% endif %}
@@ -137,10 +123,9 @@
 </section>
 
 {% if photos %}
-  <dialog
-    class="gallery-dialog"
-    aria-labelledby="gallery-dialog-caption"
-  >
+  <dialog class="gallery-dialog">
+    <span class="dialog-counter" aria-live="polite"></span>
+
     <button
       class="dialog-close"
       type="button"
@@ -149,18 +134,27 @@
       ×
     </button>
 
+    <button
+      class="dialog-nav prev"
+      type="button"
+      aria-label="Попереднє фото"
+    >
+      ‹
+    </button>
+
+    <button
+      class="dialog-nav next"
+      type="button"
+      aria-label="Наступне фото"
+    >
+      ›
+    </button>
+
     <div class="dialog-image">
-      <img
-        src=""
-        alt=""
-        data-dialog-image
-      >
+      <img src="" alt="" data-dialog-image>
     </div>
 
-    <p
-      class="dialog-caption"
-      id="gallery-dialog-caption"
-    ></p>
+    <p class="dialog-caption"></p>
   </dialog>
 {% endif %}
 

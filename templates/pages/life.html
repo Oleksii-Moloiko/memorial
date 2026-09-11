@@ -1,148 +1,159 @@
 {% extends "base.html" %}
-
+ 
 {% block page_key %}life{% endblock %}
-
+ 
 {% block title %}
   {% if biography %}
-    Життя — {{ biography.full_name }}
+    {{ site_settings.life_title }} — {{ biography.full_name }}
   {% else %}
-    Життя — Сторінка пам’яті
+    {{ site_settings.life_title }} — {{ life_page.page_title_fallback }}
   {% endif %}
 {% endblock %}
 
 {% block content %}
-
+ 
 <section class="page-hero section-paper">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Про нього</p>
-      <h1>Життя</h1>
+      <p class="eyebrow">{{ life_page.hero_eyebrow }}</p>
+      <h1>{{ site_settings.life_title }}</h1>
     </div>
-
+ 
     <p class="page-lead">
-      Людина поза подвигом: дитинство, навчання, родина,
-      інтереси й підтверджена хронологія життя.
+      {{ life_page.hero_description }}
     </p>
   </div>
 </section>
-
+ 
 <section class="section section-paper biography-section">
   <div class="container biography-grid">
-
+ 
     <aside class="biography-aside">
       {% if biography and biography.portrait %}
         <img
           class="portrait-secondary"
           src="{{ biography.portrait.url }}"
           alt="Портрет {{ biography.full_name }}"
+          loading="lazy"
+          width="{{ biography.portrait.width }}"
+          height="{{ biography.portrait.height }}"
         >
       {% else %}
         <div class="media-placeholder portrait-secondary">
-          <span>Портрет ще не додано</span>
+          <span>{{ life_page.portrait_empty_label }}</span>
         </div>
       {% endif %}
-
+ 
       {% if biography %}
         <dl class="fact-list">
-
+ 
           {% if biography.birth_date %}
             <div>
-              <dt>Народився</dt>
+              <dt>{{ life_page.birth_date_label }}</dt>
               <dd>{{ biography.birth_date|date:"d.m.Y" }}</dd>
             </div>
           {% endif %}
 
           {% if biography.death_date %}
             <div>
-              <dt>Дата смерті</dt>
+              <dt>{{ life_page.death_date_label }}</dt>
               <dd>{{ biography.death_date|date:"d.m.Y" }}</dd>
             </div>
           {% endif %}
 
           {% if biography.rank %}
             <div>
-              <dt>Звання / роль</dt>
+              <dt>{{ life_page.rank_label }}</dt>
               <dd>{{ biography.rank }}</dd>
             </div>
           {% endif %}
 
           {% if biography.award_title %}
             <div>
-              <dt>Нагорода</dt>
+              <dt>{{ life_page.award_label }}</dt>
               <dd>{{ biography.award_title }}</dd>
             </div>
           {% endif %}
-
         </dl>
       {% endif %}
     </aside>
-
+ 
     <article class="longform">
       {% if biography %}
+ 
+        <div class="life-head">
+          <h2 class="life-head__name">
+            {{ biography.full_name }}
+          </h2>
 
-        <p class="eyebrow">Життєпис</p>
-        <h2>{{ biography.full_name }}</h2>
+          <div class="life-head__rule"></div>
 
-        {% if biography.summary %}
-          <p class="intro-paragraph">
-            {{ biography.summary }}
-          </p>
-        {% endif %}
+          {% if biography.summary %}
+            <div class="life-head__epigraph">
+              <p class="life-head__key">
+                {{ life_page.principle_label }}
+              </p>
 
-        {% if biography.signature_quote %}
-          <blockquote class="inline-quote">
-            «{{ biography.signature_quote }}»
-          </blockquote>
-        {% endif %}
+              <p class="life-head__motto">
+                {{ biography.summary }}
+              </p>
+            </div>
+          {% endif %}
 
+          {% if biography.signature_quote %}
+            <p class="life-head__credo">
+              {{ biography.signature_quote }}
+            </p>
+          {% endif %}
+        </div>
+ 
         {% if biography.full_text %}
           <div class="biography-content">
             {{ biography.full_text|linebreaks }}
           </div>
         {% else %}
           <p>
-            Повний життєпис ще готується до публікації.
+            {{ life_page.empty_biography_text }}
           </p>
         {% endif %}
-
+ 
       {% else %}
         <p class="intro-paragraph">
-          Інформація для цієї сторінки ще готується.
+          {{ life_page.empty_page_text }}
         </p>
 
-        <p>
-          Життєпис можна додати через адміністративну панель.
-        </p>
       {% endif %}
     </article>
-
+ 
   </div>
 </section>
-
-<section class="section section-stone timeline-section">
+ 
+<section
+  class="section section-stone timeline-section"
+  id="timeline"
+>
   <div class="container">
-
+ 
     <div class="section-heading split-heading">
       <div>
-        <p class="eyebrow">Хронологія</p>
-        <h2>Ключові події</h2>
+        <p class="eyebrow">{{ life_page.timeline_eyebrow }}</p>
+        <h2>{{ life_page.timeline_title }}</h2>
       </div>
 
       <p>
-        До публікації додаються лише події з підтвердженими
-        датами та формулюваннями.
+        {{ life_page.timeline_description }}
       </p>
     </div>
-
+ 
     {% if timeline %}
       <ol class="timeline-list">
         {% for event in timeline %}
-          <li>
+          <li id="timeline-event-{{ event.id }}">
             <time>{{ event.date_label }}</time>
-
+ 
             <div>
               <h3>{{ event.title }}</h3>
-
+ 
               {% if event.description %}
                 <p>{{ event.description }}</p>
               {% endif %}
@@ -152,44 +163,132 @@
       </ol>
     {% else %}
       <div class="empty-state">
-        <h3>Хронологія ще наповнюється</h3>
+        <h3>{{ life_page.timeline_empty_title }}</h3>
         <p>
-          Підтверджені події з’являться тут після додавання
-          через адміністративну панель.
+          {{ life_page.timeline_empty_text }}
         </p>
       </div>
     {% endif %}
-
+ 
   </div>
 </section>
-
+ 
 <section class="section section-paper">
   <div class="container">
-
+ 
     <div class="section-heading">
-      <p class="eyebrow">Фото до історії</p>
-      <h2>Роки, що залишилися у світлинах</h2>
+      <p class="eyebrow">{{ life_page.photos_eyebrow }}</p>
+      <h2>{{ life_page.photos_title }}</h2>
     </div>
-
+ 
     <div class="story-strip">
-      <div class="media-placeholder tone-a">
-        <span>Дитинство</span>
-      </div>
+      {% if childhood_photo %}
+        <a
+          class="story-tile tone-a"
+          href="{% url 'pages:photos' %}?category=family"
+          aria-label="{{ life_page.photos_childhood_label }} — {{ life_page.photos_more_label }}"
+        >
+          <img
+            class="story-tile__img"
+            src="{{ childhood_photo.image.url }}"
+            alt="{{ childhood_photo.alt_text|default:life_page.photos_childhood_label }}"
+            loading="lazy"
+            width="{{ childhood_photo.image.width }}"
+            height="{{ childhood_photo.image.height }}"
+            style="object-position: {{ childhood_photo.preview_focus_x }}% {{ childhood_photo.preview_focus_y }}%;"
+          >
 
-      <div class="media-placeholder tone-b">
-        <span>Навчання</span>
-      </div>
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              {{ life_page.photos_more_label }}
+              <span>→</span>
+            </span>
+          </span>
 
-      <div class="media-placeholder tone-c">
-        <span>Родина</span>
-      </div>
+          <span class="story-tile__tag">
+            {{ childhood_photo.caption|default:life_page.photos_childhood_label }}
+          </span>
+        </a>
+      {% else %}
+        <div class="media-placeholder tone-a">
+          <span>{{ life_page.photos_childhood_label }}</span>
+        </div>
+      {% endif %}
+
+      {% if study_photo %}
+        <a
+          class="story-tile tone-b"
+          href="{% url 'pages:photos' %}?category=study"
+          aria-label="{{ life_page.photos_study_label }} — {{ life_page.photos_more_label }}"
+        >
+          <img
+            class="story-tile__img"
+            src="{{ study_photo.image.url }}"
+            alt="{{ study_photo.alt_text|default:life_page.photos_study_label }}"
+            loading="lazy"
+            width="{{ study_photo.image.width }}"
+            height="{{ study_photo.image.height }}"
+            style="object-position: {{ study_photo.preview_focus_x }}% {{ study_photo.preview_focus_y }}%;"
+          >
+
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              {{ life_page.photos_more_label }}
+              <span>→</span>
+            </span>
+          </span>
+
+          <span class="story-tile__tag">
+            {{ study_photo.caption|default:life_page.photos_study_label }}
+          </span>
+        </a>
+      {% else %}
+        <div class="media-placeholder tone-b">
+          <span>{{ life_page.photos_study_label }}</span>
+        </div>
+      {% endif %}
+
+      {% if family_photo %}
+        <a
+          class="story-tile tone-c"
+          href="{% url 'pages:photos' %}?category=family"
+          aria-label="{{ life_page.photos_family_label }} — {{ life_page.photos_more_label }}"
+        >
+          <img
+            class="story-tile__img"
+            src="{{ family_photo.image.url }}"
+            alt="{{ family_photo.alt_text|default:life_page.photos_family_label }}"
+            loading="lazy"
+            width="{{ family_photo.image.width }}"
+            height="{{ family_photo.image.height }}"
+            style="object-position: {{ family_photo.preview_focus_x }}% {{ family_photo.preview_focus_y }}%;"
+          >
+
+          <span class="story-tile__veil" aria-hidden="true">
+            <span class="story-tile__button">
+              {{ life_page.photos_more_label }}
+              <span>→</span>
+            </span>
+          </span>
+
+          <span class="story-tile__tag">
+            {{ family_photo.caption|default:life_page.photos_family_label }}
+          </span>
+        </a>
+      {% else %}
+        <div class="media-placeholder tone-c">
+          <span>{{ life_page.photos_family_label }}</span>
+        </div>
+      {% endif %}
     </div>
-
+ 
     <a class="text-link" href="{% url 'pages:photos' %}">
-      Перейти до фотоархіву →
+      {{ life_page.photos_archive_label }}
+      <span aria-hidden="true">→</span>
     </a>
-
+ 
   </div>
 </section>
-
+ 
 {% endblock %}
+ 

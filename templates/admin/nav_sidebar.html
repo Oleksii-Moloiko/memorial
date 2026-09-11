@@ -1,0 +1,82 @@
+{% load i18n %}
+
+<button
+    class="sticky toggle-nav-sidebar"
+    id="toggle-nav-sidebar"
+    type="button"
+    aria-label="{% translate 'Toggle navigation' %}"
+></button>
+
+<nav
+    id="nav-sidebar"
+    class="sticky memorial-sidebar"
+    aria-label="{% translate 'Sidebar' %}"
+>
+
+    <div class="memorial-sidebar__section">
+        <div class="memorial-sidebar__title">
+            КОНТЕНТ
+        </div>
+
+        <a
+            href="{% url 'admin:pages_homepage_changelist' %}"
+            class="memorial-sidebar__item"
+        >
+            <span aria-hidden="true">⌂</span>
+            Головна
+        </a>
+
+        <a
+            href="{% url 'admin:pages_lifepage_changelist' %}"
+            class="memorial-sidebar__item"
+        >
+            <span aria-hidden="true">◈</span>
+            Життя
+        </a>
+
+        <a href="{% url 'admin:pages_servicepage_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">✦</span>
+            Подвиг і служба
+        </a>
+
+        <a href="{% url 'admin:pages_photopage_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">▧</span>
+            Фото
+        </a>
+
+        <a href="{% url 'admin:pages_videopage_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">▶</span>
+            Відео
+        </a>
+
+        <a href="{% url 'admin:memories_memory_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">♡</span>
+            Спогади
+        </a>
+    </div>
+
+
+    <div class="memorial-sidebar__section">
+
+        <div class="memorial-sidebar__title">
+            СИСТЕМА
+        </div>
+
+        <a href="{% url 'admin:core_sitesettings_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">⚙</span>
+            Налаштування
+        </a>
+
+        <a href="{% url 'admin:auth_user_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">○</span>
+            Користувачі
+        </a>
+
+        <a href="{% url 'admin:auth_group_changelist' %}" class="memorial-sidebar__item">
+            <span aria-hidden="true">◌</span>
+            Групи
+        </a>
+
+    </div>
+
+</nav>

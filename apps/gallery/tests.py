@@ -2,6 +2,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
+from apps.pages.models import PhotoPage
+
 from .models import Photo
 
 TEST_GIF = (
@@ -53,6 +55,14 @@ class PhotoModelTests(TestCase):
             list(Photo.objects.all()),
             [first_photo, second_photo],
         )
+
+    def test_preview_focus_defaults_to_center(self):
+        photo = Photo.objects.create(
+            image=create_test_image("focus-default.gif"),
+        )
+
+        self.assertEqual(photo.preview_focus_x, 50)
+        self.assertEqual(photo.preview_focus_y, 50)
 
 
 class PhotosPageTests(TestCase):
@@ -116,10 +126,83 @@ class PhotosPageTests(TestCase):
             'data-category="service"',
         )
 
+    def test_saved_preview_focus_is_rendered_on_photo(self):
+        Photo.objects.create(
+            image=create_test_image("focus.gif"),
+            caption="Фото з власним фокусом",
+            preview_focus_x=28,
+            preview_focus_y=71,
+            is_published=True,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertContains(
+            response,
+            "object-position: 28% 71%;",
+        )
+
     def test_empty_state_is_displayed(self):
         response = self.client.get(self.url)
 
         self.assertContains(
             response,
             "Фотоархів ще наповнюється",
+        )
+
+    def test_photos_page_displays_cms_content(self):
+        PhotoPage.objects.create(
+            hero_eyebrow="Тестовий фотоархів",
+            hero_description="Тестовий опис сторінки фото.",
+            verification_note="Тестова примітка про перевірку.",
+            show_more_label="Ще фотографії",
+            category_empty_text="У цій добірці тестових фото немає.",
+        )
+
+        Photo.objects.create(
+            image=create_test_image("cms-content.gif"),
+            caption="Тестове фото",
+            is_published=True,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "Тестовий фотоархів",
+        )
+        self.assertContains(
+            response,
+            "Тестовий опис сторінки фото.",
+        )
+        self.assertContains(
+            response,
+            "Тестова примітка про перевірку.",
+        )
+        self.assertContains(
+            response,
+            "Ще фотографії",
+        )
+        self.assertContains(
+            response,
+            "У цій добірці тестових фото немає.",
+        )
+
+    def test_photos_page_displays_cms_empty_state(self):
+        PhotoPage.objects.create(
+            empty_title="Тестовий порожній фотоархів",
+            empty_text="Фотографії будуть додані пізніше.",
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "Тестовий порожній фотоархів",
+        )
+        self.assertContains(
+            response,
+            "Фотографії будуть додані пізніше.",
         )

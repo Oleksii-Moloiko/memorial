@@ -1,6 +1,6 @@
-<meta name="description" content="{{ seo_description|default:'Цифровий простір пам’яті: історія життя, фото, відео, публікації та слова близьких.' }}">
-<meta property="og:title" content="{{ seo_title|default:'Пам’ять про Олександра Мельника' }}">
-<meta property="og:description" content="{{ seo_description|default:'Цифровий простір пам’яті' }}">
+<meta name="description" content="{{ seo_description|default:site_settings.footer_text }}">
+<meta property="og:title" content="{{ seo_title|default:site_settings.site_title }}">
+<meta property="og:description" content="{{ seo_description|default:site_settings.footer_text }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% if seo_image %}<meta property="og:image" content="{{ seo_image }}">{% endif %}

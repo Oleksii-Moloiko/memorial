@@ -1,12 +1,14 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
+from modeltranslation.admin import TranslationAdmin
 
 from .models import SeoPage
 
 
 @admin.register(SeoPage)
-class SeoPageAdmin(admin.ModelAdmin):
+class SeoPageAdmin(TranslationAdmin):
     """Admin configuration for page SEO metadata."""
 
     list_display = ("page_key", "title", "description_length", "image_preview")
@@ -28,6 +30,28 @@ class SeoPageAdmin(admin.ModelAdmin):
             {"fields": ("og_image", "large_image_preview")},
         ),
     )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if "_continue" in request.POST:
+            return super().response_add(
+                request,
+                obj,
+                post_url_continue=post_url_continue,
+            )
+
+        return redirect("admin:core_sitesettings_changelist")
+
+    def response_change(self, request, obj):
+        if "_continue" in request.POST:
+            return super().response_change(request, obj)
+
+        return redirect("admin:core_sitesettings_changelist")
+
+    def response_delete(self, request, obj_display, obj_id):
+        return redirect("admin:core_sitesettings_changelist")
+
+    def get_model_perms(self, request):
+        return {}
 
     @admin.display(description="Символів в описі")
     def description_length(self, obj: SeoPage) -> int:

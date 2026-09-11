@@ -4,6 +4,16 @@ from .models import Memory
 
 
 class MemoryForm(forms.ModelForm):
+    website = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "tabindex": "-1",
+                "autocomplete": "off",
+            }
+        ),
+    )
+
     consent = forms.BooleanField(
         required=True,
         label="Погоджуюся на публікацію після перевірки модератором.",
@@ -44,8 +54,8 @@ class MemoryForm(forms.ModelForm):
             "text": forms.Textarea(
                 attrs={
                     "rows": 6,
-                    "maxlength": 500,
-                    "placeholder": "Напишіть спогад — до 500 символів",
+                    "maxlength": 1500,
+                    "placeholder": "Напишіть спогад",
                 }
             ),
         }
@@ -60,6 +70,14 @@ class MemoryForm(forms.ModelForm):
 
         return author_name
 
+    def clean_website(self):
+        value = self.cleaned_data.get("website", "")
+
+        if value:
+            raise forms.ValidationError("Не вдалося надіслати форму.")
+
+        return ""
+
     def clean_author_role(self):
         return self.cleaned_data.get("author_role", "").strip()
 
@@ -69,7 +87,7 @@ class MemoryForm(forms.ModelForm):
         if len(text) < 10:
             raise forms.ValidationError("Спогад має містити щонайменше 10 символів.")
 
-        if len(text) > 500:
+        if len(text) > 1500:
             raise forms.ValidationError("Спогад не може перевищувати 500 символів.")
 
         return text

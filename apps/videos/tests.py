@@ -7,6 +7,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from apps.pages.models import VideoPage
+from apps.videos.admin import VideoAdminForm
+
 from .models import (
     Video,
     validate_video_extension,
@@ -83,6 +86,66 @@ class VideoModelTests(TestCase):
             list(Video.objects.all()),
             [first_video, second_video],
         )
+
+    def test_unpublished_video_cannot_replace_published_featured_video(self):
+        published_featured = Video.objects.create(
+            title="Опубліковане рекомендоване відео",
+            video_file=create_test_video("published-featured.mp4"),
+            is_featured=True,
+            is_published=True,
+        )
+
+        unpublished_video = Video.objects.create(
+            title="Чернетка",
+            video_file=create_test_video("draft.mp4"),
+            is_featured=True,
+            is_published=False,
+        )
+
+        published_featured.refresh_from_db()
+        unpublished_video.refresh_from_db()
+
+        self.assertTrue(published_featured.is_featured)
+        self.assertFalse(unpublished_video.is_featured)
+
+    def test_unpublishing_featured_video_removes_featured_status(self):
+        video = Video.objects.create(
+            title="Рекомендоване відео",
+            video_file=create_test_video("featured.mp4"),
+            is_featured=True,
+            is_published=True,
+        )
+
+        video.is_published = False
+        video.save()
+        video.refresh_from_db()
+
+        self.assertFalse(video.is_featured)
+        self.assertFalse(video.is_published)
+
+    def test_admin_form_rejects_featured_unpublished_video(self):
+        form = VideoAdminForm(
+            data={
+                "title_uk": "Тестове відео",
+                "title_en": "",
+                "description_uk": "",
+                "description_en": "",
+                "category": Video.Category.OTHER,
+                "recorded_at": "",
+                "duration": "",
+                "transcript_uk": "",
+                "transcript_en": "",
+                "is_featured": True,
+                "is_published": False,
+                "order": 0,
+            },
+            files={
+                "video_file": create_test_video("featured-draft.mp4"),
+            },
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("is_featured", form.errors)
 
 
 class VideoValidatorTests(TestCase):
@@ -308,4 +371,65 @@ class VideosPageTests(TestCase):
         self.assertContains(
             response,
             "Відеоархів ще наповнюється",
+        )
+
+    def test_videos_page_displays_cms_content(self):
+        VideoPage.objects.create(
+            hero_eyebrow="Тестові відеозаписи",
+            hero_description="Тестовий опис сторінки відео.",
+            featured_label="Вибране відео",
+            transcript_label="Читати розшифровку",
+            archive_eyebrow="Увесь архів",
+            archive_title="Тестовий відеоархів",
+            archive_note="Тестова примітка до архіву.",
+            accessibility_label="Доступність відео:",
+            accessibility_text="Тестовий текст про доступність.",
+        )
+
+        Video.objects.create(
+            title="Тестове рекомендоване відео",
+            video_file=create_test_video("cms-content.mp4"),
+            transcript="Тестова розшифровка.",
+            is_featured=True,
+            is_published=True,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Тестові відеозаписи")
+        self.assertContains(
+            response,
+            "Тестовий опис сторінки відео.",
+        )
+        self.assertContains(response, "Вибране відео")
+        self.assertContains(response, "Читати розшифровку")
+        self.assertContains(response, "Увесь архів")
+        self.assertContains(response, "Тестовий відеоархів")
+        self.assertContains(
+            response,
+            "Тестова примітка до архіву.",
+        )
+        self.assertContains(response, "Доступність відео:")
+        self.assertContains(
+            response,
+            "Тестовий текст про доступність.",
+        )
+
+    def test_videos_page_displays_cms_empty_state(self):
+        VideoPage.objects.create(
+            empty_title="Тестовий порожній відеоархів",
+            empty_text="Відеозаписи будуть додані пізніше.",
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "Тестовий порожній відеоархів",
+        )
+        self.assertContains(
+            response,
+            "Відеозаписи будуть додані пізніше.",
         )
