@@ -62,11 +62,17 @@ class BiographyAdmin(TranslationAdmin):
         ),
     )
 
+    def _return_url_name(self, request: HttpRequest) -> str:
+        if request.GET.get("return_to") == "home":
+            return "admin:pages_homepage_changelist"
+
+        return "admin:pages_lifepage_changelist"
+
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:pages_lifepage_changelist")
+        return redirect(self._return_url_name(request))
 
     def response_add(
             self,
@@ -81,7 +87,7 @@ class BiographyAdmin(TranslationAdmin):
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:pages_lifepage_changelist")
+        return redirect(self._return_url_name(request))
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         """Allow only one biography record."""

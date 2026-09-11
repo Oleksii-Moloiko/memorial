@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
@@ -6,9 +7,32 @@ from modeltranslation.admin import TranslationAdmin
 from .models import Video
 
 
+class VideoAdminForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = "__all__"
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if (
+            cleaned_data.get("is_featured")
+            and not cleaned_data.get("is_published")
+        ):
+            self.add_error(
+                "is_featured",
+                (
+                    "Рекомендованим може бути лише відео, "
+                    "яке показується на сайті."
+                ),
+            )
+
+        return cleaned_data
+
 @admin.register(Video)
 class VideoAdmin(TranslationAdmin):
     """Admin configuration for memorial videos."""
+    form = VideoAdminForm
 
     list_display = (
         "thumbnail_preview",

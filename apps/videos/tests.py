@@ -6,7 +6,9 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+
 from apps.pages.models import VideoPage
+from apps.videos.admin import VideoAdminForm
 
 from .models import (
     Video,
@@ -120,6 +122,30 @@ class VideoModelTests(TestCase):
 
         self.assertFalse(video.is_featured)
         self.assertFalse(video.is_published)
+
+    def test_admin_form_rejects_featured_unpublished_video(self):
+        form = VideoAdminForm(
+            data={
+                "title_uk": "Тестове відео",
+                "title_en": "",
+                "description_uk": "",
+                "description_en": "",
+                "category": Video.Category.OTHER,
+                "recorded_at": "",
+                "duration": "",
+                "transcript_uk": "",
+                "transcript_en": "",
+                "is_featured": True,
+                "is_published": False,
+                "order": 0,
+            },
+            files={
+                "video_file": create_test_video("featured-draft.mp4"),
+            },
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("is_featured", form.errors)
 
 
 class VideoValidatorTests(TestCase):

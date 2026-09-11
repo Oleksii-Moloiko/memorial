@@ -1,11 +1,28 @@
-from django.test import TestCase
+
 from django.urls import reverse
+from django.test import RequestFactory, TestCase
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from apps.gallery.models import Photo
 
 from .models import HomePage, LifePage, ServiceAward, ServicePage
+
+from apps.pages.admin import (
+    HomePageAdmin,
+    LifePageAdmin,
+    PhotoPageAdmin,
+    ServicePageAdmin,
+    VideoPageAdmin,
+)
+from apps.pages.models import (
+    HomePage,
+    LifePage,
+    PhotoPage,
+    ServicePage,
+    VideoPage,
+)
 
 
 TEST_GIF = (
@@ -635,3 +652,59 @@ class LifePageViewTests(TestCase):
             response,
             "Приховане вибране фото",
         )
+
+class SingletonPageAdminRedirectTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_singleton_page_admins_return_to_their_section(self):
+        cases = (
+            (
+                HomePageAdmin,
+                HomePage,
+                "admin:pages_homepage_changelist",
+            ),
+            (
+                LifePageAdmin,
+                LifePage,
+                "admin:pages_lifepage_changelist",
+            ),
+            (
+                PhotoPageAdmin,
+                PhotoPage,
+                "admin:pages_photopage_changelist",
+            ),
+            (
+                VideoPageAdmin,
+                VideoPage,
+                "admin:pages_videopage_changelist",
+            ),
+            (
+                ServicePageAdmin,
+                ServicePage,
+                "admin:pages_servicepage_changelist",
+            ),
+        )
+
+        for admin_class, model, url_name in cases:
+            with self.subTest(model=model.__name__):
+                model_admin = admin_class(
+                    model,
+                    admin.site,
+                )
+
+                request = self.factory.post(
+                    "/admin/test/change/",
+                    data={},
+                )
+
+                response = model_admin.response_change(
+                    request,
+                    object(),
+                )
+
+                self.assertRedirects(
+                    response,
+                    reverse(url_name),
+                    fetch_redirect_response=False,
+                )

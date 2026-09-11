@@ -29,21 +29,21 @@
 
 <div class="photo-quick-filters">
     <a
-        href="?"
+        href="{% querystring is_published__exact=None p=None %}"
         class="photo-filter {% if not request.GET.is_published__exact %}photo-filter--active{% endif %}"
     >
         Усі
     </a>
 
     <a
-        href="?is_published__exact=1"
+        href="{% querystring is_published__exact='1' p=None %}"
         class="photo-filter {% if request.GET.is_published__exact == '1' %}photo-filter--active{% endif %}"
     >
         Опубліковані
     </a>
 
     <a
-        href="?is_published__exact=0"
+        href="{% querystring is_published__exact='0' p=None %}"
         class="photo-filter {% if request.GET.is_published__exact == '0' %}photo-filter--active{% endif %}"
     >
         Чернетки

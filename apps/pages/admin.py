@@ -338,12 +338,14 @@ class HomePageAdmin(
         biography = Biography.objects.first()
 
         if biography:
-            return reverse(
+            url = reverse(
                 "admin:biography_biography_change",
                 args=[biography.pk],
             )
+        else:
+            url = reverse("admin:biography_biography_add")
 
-        return reverse("admin:biography_biography_add")
+        return f"{url}?return_to=home"
 
     @admin.display(description="Основний контент першого екрану")
     def hero_content_link(self, obj):
@@ -436,13 +438,13 @@ class HomePageAdmin(
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:index")
+        return redirect("admin:pages_homepage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect("admin:pages_homepage_changelist")
 
     def changelist_view(
         self,
@@ -554,12 +556,14 @@ class LifePageAdmin(
         biography = Biography.objects.first()
 
         if biography:
-            return reverse(
+            url = reverse(
                 "admin:biography_biography_change",
                 args=[biography.pk],
             )
+        else:
+            url = reverse("admin:biography_biography_add")
 
-        return reverse("admin:biography_biography_add")
+        return f"{url}?return_to=life"
 
     @admin.display(description="Основний контент першого екрану")
     def hero_content_link(self, obj):
@@ -617,13 +621,13 @@ class LifePageAdmin(
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:index")
+        return redirect("admin:pages_lifepage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect("admin:pages_lifepage_changelist")
 
     def changelist_view(
         self,
@@ -722,13 +726,13 @@ class PhotoPageAdmin(
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:index")
+        return redirect("admin:pages_photopage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect("admin:pages_photopage_changelist")
 
     def changelist_view(
         self,
@@ -842,13 +846,13 @@ class VideoPageAdmin(
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:index")
+        return redirect("admin:pages_videopage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect("admin:pages_videopage_changelist")
 
     def changelist_view(
         self,
@@ -922,6 +926,7 @@ class ServicePageAdmin(
         (
             "3. НАГОРОДИ",
             {
+                "classes": ("service-section-awards",),
                 "fields": (
                     "awards_eyebrow",
                     "awards_title",
@@ -934,6 +939,7 @@ class ServicePageAdmin(
         (
             "4. ЦИТАТИ",
             {
+                "classes": ("service-section-quotes",),
                 "fields": (
                     "quotes_eyebrow",
                     "quotes_title",
@@ -944,6 +950,7 @@ class ServicePageAdmin(
         (
             "5. ПОСИЛАННЯ",
             {
+                "classes": ("service-section-mentions",),
                 "fields": (
                     "links_nav_label",
                     "links_eyebrow",
@@ -998,13 +1005,13 @@ class ServicePageAdmin(
                 post_url_continue=post_url_continue,
             )
 
-        return redirect("admin:index")
+        return redirect("admin:pages_servicepage_changelist")
 
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect("admin:pages_servicepage_changelist")
 
     def changelist_view(
         self,

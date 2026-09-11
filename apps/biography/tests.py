@@ -1,8 +1,11 @@
 from datetime import date
 
 from django.contrib import admin
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
+
+from apps.biography.admin import BiographyAdmin
+from apps.biography.models import Biography
 
 from .models import Biography, TimelineEvent
 from .admin import BiographyAdmin, TimelineEventAdmin
@@ -207,4 +210,46 @@ class BiographyAdminRedirectTests(TestCase):
         self.assertEqual(
             response.url,
             reverse("admin:pages_lifepage_changelist"),
+        )
+
+class BiographyAdminReturnToTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+    def test_response_change_returns_to_home(self):
+        request = self.factory.post(
+            "/admin/biography/biography/1/change/?return_to=home",
+            data={},
+        )
+
+        response = self.model_admin.response_change(
+            request,
+            object(),
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:pages_homepage_changelist"),
+            fetch_redirect_response=False,
+        )
+
+    def test_response_change_returns_to_life(self):
+        request = self.factory.post(
+            "/admin/biography/biography/1/change/?return_to=life",
+            data={},
+        )
+
+        response = self.model_admin.response_change(
+            request,
+            object(),
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:pages_lifepage_changelist"),
+            fetch_redirect_response=False,
         )

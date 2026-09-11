@@ -22,7 +22,6 @@ class PhotoAdmin(TranslationAdmin):
         "order",
     )
     list_display_links = ("preview", "caption")
-    list_editable = ("is_published", "order")
     list_filter = ("category", "is_published", "layout_size")
     search_fields = ("caption", "alt_text")
     readonly_fields = ("preview_crop_editor", "large_preview")

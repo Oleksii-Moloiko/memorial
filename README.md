@@ -99,7 +99,6 @@ memorial/
 | `/media/` | Redirect до секції джерел на сторінці служби |
 | `/memories/` | Спогади |
 | `/admin/` | Django Admin |
-| `/admin/home/` | Кастомна головна сторінка Admin |
 | `/styleguide/` | Style guide, лише при `DEBUG=True` |
 
 Для англійської версії публічних URL Django додає префікс `/en/`, наприклад:
