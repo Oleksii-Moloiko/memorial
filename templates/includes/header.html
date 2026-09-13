@@ -105,106 +105,168 @@
         >
           {{ site_settings.memories_title }}
         </a>
-      </nav>
-
-      <div
-        class="language-switcher"
-        data-language-switcher
-      >
-        <button
-          class="language-switcher__trigger"
-          type="button"
-          aria-expanded="false"
-          aria-haspopup="true"
-          data-language-trigger
-        >
-          <svg
-            class="language-switcher__icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M3 12h18"></path>
-            <path d="M12 3c3 3 3 15 0 18"></path>
-            <path d="M12 3c-3 3-3 15 0 18"></path>
-          </svg>
-
-          <span>
-            {% if CURRENT_LANGUAGE == "en" %}
-              EN
-            {% else %}
-              UA
-            {% endif %}
-          </span>
-
-          <span
-            class="language-switcher__chevron"
-            aria-hidden="true"
-          ></span>
-        </button>
-
-        <div
-          class="language-switcher__menu"
-          data-language-menu
-          hidden
-        >
-          <div class="language-switcher__label">
-            МОВА / LANGUAGE
-          </div>
-
-          <form
-            action="{% url 'set_language' %}"
-            method="post"
-            class="language-switcher__options"
-          >
-            {% csrf_token %}
-
-            <input
-              type="hidden"
-              name="next"
-              value="{{ request.get_full_path }}"
+          <div class="mobile-menu-language">
+            <p
+              class="mobile-menu-language__label"
+              id="mobile-menu-language-label"
             >
-
-            <button
-              type="submit"
-              name="language"
-              value="uk"
-              class="language-switcher__option {% if CURRENT_LANGUAGE == 'uk' %}is-active{% endif %}"
-            >
-              <span class="language-switcher__code">UA</span>
-              <span>Українська</span>
-
-              {% if CURRENT_LANGUAGE == "uk" %}
-                <span
-                  class="language-switcher__check"
-                  aria-hidden="true"
-                >
-                  ✓
-                </span>
-              {% endif %}
-            </button>
-
-            <button
-              type="submit"
-              name="language"
-              value="en"
-              class="language-switcher__option {% if CURRENT_LANGUAGE == 'en' %}is-active{% endif %}"
-            >
-              <span class="language-switcher__code">EN</span>
-              <span>English</span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M3 12h18"></path>
+                <path d="M12 3c2.5 2.6 2.5 15.4 0 18"></path>
+                <path d="M12 3c-2.5 2.6-2.5 15.4 0 18"></path>
+              </svg>
 
               {% if CURRENT_LANGUAGE == "en" %}
-                <span
-                  class="language-switcher__check"
-                  aria-hidden="true"
-                >
-                  ✓
-                </span>
+                Language
+              {% else %}
+                Мова
               {% endif %}
-            </button>
-          </form>
+            </p>
+
+            <form
+              class="mobile-menu-language__switcher"
+              action="{% url 'set_language' %}"
+              method="post"
+              role="group"
+              aria-labelledby="mobile-menu-language-label"
+            >
+              {% csrf_token %}
+
+              <input
+                type="hidden"
+                name="next"
+                value="{{ request.get_full_path }}"
+              >
+
+              <button
+                type="submit"
+                name="language"
+                value="uk"
+                lang="uk"
+                aria-pressed="{% if CURRENT_LANGUAGE == 'uk' %}true{% else %}false{% endif %}"
+              >
+                UA
+              </button>
+
+              <button
+                type="submit"
+                name="language"
+                value="en"
+                lang="en"
+                aria-pressed="{% if CURRENT_LANGUAGE == 'en' %}true{% else %}false{% endif %}"
+              >
+                EN
+              </button>
+            </form>
+          </div>
+        </nav>
+
+        <div
+          class="language-switcher"
+          data-language-switcher
+        >
+          <button
+            class="language-switcher__trigger"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            data-language-trigger
+          >
+            <svg
+              class="language-switcher__icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M3 12h18"></path>
+              <path d="M12 3c3 3 3 15 0 18"></path>
+              <path d="M12 3c-3 3-3 15 0 18"></path>
+            </svg>
+
+            <span>
+              {% if CURRENT_LANGUAGE == "en" %}
+                EN
+              {% else %}
+                UA
+              {% endif %}
+            </span>
+
+            <span
+              class="language-switcher__chevron"
+              aria-hidden="true"
+            ></span>
+          </button>
+
+          <div
+            class="language-switcher__menu"
+            data-language-menu
+            hidden
+          >
+            <div class="language-switcher__label">
+              МОВА / LANGUAGE
+            </div>
+
+            <form
+              action="{% url 'set_language' %}"
+              method="post"
+              class="language-switcher__options"
+            >
+              {% csrf_token %}
+
+              <input
+                type="hidden"
+                name="next"
+                value="{{ request.get_full_path }}"
+              >
+
+              <button
+                type="submit"
+                name="language"
+                value="uk"
+                class="language-switcher__option {% if CURRENT_LANGUAGE == 'uk' %}is-active{% endif %}"
+              >
+                <span class="language-switcher__code">UA</span>
+                <span>Українська</span>
+
+                {% if CURRENT_LANGUAGE == "uk" %}
+                  <span
+                    class="language-switcher__check"
+                    aria-hidden="true"
+                  >
+                  ✓
+                  </span>
+                {% endif %}
+              </button>
+
+              <button
+                type="submit"
+                name="language"
+                value="en"
+                class="language-switcher__option {% if CURRENT_LANGUAGE == 'en' %}is-active{% endif %}"
+              >
+                <span class="language-switcher__code">EN</span>
+                <span>English</span>
+
+                {% if CURRENT_LANGUAGE == "en" %}
+                  <span
+                    class="language-switcher__check"
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                {% endif %}
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
 
     </div>
   </div>

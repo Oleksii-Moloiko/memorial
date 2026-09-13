@@ -43,8 +43,8 @@
     });
 
   /*
-   * Mobile navigation
-   */
+ * Mobile navigation
+ */
 
   const navToggle =
     document.querySelector(".nav-toggle");
@@ -52,84 +52,115 @@
   const nav =
     document.querySelector(".primary-nav");
 
-  navToggle?.addEventListener("click", () => {
-    if (!nav) {
+  const prefersReducedMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+  function openMobileNav() {
+    if (!nav || !navToggle) {
       return;
     }
 
-    const isOpen = nav.classList.contains("open");
+    nav.classList.remove("is-closing");
+    nav.classList.add("open");
 
-    if (!isOpen) {
-      // OPEN
-      nav.classList.remove("is-closing");
-      nav.classList.add("open");
+    navToggle.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+  }
 
-      navToggle.setAttribute(
-        "aria-expanded",
-        "true"
-      );
-
+  function closeMobileNav({
+    returnFocus = false,
+    } = {}) {
+    if (!nav || !navToggle) {
       return;
     }
 
-    // CLOSE
-    nav.classList.add("is-closing");
-    nav.classList.remove("open");
+    if (!nav.classList.contains("open")) {
+      return;
+    }
 
     navToggle.setAttribute(
       "aria-expanded",
       "false"
     );
 
+    /*
+     * При reduced motion не чекаємо transitionend,
+     * бо анімація вимкнена.
+     */
+    if (prefersReducedMotion.matches) {
+      nav.classList.remove(
+        "open",
+        "is-closing"
+      );
+
+      if (returnFocus) {
+        navToggle.focus();
+      }
+
+      return;
+    }
+
+    nav.classList.add("is-closing");
+    nav.classList.remove("open");
+
     const finishClosing = (event) => {
-      if (event.propertyName !== "clip-path") {
+      if (
+        event.target !== nav ||
+        event.propertyName !== "opacity"
+      ) {
         return;
       }
 
       nav.classList.remove("is-closing");
+
       nav.removeEventListener(
         "transitionend",
         finishClosing
       );
+
+      if (returnFocus) {
+        navToggle.focus();
+      }
     };
 
     nav.addEventListener(
       "transitionend",
       finishClosing
     );
+  }
+
+  navToggle?.addEventListener("click", () => {
+    if (!nav) {
+      return;
+    }
+
+    if (nav.classList.contains("open")) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      nav?.classList.contains("open")
+    ) {
+      event.preventDefault();
+
+      closeMobileNav({
+        returnFocus: true,
+      });
+    }
   });
 
   nav?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      if (!nav.classList.contains("open")) {
-        return;
-      }
-
-      nav.classList.add("is-closing");
-      nav.classList.remove("open");
-
-      navToggle?.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
-      const finishClosing = (event) => {
-        if (event.propertyName !== "clip-path") {
-          return;
-        }
-
-        nav.classList.remove("is-closing");
-
-        nav.removeEventListener(
-          "transitionend",
-          finishClosing
-        );
-      };
-
-      nav.addEventListener(
-        "transitionend",
-        finishClosing
-      );
+      closeMobileNav();
     });
   });
 
@@ -980,6 +1011,7 @@
     if (!galleryDialog.open) {
       lockDialogScroll();
       galleryDialog.showModal();
+      galleryDialog.focus({ preventScroll: true });
     }
 
     requestAnimationFrame(() => {
@@ -1011,30 +1043,27 @@
     galleryDialog?.close();
   });
 
-  galleryDialog?.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-
-        showDialogPhoto(
-          dialogPhotoIndex - 1
-        );
-      }
-
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-
-        showDialogPhoto(
-          dialogPhotoIndex + 1
-        );
-      }
-
-      if (event.key === "Escape") {
-        galleryDialog.close();
-      }
+  document.addEventListener("keydown", (event) => {
+    if (!galleryDialog?.open) {
+      return;
     }
-  );
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+
+      showDialogPhoto(
+        dialogPhotoIndex - 1
+      );
+    }
+
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+
+      showDialogPhoto(
+        dialogPhotoIndex + 1
+      );
+    }
+  });
 
   galleryDialog?.addEventListener(
     "close",
