@@ -6,6 +6,7 @@ from django.utils.html import format_html
 
 from apps.biography.models import Biography
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
+from apps.media_mentions.services import fetch_preview_image
 
 from apps.media_mentions.models import MediaMention
 
@@ -145,6 +146,7 @@ class MediaMentionInline(
         "title": "Назва матеріалу",
         "category": "Тип джерела",
         "url": "Посилання на матеріал",
+        "preview_image": "Зображення прев’ю",
         "is_published": "Показувати посилання на сайті",
         "is_featured": (
             "Показувати посилання на головній сторінці"
@@ -160,6 +162,10 @@ class MediaMentionInline(
             "посилання. Якщо вибрати інше, попереднє "
             "буде знято автоматично."
         ),
+        "preview_image": (
+            "Необов’язково. Завантажене вручну зображення "
+            "матиме пріоритет над автоматичним прев’ю."
+        ),
     }
 
     fields = (
@@ -168,6 +174,7 @@ class MediaMentionInline(
         "category",
         "published_date",
         "url",
+        "preview_image",
         "is_published",
         "is_featured",
         "order",
@@ -986,6 +993,66 @@ class ServicePageAdmin(
             },
         ),
     )
+
+    def save_formset(
+            self,
+            request,
+            form,
+            formset,
+            change,
+    ):
+        super().save_formset(
+            request,
+            form,
+            formset,
+            change,
+        )
+
+        if formset.model is not MediaMention:
+            return
+
+        for inline_form in formset.forms:
+            if not hasattr(inline_form, "cleaned_data"):
+                continue
+
+            if inline_form.cleaned_data.get("DELETE"):
+                continue
+
+            mention = inline_form.instance
+
+            if not mention.pk:
+                continue
+
+            url_changed = "url" in inline_form.changed_data
+
+            # Якщо URL змінився — старе автоматичне
+            # прев'ю вже не відповідає новому джерелу.
+            if url_changed and mention.auto_preview_image:
+                old_name = mention.auto_preview_image.name
+                storage = mention.auto_preview_image.storage
+
+                mention.auto_preview_image = None
+                mention.preview_fetched_from = ""
+                mention.preview_fetched_at = None
+
+                mention.save(
+                    update_fields=(
+                        "auto_preview_image",
+                        "preview_fetched_from",
+                        "preview_fetched_at",
+                    )
+                )
+
+                storage.delete(old_name)
+
+            # Ручне зображення завжди має пріоритет.
+            if mention.preview_image:
+                continue
+
+            # Для нового URL або якщо автоматичного
+            # прев'ю ще немає — пробуємо отримати його.
+            if url_changed or not mention.auto_preview_image:
+                fetch_preview_image(mention)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return not ServicePage.objects.exists()

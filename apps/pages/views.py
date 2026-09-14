@@ -60,7 +60,6 @@ def home(request):
             is_featured=True,
         ).first(),
         "featured_mention": MediaMention.objects.filter(
-            service_page__is_published=True,
             is_published=True,
             is_featured=True,
         ).first(),
@@ -124,7 +123,7 @@ def service(request):
             service_page.quotes.all()
         )
 
-        mentions = service_page.mentions.filter(
+        mentions = MediaMention.objects.filter(
             is_published=True,
         )
 

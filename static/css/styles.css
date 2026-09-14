@@ -1,14 +1,16 @@
 @font-face {
-  font-family: Inter;
-  src: local("Inter");
+  font-family: "Noto Serif";
+  src: url("../fonts/noto-serif-normal.ttf") format("truetype");
   font-style: normal;
   font-weight: 100 900;
+  font-display: swap;
 }
 @font-face {
   font-family: "Noto Serif";
-  src: local("Noto Serif");
-  font-style: normal;
+  src: url("../fonts/noto-serif-italic.ttf") format("truetype");
+  font-style: italic;
   font-weight: 100 900;
+  font-display: swap;
 }
 :root {
   --ink: #4e635e;
@@ -30,6 +32,7 @@
   box-sizing: border-box;
 }
 html {
+  font-family: var(--serif);
   scroll-behavior: smooth;
 }
 body {
@@ -3743,6 +3746,7 @@ body.wireframe .tone-f {
 
   .hero-intro {
     font-size: 16px;
+    text-align: left;
   }
 
   .button-row {
@@ -3850,7 +3854,7 @@ body.wireframe .tone-f {
 .timeline-carousel__title {
   margin: 0 0 16px;
 
-  font-family: "Iowan Old Style", "PT Serif", Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 21px;
   font-weight: 400;
   line-height: 1.3;
@@ -5434,5 +5438,310 @@ body.dialog-open {
   /* При натисканні */
   .primary-nav a:active {
     opacity: 0.45;
+  }
+}
+
+
+main,
+main * {
+  min-width: 0;
+}
+
+main p,
+main h1,
+main h2,
+main h3,
+main h4,
+main li {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+main section,
+main article,
+main div {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HOME — ВІДЕО + ПУБЛІКАЦІЇ
+   ========================================================= */
+
+.media-feature-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+
+/* ---------- КАРТКА ---------- */
+
+.media-feature-card {
+  display: grid;
+  grid-template-columns: 44% minmax(0, 1fr);
+
+  min-width: 0;
+
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  transition: box-shadow 0.35s ease;
+}
+
+.media-feature-card:hover {
+  box-shadow: 0 6px 26px rgba(60, 74, 60, 0.1);
+}
+
+
+/* ---------- ЛІВА ЧАСТИНА ---------- */
+
+.media-feature-card__visual {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  aspect-ratio: 9 / 16;
+
+  overflow: hidden;
+
+  background: #d5d4c0;
+}
+
+.media-feature-card__visual img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+
+/* ---------- ВІДЕО ---------- */
+
+.media-feature-card__visual--video::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(20, 28, 20, 0.28) 0%,
+      rgba(20, 28, 20, 0.1) 45%,
+      rgba(20, 28, 20, 0) 70%
+    );
+}
+
+.media-feature-card__play {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+
+  transform: translate(-50%, -50%);
+
+  width: 74px;
+  height: 74px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(246, 245, 236, 0.92);
+  color: var(--ink);
+
+  box-shadow: 0 6px 22px rgba(30, 40, 30, 0.28);
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+
+.media-feature-card__play svg {
+  width: 22px;
+  height: 22px;
+
+  margin-left: 3px;
+}
+
+.media-feature-card:hover .media-feature-card__play {
+  transform: translate(-50%, -50%) scale(1.06);
+  background: #f6f5ec;
+}
+
+
+/* ---------- ПУБЛІКАЦІЯ ---------- */
+
+.media-feature-card__visual--publication {
+  display: grid;
+  place-items: center;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(60, 74, 60, 0.05) 0 1px,
+      transparent 1px 9px
+    ),
+    linear-gradient(
+      150deg,
+      #dedcc8 0%,
+      #d3d2bd 100%
+    );
+}
+
+.media-feature-card__publication-icon {
+  width: 104px;
+  height: 104px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(246, 245, 236, 0.72);
+  color: var(--ink);
+}
+
+.media-feature-card__publication-icon svg {
+  width: 46px;
+  height: 46px;
+}
+
+.media-feature-card__publication-tag {
+  position: absolute;
+
+  left: 22px;
+  bottom: 20px;
+
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  color: #5c6a5a;
+}
+
+
+/* ---------- ПРАВА ЧАСТИНА ---------- */
+
+.media-feature-card__body {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding: 32px 34px 30px;
+}
+
+.media-feature-card__eyebrow {
+  margin: 0 0 22px;
+
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  color: #7a8179;
+}
+
+.media-feature-card__title {
+  margin: 0 0 14px;
+
+  font-family: var(--serif);
+  font-size: clamp(22px, 2vw, 30px);
+  font-weight: 400;
+  line-height: 1.2;
+
+  color: var(--ink);
+}
+
+.media-feature-card__meta {
+  margin: 0;
+
+  font-size: 13.5px;
+  line-height: 1.7;
+
+  color: #5c6a5a;
+}
+
+
+/* ---------- ПОСИЛАННЯ ВНИЗУ ---------- */
+
+.media-feature-card__action {
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 8px;
+
+  align-self: flex-start;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: var(--ink);
+
+  border-bottom: 1px solid var(--line);
+
+  transition: border-color 0.3s ease;
+}
+
+.media-feature-card:hover .media-feature-card__action {
+  border-color: var(--ink);
+}
+
+
+/* ---------- АДАПТИВ ---------- */
+
+@media (max-width: 860px) {
+  .media-feature-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .media-feature-card {
+    grid-template-columns: 1fr;
+  }
+
+  .media-feature-card__visual {
+    aspect-ratio: 4 / 3;
+  }
+
+  .media-feature-card__body {
+    padding: 26px 24px 28px;
+  }
+
+  .media-feature-card__play {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+
+/* ---------- REDUCED MOTION ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .media-feature-card,
+  .media-feature-card__play,
+  .media-feature-card__action {
+    transition: none;
   }
 }

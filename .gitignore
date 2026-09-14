@@ -41,3 +41,7 @@ __MACOSX/
 index.html
 index.php
 logo_white.png
+
+# Other
+GEMINI.md
+docker-compose.override.yml

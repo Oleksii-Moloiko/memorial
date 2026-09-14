@@ -298,13 +298,19 @@
 </section>
 
 <section class="section section-paper">
-  <div class="container feature-pair">
+  <div class="container media-feature-pair">
 
-    <article class="feature-card">
+    <!-- ВІДЕО -->
+    <article class="media-feature-card">
+
       <a
-        class="feature-media feature-media-link"
-        href="{% url 'pages:videos' %}"
-        aria-label="Перейти до відео"
+        class="media-feature-card__visual media-feature-card__visual--video"
+        href="{% if featured_video %}{{ featured_video.video_file.url }}{% else %}{% url 'pages:videos' %}{% endif %}"
+        {% if featured_video %}
+          target="_blank"
+          rel="noopener"
+        {% endif %}
+        aria-label="Дивитися відео"
       >
         {% if featured_video and featured_video.thumbnail %}
           <img
@@ -314,29 +320,30 @@
             width="{{ featured_video.thumbnail.width }}"
             height="{{ featured_video.thumbnail.height }}"
           >
-        {% else %}
-          <div class="feature-media-fallback video-placeholder media-placeholder">
-            <span>{{ home_page.video_eyebrow }}</span>
-          </div>
         {% endif %}
 
-        <span class="play-icon" aria-hidden="true">▶</span>
+        <span class="media-feature-card__play" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M5 3l16 9-16 9V3z"/>
+          </svg>
+        </span>
       </a>
 
-      <div class="feature-copy">
-        <p class="eyebrow">{{ home_page.video_eyebrow }}</p>
+      <div class="media-feature-card__body">
+        <p class="media-feature-card__eyebrow">
+          {{ home_page.video_eyebrow }}
+        </p>
 
         {% if featured_video %}
-          <h3>{{ featured_video.title }}</h3>
-
-          {% if featured_video.description %}
-            <p>
-              {{ featured_video.description|truncatewords:24 }}
-            </p>
-          {% endif %}
+          <h3 class="media-feature-card__title">
+            {{ featured_video.title }}
+          </h3>
 
           {% if featured_video.recorded_at or featured_video.duration %}
-            <p class="feature-meta">
+            <p class="media-feature-card__meta">
               {% if featured_video.recorded_at %}
                 {{ featured_video.recorded_at }}
               {% endif %}
@@ -351,32 +358,83 @@
             </p>
           {% endif %}
         {% else %}
-          <h3>{{ home_page.video_empty_title }}</h3>
+          <h3 class="media-feature-card__title">
+            {{ home_page.video_empty_title }}
+          </h3>
 
-          <p>
+          <p class="media-feature-card__meta">
             {{ home_page.video_empty_description }}
           </p>
         {% endif %}
 
-        <a class="text-link" href="{% url 'pages:videos' %}">
+        <a
+          class="media-feature-card__action"
+          href="{% if featured_video %}{{ featured_video.video_file.url }}{% else %}{% url 'pages:videos' %}{% endif %}"
+          {% if featured_video %}
+            target="_blank"
+            rel="noopener"
+          {% endif %}
+        >
           {{ home_page.video_button_label }}
           <span aria-hidden="true">→</span>
         </a>
       </div>
+
     </article>
 
-    <article class="feature-card">
-      <div class="feature-media document-placeholder media-placeholder">
-        <span>{{ home_page.links_eyebrow }}</span>
+
+    <!-- ПУБЛІКАЦІЇ -->
+    <article class="media-feature-card">
+
+      <div class="media-feature-card__visual media-feature-card__visual--publication">
+
+        {% if featured_mention and featured_mention.effective_preview %}
+          <img
+            src="{{ featured_mention.effective_preview.url }}"
+            alt="{{ featured_mention.title }}"
+            loading="lazy"
+          >
+        {% else %}
+
+          <span class="media-feature-card__publication-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 48 48"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 6h20l10 10v26H9z"/>
+              <path d="M29 6v10h10"/>
+              <path d="M15 24h12M15 30h12M15 36h8"/>
+              <path d="M15 15h8"/>
+            </svg>
+          </span>
+
+        {% endif %}
+
+        <span class="media-feature-card__publication-tag">
+          {% if featured_mention %}
+            {{ featured_mention.get_category_display }}
+          {% else %}
+            {{ home_page.links_eyebrow }}
+          {% endif %}
+        </span>
+
       </div>
 
-      <div class="feature-copy">
-        <p class="eyebrow">{{ home_page.links_eyebrow }}</p>
+      <div class="media-feature-card__body">
+        <p class="media-feature-card__eyebrow">
+          {{ home_page.links_eyebrow }}
+        </p>
 
         {% if featured_mention %}
-          <h3>{{ featured_mention.title }}</h3>
+          <h3 class="media-feature-card__title">
+            {{ featured_mention.title }}
+          </h3>
 
-          <p class="feature-meta">
+          <p class="media-feature-card__meta">
             {{ featured_mention.source_name }}
 
             {% if featured_mention.published_date %}
@@ -385,7 +443,7 @@
           </p>
 
           <a
-            class="text-link"
+            class="media-feature-card__action"
             href="{{ featured_mention.url }}"
             target="_blank"
             rel="noopener noreferrer"
@@ -393,19 +451,26 @@
             {{ home_page.links_source_button_label }}
             <span aria-hidden="true">↗</span>
           </a>
-        {% else %}
-          <h3>{{ home_page.links_empty_title }}</h3>
 
-          <p>
+        {% else %}
+          <h3 class="media-feature-card__title">
+            {{ home_page.links_empty_title }}
+          </h3>
+
+          <p class="media-feature-card__meta">
             {{ home_page.links_empty_description }}
           </p>
 
-          <a class="text-link" href="{% url 'pages:service' %}#links">
+          <a
+            class="media-feature-card__action"
+            href="{% url 'pages:service' %}#links"
+          >
             {{ home_page.links_archive_button_label }}
             <span aria-hidden="true">→</span>
           </a>
         {% endif %}
       </div>
+
     </article>
 
   </div>

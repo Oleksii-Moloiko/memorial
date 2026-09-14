@@ -1,8 +1,24 @@
+@font-face {
+    font-family: Inter;
+    src: url("../../fonts/inter-normal.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+@font-face {
+    font-family: Inter;
+    src: url("../../fonts/inter-italic.ttf") format("truetype");
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
 /* =========================================================
    MEMORIAL ADMIN THEME
    ========================================================= */
 
 :root {
+    --font-family-primary: Inter, "Noto Sans", Arial, sans-serif;
     --admin-ink: #4E635E;
     --admin-ink-dark: #3d4e4a;
     --admin-paper: #E2E0C8;
@@ -20,16 +36,13 @@
 
 html,
 body {
+    font-family: var(--font-family-primary);
     background: var(--admin-paper) !important;
 }
 
 body {
     color: var(--admin-ink) !important;
-    font-family:
-        Inter,
-        "Noto Sans",
-        Arial,
-        sans-serif !important;
+    font-family: var(--font-family-primary) !important;
 }
 
 /* =========================================================
@@ -57,10 +70,7 @@ body {
 #branding h1 a {
     color: var(--admin-paper) !important;
 
-    font-family:
-        "Noto Serif",
-        Georgia,
-        serif;
+    font-family: var(--font-family-primary);
 
     font-size: 20px;
     font-weight: 500;
@@ -218,10 +228,7 @@ body {
 #content h1 {
     color: var(--admin-ink-dark);
 
-    font-family:
-        "Noto Serif",
-        Georgia,
-        serif;
+    font-family: var(--font-family-primary);
 
     font-size: 36px;
     font-weight: 500;
@@ -1280,4 +1287,14 @@ body.login {
 
         box-sizing: border-box;
     }
+}
+
+/* Native buttons do not consistently inherit the document font. */
+input,
+select,
+textarea,
+button,
+.theme-toggle,
+.theme-toggle svg {
+    font-family: var(--font-family-primary);
 }

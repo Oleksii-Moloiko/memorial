@@ -32,6 +32,38 @@ class MediaMention(models.Model):
     url = models.URLField(
         "Посилання",
     )
+    preview_image = models.ImageField(
+        "Зображення прев’ю",
+        upload_to="media_mentions/previews/manual/",
+        blank=True,
+        null=True,
+        help_text=(
+            "Необов’язково. Якщо завантажити зображення вручну, "
+            "воно матиме пріоритет над автоматичним прев’ю."
+        ),
+    )
+
+    auto_preview_image = models.ImageField(
+        "Автоматичне прев’ю",
+        upload_to="media_mentions/previews/auto/",
+        blank=True,
+        null=True,
+        editable=False,
+    )
+
+    preview_fetched_from = models.URLField(
+        "Джерело автоматичного прев’ю",
+        max_length=2048,
+        blank=True,
+        editable=False,
+    )
+
+    preview_fetched_at = models.DateTimeField(
+        "Прев’ю отримано",
+        null=True,
+        blank=True,
+        editable=False,
+    )
     published_date = models.DateField(
         "Дата публікації",
         null=True,
@@ -58,6 +90,10 @@ class MediaMention(models.Model):
             MediaMention.objects.exclude(pk=self.pk).filter(
                 is_featured=True,
             ).update(is_featured=False)
+
+    @property
+    def effective_preview(self):
+        return self.preview_image or self.auto_preview_image
 
     class Meta:
         verbose_name = "Публікація"
