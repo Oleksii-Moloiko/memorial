@@ -90,21 +90,18 @@
           <div class="life-head__rule"></div>
 
           {% if biography.summary %}
-            <div class="life-head__epigraph">
-              <p class="life-head__key">
-                {{ life_page.principle_label }}
-              </p>
-
-              <p class="life-head__motto">
-                {{ biography.summary }}
-              </p>
-            </div>
+            <p class="life-head__summary">
+              {{ biography.summary }}
+            </p>
           {% endif %}
 
           {% if biography.signature_quote %}
-            <p class="life-head__credo">
-              {{ biography.signature_quote }}
-            </p>
+            <aside class="principle" aria-labelledby="life-principle-label">
+              <span class="principle__label" id="life-principle-label">
+                {{ life_page.principle_label }}
+              </span>
+              <blockquote class="principle__text">{{ biography.signature_quote }}</blockquote>
+            </aside>
           {% endif %}
         </div>
  

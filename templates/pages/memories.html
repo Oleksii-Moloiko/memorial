@@ -112,6 +112,8 @@
       class="memory-form"
       method="post"
       action="{% url 'pages:memories' %}"
+      data-success-message="{{ site_settings.memories_success_message }}"
+      data-error-message="{{ site_settings.memories_error_message }}"
       novalidate
     >
       {% csrf_token %}
@@ -182,7 +184,7 @@
         class="button button-primary full"
         type="submit"
       >
-        Надіслати на модерацію
+        {{ site_settings.memories_submit_button_label }}
       </button>
     </form>
   </div>

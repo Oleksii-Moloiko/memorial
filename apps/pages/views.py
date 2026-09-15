@@ -1,9 +1,13 @@
+import logging
+
 from django.contrib import messages
+from django.db import DatabaseError, transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django_ratelimit.decorators import ratelimit
 
 from apps.biography.models import Biography, TimelineEvent
+from apps.core.models import SiteSettings
 from apps.gallery.models import Photo
 from apps.media_mentions.models import MediaMention
 from apps.memories.forms import MemoryForm
@@ -119,23 +123,16 @@ def service(request):
     ).first()
 
     if service_page:
-        quotes = list(
-            service_page.quotes.all()
-        )
+        quotes = list(service_page.quotes.all())
 
         mentions = MediaMention.objects.filter(
             is_published=True,
         )
 
         for quote in quotes:
-            quote.is_long = (
-                len(quote.text)
-                > SERVICE_QUOTE_TEASER_LIMIT
-            )
+            quote.is_long = len(quote.text) > SERVICE_QUOTE_TEASER_LIMIT
 
-            quote.teaser = make_service_quote_teaser(
-                quote.text
-            )
+            quote.teaser = make_service_quote_teaser(quote.text)
     else:
         quotes = []
         mentions = MediaMention.objects.none()
@@ -222,70 +219,46 @@ def media(request):
 )
 def memories(request):
     if request.method == "POST":
+        site_settings = SiteSettings.load()
         is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        form = MemoryForm(request.POST)
+        error_message = site_settings.memories_error_message
+        error_status = 400
+        errors = {}
 
         if getattr(request, "limited", False):
-            limit_message = (
-                "Ви надіслали кілька спогадів за короткий час. "
-                "Спробуйте, будь ласка, пізніше."
-            )
-
-            if is_ajax:
-                return JsonResponse(
-                    {
-                        "success": False,
-                        "message": limit_message,
-                    },
-                    status=429,
-                )
-
-            messages.error(
-                request,
-                limit_message,
-            )
-
-            return redirect("pages:memories")
-
-        form = MemoryForm(request.POST)
-
-        if form.is_valid():
-            memory = form.save(commit=False)
-            memory.status = Memory.Status.PENDING
-            memory.featured = False
-            memory.save()
-
-            success_message = "Дякуємо. Ваш спогад надіслано на модерацію."
-
-            if is_ajax:
-                return JsonResponse(
-                    {
-                        "success": True,
-                        "message": success_message,
-                    }
-                )
-
-            messages.success(
-                request,
-                success_message,
-            )
-
-            return redirect("pages:memories")
+            error_message = site_settings.memories_rate_limit_message
+            error_status = 429
+        elif form.is_valid():
+            try:
+                with transaction.atomic():
+                    memory = form.save(commit=False)
+                    memory.status = Memory.Status.PENDING
+                    memory.featured = False
+                    memory.save()
+            except DatabaseError:
+                logging.getLogger(__name__).exception("Failed to save a memory")
+                error_status = 503
+            else:
+                success_message = site_settings.memories_success_message
+                if is_ajax:
+                    return JsonResponse({"success": True, "message": success_message})
+                messages.success(request, success_message)
+                return redirect("pages:memories")
+        else:
+            errors = form.errors.get_json_data()
 
         if is_ajax:
             return JsonResponse(
                 {
                     "success": False,
-                    "errors": form.errors.get_json_data(),
+                    "message": error_message,
+                    "errors": errors,
                 },
-                status=400,
+                status=error_status,
             )
 
-        else:
-            messages.error(
-                request,
-                "Щось пішло не так. Перевірте дані у формі та спробуйте ще раз.",
-            )
-
+        messages.error(request, error_message)
     else:
         form = MemoryForm()
 

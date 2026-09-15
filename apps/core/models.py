@@ -61,7 +61,6 @@ class SiteSettings(models.Model):
         default="Відео",
     )
 
-
     memories_title = models.CharField(
         "Назва розділу «Спогади»",
         max_length=100,
@@ -141,7 +140,6 @@ class SiteSettings(models.Model):
         default="Формулювання схвалені родиною.",
     )
 
-
     # Сторінка «Спогади»
 
     memories_hero_eyebrow = models.CharField(
@@ -195,6 +193,31 @@ class SiteSettings(models.Model):
         "Спогади — блок модерації: заголовок",
         max_length=100,
         default="Модерація",
+    )
+
+    memories_submit_button_label = models.CharField(
+        "Спогади — форма: текст кнопки надсилання",
+        max_length=200,
+        default="Надіслати на модерацію",
+    )
+
+    memories_success_message = models.TextField(
+        "Спогади — повідомлення про успішне надсилання",
+        default="Дякуємо. Ваш спогад надіслано на модерацію.",
+    )
+
+    memories_error_message = models.TextField(
+        "Спогади — повідомлення про помилку надсилання",
+        default="Щось пішло не так. Перевірте дані у формі та спробуйте ще раз.",
+        help_text="Також показується при проблемах зі з’єднанням. Введені дані зберігаються у формі.",
+    )
+
+    memories_rate_limit_message = models.TextField(
+        "Спогади — повідомлення про ліміт надсилань",
+        default=(
+            "Ви надіслали кілька спогадів за короткий час. "
+            "Спробуйте, будь ласка, пізніше."
+        ),
     )
 
     memories_moderator_text = models.CharField(

@@ -1454,30 +1454,18 @@ if (memorySubmitForm) {
           memorySubmitForm.reset();
 
           showToast(
-            data.message ||
-              "Дякуємо. Ваш спогад надіслано на модерацію."
+            data.message || memorySubmitForm.dataset.successMessage
           );
 
           return;
         }
 
-        if (data.message) {
-          showToast(
-            data.message,
-            "error"
-          );
-
-          return;
-        }
+        showToast(
+          data.message || memorySubmitForm.dataset.errorMessage,
+          "error"
+        );
 
         const errors = data.errors || {};
-
-        if (Object.keys(errors).length) {
-          showToast(
-            "Будь ласка, перевірте форму та заповніть обов’язкові поля.",
-           "error"
-          );
-        }
 
         Object.entries(errors).forEach(
           ([fieldName, fieldErrors]) => {
@@ -1523,7 +1511,7 @@ if (memorySubmitForm) {
         );
       } catch (error) {
         showToast(
-          "Не вдалося надіслати спогад. Спробуйте ще раз.",
+          memorySubmitForm.dataset.errorMessage,
           "error"
         );
       } finally {

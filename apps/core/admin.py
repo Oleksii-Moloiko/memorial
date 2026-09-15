@@ -71,6 +71,10 @@ class SiteSettingsAdmin(TranslationAdmin):
                     "memories_submit_eyebrow",
                     "memories_submit_title",
                     "memories_submit_description",
+                    "memories_submit_button_label",
+                    "memories_success_message",
+                    "memories_error_message",
+                    "memories_rate_limit_message",
                     "memories_moderation_label",
                     "memories_moderator_text",
                 )
