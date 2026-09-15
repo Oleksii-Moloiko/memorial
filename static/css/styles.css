@@ -4469,6 +4469,7 @@ body.wireframe .tone-f {
     position: absolute;
     inset: 0 auto 0 0;
 
+    width: 0;
     height: 100%;
     background: var(--ink);
 
@@ -5819,4 +5820,62 @@ main div {
     padding: 0 7px;
     font-size: 10.5px;
   }
+}
+
+.memories-progress[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memories-progress__fill {
+    transition: none;
+  }
+}
+/* NZRQR-25: quote cards, isolated from the memories carousel. */
+.quotes-description { max-width: 62ch; margin: -12px 0 38px; }
+.quotes-grid .quote-memory-card {
+  margin: 0;
+  padding: 52px 30px 26px;
+}
+.quotes-grid .quote-memory-card::before { content: none; }
+.quote-decoration {
+  position: absolute;
+  top: 6px;
+  left: 24px;
+  font-family: var(--serif);
+  font-size: 82px;
+  line-height: 1;
+  color: rgba(60, 74, 62, .16);
+  pointer-events: none;
+}
+.quotes-grid .memory-text { display: block; }
+.quotes-grid .quote-memory-card { scroll-margin-top: 110px; }
+.no-js .quotes-grid .memory-text::after { display: none; }
+.no-js .quotes-grid .memory-text .teaser,
+.no-js .quotes-grid .memory-text .ellipsis { display: none; }
+.no-js .quotes-grid .memory-text .full { display: inline; }
+@media (min-width: 641px) and (max-width: 1000px) {
+  .quotes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .quotes-grid { grid-template-columns: 1fr; gap: 12px; }
+  .quotes-grid .quote-memory-card { padding: 44px 20px 6px; }
+  .quotes-grid .quote-memory-card.featured { grid-column: auto; }
+  .quotes-grid .quote-decoration { top: 4px; left: 16px; font-size: 64px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quote-jump svg { animation: none; }
+}
+
+.no-js .quotes-grid .is-short .memory-text .teaser { display: inline; }
+.quotes-grid .quote-memory-card:not(.is-short):not(.is-open) .memory-text::after {
+  display: block;
+}
+@media (max-width: 760px) {
+  .quotes-grid .quote-memory-card.featured .memory-text::after {
+    background: linear-gradient(to bottom, transparent, var(--paper-2));
+  }
+}
+.no-js .quotes-grid .quote-memory-card .memory-text::after {
+  display: none !important;
 }

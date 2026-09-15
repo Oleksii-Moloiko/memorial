@@ -115,6 +115,28 @@ class ServiceQuoteInline(
 ):
     model = ServiceQuote
     extra = 0
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        field = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if field and db_field.name in {"text", "text_uk", "text_en"}:
+            field.widget.attrs.update(
+                {"maxlength": 1500, "placeholder": "Текст цитати"}
+            )
+            field.error_messages["max_length"] = (
+                "Цитата задовга, скоротіть її, будь ласка."
+            )
+            # Replace the default length validator so errors contain no numbers.
+            from django.core.validators import MaxLengthValidator
+
+            field.validators = [
+                validator for validator in field.validators
+                if not isinstance(validator, MaxLengthValidator)
+            ]
+            field.validators.append(MaxLengthValidator(
+                1500, message="Цитата задовга, скоротіть її, будь ласка."
+            ))
+        return field
+
     verbose_name = "цитата"
     verbose_name_plural = "Список цитат"
     client_field_labels = {
@@ -227,6 +249,7 @@ class HomePageAdmin(
             {
                 "fields": (
                     "quote_subtitle",
+                    "quote_jump_label",
                     "quote_content_link",
                 )
             },
@@ -950,7 +973,9 @@ class ServicePageAdmin(
                 "fields": (
                     "quotes_eyebrow",
                     "quotes_title",
+                    "quotes_description",
                     "quote_more_label",
+                    "quote_less_label",
                 )
             },
         ),
@@ -976,6 +1001,8 @@ class ServicePageAdmin(
                 ),
                 "fields": (
                     "links_verification_note",
+                    "links_count_label",
+                    "source_open_label",
                     "links_empty_title",
                     "links_empty_text",
                     "links_missing_date_label",

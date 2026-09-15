@@ -70,20 +70,21 @@
           </p>
         </div>
       {% endfor %}
-    </div>
-    <div class="memories-progress">
-      <span class="memories-progress__bar">
+    </div><!-- memories-grid -->
+
+    <div class="memories-progress" hidden>
+      <span class="memories-progress__bar" aria-hidden="true">
         <span class="memories-progress__fill"></span>
       </span>
 
       <span
         class="memories-progress__count"
         aria-live="polite"
-      >
-        1 / {{ memories|length }}
-      </span>
-    </div>
-  </div>
+        aria-atomic="true"
+      ></span>
+    </div><!-- memories-progress -->
+
+  </div><!-- container -->
 </section>
 
 <section

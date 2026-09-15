@@ -1566,8 +1566,9 @@ document.addEventListener("click", (event) => {
 
   if (!isOpen) {
     card.scrollIntoView({
-      block: "nearest",
-      behavior: "smooth",
+      block: card.classList.contains("quote-memory-card") ? "start" : "nearest",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto" : "smooth",
     });
   }
 });
@@ -1690,4 +1691,88 @@ galleryDialog?.addEventListener(
       });
     });
 
+})();
+
+(() => {
+  const grid = document.querySelector(
+    'body[data-page="memories"] .memories-grid'
+  );
+
+  if (!grid) return;
+
+  const progress = grid.nextElementSibling;
+
+  if (!progress?.classList.contains("memories-progress")) return;
+
+  const fill = progress.querySelector(".memories-progress__fill");
+  const count = progress.querySelector(".memories-progress__count");
+  const cards = Array.from(grid.children).filter((element) =>
+    element.classList.contains("memory-card")
+  );
+
+  if (!fill || !count) return;
+
+  const total = cards.length;
+  const mobile = window.matchMedia("(max-width: 760px)");
+  let frame = null;
+
+  const update = () => {
+    frame = null;
+
+    // Для порожнього списку й однієї картки індикатор не потрібний.
+    progress.hidden = !mobile.matches || total < 2;
+
+    if (progress.hidden) return;
+
+    const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
+    const scrollLeft = Math.max(0, Math.min(grid.scrollLeft, maxScroll));
+
+    let index = 0;
+
+    if (maxScroll > 0 && scrollLeft >= maxScroll - 2) {
+      // Остання картка може не доходити до лівого краю контейнера.
+      index = total - 1;
+    } else {
+      const gridLeft = grid.getBoundingClientRect().left;
+      let nearestDistance = Infinity;
+
+      cards.forEach((card, cardIndex) => {
+        const distance = Math.abs(
+          card.getBoundingClientRect().left - gridLeft
+        );
+
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          index = cardIndex;
+        }
+      });
+    }
+
+    fill.style.width = `${((index + 1) / total) * 100}%`;
+
+    const label = `${index + 1} / ${total}`;
+
+    // Не повторюємо повідомлення скринрідеру на кожному scroll.
+    if (count.textContent !== label) {
+      count.textContent = label;
+    }
+  };
+
+  const scheduleUpdate = () => {
+    if (frame === null) {
+      frame = window.requestAnimationFrame(update);
+    }
+  };
+
+  grid.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", scheduleUpdate);
+  mobile.addEventListener("change", scheduleUpdate);
+
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(scheduleUpdate);
+    observer.observe(grid);
+  }
+
+  document.fonts?.ready.then(scheduleUpdate);
+  scheduleUpdate();
 })();

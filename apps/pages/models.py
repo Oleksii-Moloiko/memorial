@@ -1,7 +1,10 @@
+from .validators import validate_service_quote
 from django.db import models
 
 
 class HomePage(models.Model):
+    quote_jump_label = models.CharField("Опис переходу до цитат", max_length=300, default='Перейти до цитат')
+
     """Контент головної сторінки.
 
     На сайті має існувати лише один запис.
@@ -584,6 +587,11 @@ class VideoPage(models.Model):
 
 
 class ServicePage(models.Model):
+    quotes_description = models.CharField("Опис блоку цитат", max_length=300, default='Слова самого Назара — з листів, розмов і записів у блокноті. Короткі цитати показані повністю, довгі — скорочені з кнопкою розгортання.')
+    quote_less_label = models.CharField("Текст кнопки згортання цитати", max_length=300, default='Згорнути')
+    links_count_label = models.CharField("Підпис кількості джерел", max_length=300, default='Джерела')
+    source_open_label = models.CharField("Опис відкриття джерела", max_length=300, default='Відкрити джерело')
+
     """Контент сторінки «Подвиг і служба».
 
     На сайті має існувати лише один запис.
@@ -817,6 +825,8 @@ class ServiceQuote(models.Model):
 
     text = models.TextField(
         "Цитата",
+        max_length=1500,
+        validators=[validate_service_quote],
     )
 
     context = models.CharField(

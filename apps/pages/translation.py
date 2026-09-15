@@ -14,6 +14,7 @@ from .models import (
 @register(HomePage)
 class HomePageTranslationOptions(TranslationOptions):
     fields = (
+        "quote_jump_label",
         "hero_eyebrow",
         "hero_primary_button_label",
         "hero_secondary_button_label",
@@ -47,6 +48,10 @@ class HomePageTranslationOptions(TranslationOptions):
 @register(ServicePage)
 class ServicePageTranslationOptions(TranslationOptions):
     fields = (
+        "quotes_description",
+        "quote_less_label",
+        "links_count_label",
+        "source_open_label",
         "hero_eyebrow",
         "hero_title",
         "hero_description",

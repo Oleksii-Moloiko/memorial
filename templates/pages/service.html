@@ -129,7 +129,7 @@
               href="{{ award.decree_url }}"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="{% translate "Відкрити джерело:" %} {{ award.title }}"
+              aria-label="{{ service_page.source_open_label }}: {{ award.title }}"
             >
               ↗
             </a>
@@ -157,14 +157,19 @@
       </h2>
     </div>
 
+    {% if service_page.quotes_description %}
+      <p class="quotes-description">{{ service_page.quotes_description }}</p>
+    {% endif %}
+
     <div class="quotes-grid">
       {% for quote in quotes %}
 
         <figure
           class="memory-card quote-memory-card
                  {% if not quote.is_long %} is-short{% endif %}
-                 {% if forloop.first %} featured{% endif %}"
+                 {% if forloop.counter == 2 %} featured{% endif %}"
         >
+          <span class="quote-decoration" aria-hidden="true">“</span>
           <blockquote>
             <span class="memory-text" id="service-quote-{{ quote.id }}">{% if quote.is_long %}<span class="teaser">{{ quote.teaser }}</span><span class="ellipsis">…</span><span class="full">{{ quote.text }}</span>{% else %}<span class="teaser">{{ quote.text }}</span>{% endif %}</span>
           </blockquote>
@@ -173,7 +178,7 @@
             <button
               class="read-more"
               data-more-label="{{ service_page.quote_more_label|default:_('Дивитись більше') }}"
-              data-less-label="{% translate 'Згорнути' %}"
+              data-less-label="{{ service_page.quote_less_label }}"
               type="button"
               aria-expanded="false"
               aria-controls="service-quote-{{ quote.id }}"
@@ -212,7 +217,7 @@
 
     {% if mentions and service_page.links_verification_note %}
       <div class="link-check">
-        <strong>{{ mentions|length }} {% translate "джерел" %}</strong>
+        <strong>{{ service_page.links_count_label }}: {{ mentions|length }}</strong>
         <p>
           {{ service_page.links_verification_note }}
         </p>
@@ -251,7 +256,7 @@
               href="{{ mention.url }}"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="{% translate "Відкрити джерело:" %} {{ mention.title }}"
+              aria-label="{{ service_page.source_open_label }}: {{ mention.title }}"
             >
               ↗
             </a>
