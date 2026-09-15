@@ -1,0 +1,159 @@
+# English interface translations for Memorial.
+msgid ""
+msgstr "Language: en\nContent-Type: text/plain; charset=UTF-8\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Інтерв’ю"
+msgstr "Interviews"
+
+msgid "Інше"
+msgstr "Other"
+
+msgid "Ваш браузер не підтримує відео."
+msgstr "Your browser does not support video."
+
+msgid "Вшанування"
+msgstr "Remembrance"
+
+msgid "Відкрити джерело:"
+msgstr "Open source:"
+
+msgid "Відкрити меню"
+msgstr "Open menu"
+
+msgid "Відкрити фото:"
+msgstr "Open photo:"
+
+msgid "Відтворити відео"
+msgstr "Play video"
+
+msgid "Головна навігація"
+msgstr "Main navigation"
+
+msgid "Дата запису"
+msgstr "Recording date"
+
+msgid "Дата не вказана"
+msgstr "Date not specified"
+
+msgid "Дата указу"
+msgstr "Decree date"
+
+msgid "Джерело"
+msgstr "Source"
+
+msgid "Дивитись більше"
+msgstr "Read more"
+
+msgid "Дивитися відео"
+msgstr "Watch video"
+
+msgid "Закрити фото"
+msgstr "Close photo"
+
+msgid "Згорнути"
+msgstr "Show less"
+
+msgid "Категорія"
+msgstr "Category"
+
+msgid "Матеріали ЗМІ"
+msgstr "Media coverage"
+
+msgid "Матеріали та джерела"
+msgstr "Publications and sources"
+
+msgid "Матеріалів поки немає"
+msgstr "No publications yet"
+
+msgid "Місце для головного портрета"
+msgstr "Main portrait placeholder"
+
+msgid "На головну"
+msgstr "Home"
+
+msgid "На сторінці"
+msgstr "On this page"
+
+msgid "Навчання"
+msgstr "Education"
+
+msgid "Навігація в підвалі"
+msgstr "Footer navigation"
+
+msgid "Нагороди"
+msgstr "Awards"
+
+msgid "Нагороди та відзнаки"
+msgstr "Awards and honours"
+
+msgid "Наступне фото"
+msgstr "Next photo"
+
+msgid "Номер"
+msgstr "Number"
+
+msgid "Офіційно узгоджений розділ"
+msgstr "Officially approved section"
+
+msgid "ПАМ’ЯТЬ"
+msgstr "REMEMBRANCE"
+
+msgid "Перейти до наступного розділу"
+msgstr "Go to the next section"
+
+msgid "Перейти до основного вмісту"
+msgstr "Skip to main content"
+
+msgid "Перейти до цитат"
+msgstr "Go to quotes"
+
+msgid "Подвиг і служба"
+msgstr "Service and heroism"
+
+msgid "Попереднє фото"
+msgstr "Previous photo"
+
+msgid "Портрет"
+msgstr "Portrait of"
+
+msgid "Посилання"
+msgstr "Sources"
+
+msgid "Родина Назара Боровицького"
+msgstr "The family of Nazar Borovytskyi"
+
+msgid "Слова, що залишилися"
+msgstr "Words that remain"
+
+msgid "Служба"
+msgstr "Service"
+
+msgid "Служба та побратими"
+msgstr "Service and comrades"
+
+msgid "Сторінка розроблена в світлу пам*ять Назара Боровицького"
+msgstr "Created in loving memory of Nazar Borovytskyi"
+
+msgid "Сімейний архів"
+msgstr "Family archive"
+
+msgid "Сім’я та дитинство"
+msgstr "Family and childhood"
+
+msgid "Тривалість"
+msgstr "Duration"
+
+msgid "Усі фото"
+msgstr "All photos"
+
+msgid "Фільтр категорій фото"
+msgstr "Photo category filter"
+
+msgid "Цитати"
+msgstr "Quotes"
+
+msgid "без підпису"
+msgstr "Untitled"
+
+msgid "джерел"
+msgstr "sources"

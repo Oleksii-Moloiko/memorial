@@ -58,7 +58,7 @@
 
 <body data-page="{% block page_key %}{% endblock %}">
     <a class="skip-link" href="#main-content">
-        Перейти до основного вмісту
+        {% translate "Перейти до основного вмісту" %}
     </a>
 
     {% if debug and site_settings.demo_strip_enabled|default:True %}

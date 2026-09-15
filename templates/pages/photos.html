@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block page_key %}photos{% endblock %}
 
@@ -29,7 +30,7 @@
       <div
         class="filter-bar"
         role="group"
-        aria-label="Фільтр категорій фото"
+        aria-label="{% translate "Фільтр категорій фото" %}"
       >
         <button
           class="filter-chip active"
@@ -37,7 +38,7 @@
           data-filter="all"
           aria-pressed="true"
         >
-          Усі фото
+          {% translate "Усі фото" %}
           <span>{{ category_counts.all }}</span>
         </button>
 
@@ -69,7 +70,7 @@
               data-image="{{ photo.image.url }}"
               data-caption="{{ photo.caption }}"
               data-alt="{{ photo.alt_text|default:photo.caption }}"
-              aria-label="Відкрити фото: {{ photo.caption|default:'без підпису' }}"
+              aria-label="{% translate "Відкрити фото:" %} {{ photo.caption|default:_("без підпису") }}"
             >
               <img
                 src="{{ photo.image.url }}"
@@ -129,7 +130,7 @@
     <button
       class="dialog-close"
       type="button"
-      aria-label="Закрити фото"
+      aria-label="{% translate "Закрити фото" %}"
     >
       ×
     </button>
@@ -137,7 +138,7 @@
     <button
       class="dialog-nav prev"
       type="button"
-      aria-label="Попереднє фото"
+      aria-label="{% translate "Попереднє фото" %}"
     >
       ‹
     </button>
@@ -145,7 +146,7 @@
     <button
       class="dialog-nav next"
       type="button"
-      aria-label="Наступне фото"
+      aria-label="{% translate "Наступне фото" %}"
     >
       ›
     </button>

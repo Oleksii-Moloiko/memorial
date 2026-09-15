@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
  
 {% block page_key %}life{% endblock %}
  
@@ -33,7 +34,7 @@
         <img
           class="portrait-secondary"
           src="{{ biography.portrait.url }}"
-          alt="Портрет {{ biography.full_name }}"
+          alt="{% translate "Портрет" %} {{ biography.full_name }}"
           loading="lazy"
           width="{{ biography.portrait.width }}"
           height="{{ biography.portrait.height }}"

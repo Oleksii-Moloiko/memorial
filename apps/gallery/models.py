@@ -1,13 +1,14 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Photo(models.Model):
     class Category(models.TextChoices):
-        FAMILY = "family", "Сім’я та дитинство"
-        STUDY = "study", "Навчання"
-        SERVICE = "service", "Служба та побратими"
-        MEMORY = "memory", "Вшанування"
+        FAMILY = "family", _("Сім’я та дитинство")
+        STUDY = "study", _("Навчання")
+        SERVICE = "service", _("Служба та побратими")
+        MEMORY = "memory", _("Вшанування")
 
     class LayoutSize(models.TextChoices):
         NORMAL = "", "Автоматично"

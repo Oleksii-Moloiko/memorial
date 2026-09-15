@@ -2,6 +2,7 @@ from pathlib import Path
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 def validate_video_extension(file):
@@ -21,12 +22,12 @@ def validate_video_size(file):
 
 class Video(models.Model):
     class Category(models.TextChoices):
-        FAMILY = "family", "Сімейний архів"
-        INTERVIEW = "interview", "Інтерв’ю"
-        SERVICE = "service", "Служба"
-        MEMORY = "memory", "Вшанування"
-        MEDIA = "media", "Матеріали ЗМІ"
-        OTHER = "other", "Інше"
+        FAMILY = "family", _("Сімейний архів")
+        INTERVIEW = "interview", _("Інтерв’ю")
+        SERVICE = "service", _("Служба")
+        MEMORY = "memory", _("Вшанування")
+        MEDIA = "media", _("Матеріали ЗМІ")
+        OTHER = "other", _("Інше")
 
     title = models.CharField(
         "Назва",

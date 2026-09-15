@@ -5745,3 +5745,78 @@ main div {
     transition: none;
   }
 }
+
+/* NZRQR-13: desktop controls follow the compact language-switch reference. */
+.language-switcher__trigger:focus-visible,
+.language-switcher__option:focus-visible,
+.footer-language-switcher button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.footer-language-switcher button:not(.is-active):hover {
+  background: rgba(236, 234, 219, .5);
+}
+@media (min-width: 961px) {
+  .language-switcher__trigger {
+    width: 84px;
+    height: 30px;
+    padding: 0 7px;
+    gap: 5px;
+    font-size: 11.5px;
+    letter-spacing: .07em;
+  }
+  .language-switcher__icon { width: 13px; height: 13px; stroke-width: 1.1; }
+  .language-switcher__chevron { width: 6px; height: 6px; }
+  .language-switcher__menu {
+    top: calc(100% + 9px);
+    width: 152px;
+    padding: 5px;
+    background: var(--paper-2);
+    box-shadow: 0 6px 20px rgba(30, 40, 32, .1);
+  }
+  .language-switcher__menu::before {
+    top: -5px;
+    right: 16px;
+    width: 8px;
+    height: 8px;
+    background: var(--paper-2);
+  }
+  .language-switcher__label {
+    margin: 0;
+    padding: 5px 9px 7px;
+    font-size: 9px;
+    letter-spacing: .14em;
+  }
+  .language-switcher__option {
+    min-height: 32px;
+    padding: 0 9px;
+    grid-template-columns: 17px 1fr 9px;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--olive);
+  }
+  .language-switcher__option:hover {
+    opacity: 1;
+    background: rgba(78, 99, 94, .07);
+    color: var(--ink);
+  }
+  .language-switcher__option.is-active { color: var(--ink); }
+  .language-switcher__code { font-size: 9.5px; letter-spacing: .1em; }
+  .language-switcher__check { font-size: 11px; }
+  .footer-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+  .footer-branding > .brand-footer,
+  .footer-branding > p,
+  .footer-branding > .footer-language-switcher { margin: 0; }
+  .footer-language-switcher { border-radius: 0; }
+  .footer-language-switcher button {
+    min-width: 59px;
+    min-height: 30px;
+    padding: 0 7px;
+    font-size: 10.5px;
+  }
+}

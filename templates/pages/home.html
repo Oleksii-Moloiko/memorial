@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 
 {% block page_key %}home{% endblock %}
@@ -34,7 +35,7 @@
       <img
         class="hero-portrait"
         src="{{ biography.portrait.url }}"
-        alt="Портрет {{ biography.full_name }}"
+        alt="{% translate "Портрет" %} {{ biography.full_name }}"
         width="{{ biography.portrait.width }}"
         height="{{ biography.portrait.height }}"
         fetchpriority="high"
@@ -43,7 +44,7 @@
       <div
         class="hero-portrait media-placeholder portrait-placeholder"
         role="img"
-        aria-label="Місце для головного портрета"
+        aria-label="{% translate "Місце для головного портрета" %}"
       >
         <span>{{ home_page.hero_portrait_empty_label }}</span>
       </div>
@@ -117,7 +118,7 @@
       <button
         type="button"
         class="hero-scroll__dot"
-        aria-label="Перейти до наступного розділу"
+        aria-label="{% translate "Перейти до наступного розділу" %}"
       >
         <span class="hero-scroll__arrow" aria-hidden="true">↓</span>
       </button>
@@ -140,7 +141,7 @@
       <a
         class="quote-jump"
         href="{% url 'pages:service' %}#quotes"
-        aria-label="Перейти до цитат"
+        aria-label="{% translate "Перейти до цитат" %}"
       >
         <svg
           viewBox="0 0 96 16"
@@ -310,7 +311,7 @@
           target="_blank"
           rel="noopener"
         {% endif %}
-        aria-label="Дивитися відео"
+        aria-label="{% translate "Дивитися відео" %}"
       >
         {% if featured_video and featured_video.thumbnail %}
           <img

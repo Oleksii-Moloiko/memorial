@@ -1561,8 +1561,8 @@ document.addEventListener("click", (event) => {
 
   button.textContent =
     isOpen
-      ? "Згорнути"
-      : "Дивитись більше";
+      ? (button.dataset.lessLabel || "Згорнути")
+      : (button.dataset.moreLabel || "Дивитись більше");
 
   if (!isOpen) {
     card.scrollIntoView({
@@ -1683,7 +1683,7 @@ galleryDialog?.addEventListener(
       });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" && !menu.hidden) {
           close();
           trigger.focus();
         }

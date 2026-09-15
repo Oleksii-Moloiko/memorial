@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block page_key %}service{% endblock %}
 
@@ -15,11 +16,11 @@
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">
-        {{ service_page.hero_eyebrow|default:"Офіційно узгоджений розділ" }}
+        {{ service_page.hero_eyebrow|default:_("Офіційно узгоджений розділ") }}
       </p>
 
       <h1>
-        {{ service_page.hero_title|default:"Подвиг і служба" }}
+        {{ service_page.hero_title|default:_("Подвиг і служба") }}
       </h1>
     </div>
 
@@ -41,20 +42,20 @@
   <div class="container service-layout">
     <aside class="service-index">
       <p class="eyebrow">
-        {{ service_page.index_eyebrow|default:"На сторінці" }}
+        {{ service_page.index_eyebrow|default:_("На сторінці") }}
       </p>
 
       <div class="service-index__links">
         <a href="#awards">
-          {{ service_page.awards_eyebrow|default:"Нагороди" }}
+          {{ service_page.awards_eyebrow|default:_("Нагороди") }}
         </a>
 
         <a href="#quotes">
-          {{ service_page.quotes_eyebrow|default:"Цитати" }}
+          {{ service_page.quotes_eyebrow|default:_("Цитати") }}
         </a>
 
         <a href="#links">
-          {{ service_page.links_nav_label|default:"Посилання" }}
+          {{ service_page.links_nav_label|default:_("Посилання") }}
         </a>
       </div>
     </aside>
@@ -67,11 +68,11 @@
 
     <div class="section-heading">
       <p class="eyebrow">
-        {{ service_page.awards_eyebrow|default:"Нагороди" }}
+        {{ service_page.awards_eyebrow|default:_("Нагороди") }}
       </p>
 
       <h2>
-        {{ service_page.awards_title|default:"Нагороди та відзнаки" }}
+        {{ service_page.awards_title|default:_("Нагороди та відзнаки") }}
       </h2>
     </div>
 
@@ -97,7 +98,7 @@
             {% if award.decree_date %}
               <div>
                 <dt>
-                  {{ service_page.award_date_label|default:"Дата указу" }}
+                  {{ service_page.award_date_label|default:_("Дата указу") }}
                 </dt>
                 <dd>{{ award.decree_date|date:"d.m.Y" }}</dd>
               </div>
@@ -106,7 +107,7 @@
             {% if award.decree_number %}
               <div>
                 <dt>
-                  {{ service_page.award_number_label|default:"Номер" }}
+                  {{ service_page.award_number_label|default:_("Номер") }}
                 </dt>
                 <dd>№ {{ award.decree_number }}</dd>
               </div>
@@ -115,7 +116,7 @@
             {% if award.decree_source_name %}
               <div>
                 <dt>
-                  {{ service_page.award_source_label|default:"Джерело" }}
+                  {{ service_page.award_source_label|default:_("Джерело") }}
                 </dt>
                 <dd>{{ award.decree_source_name }}</dd>
               </div>
@@ -128,7 +129,7 @@
               href="{{ award.decree_url }}"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Відкрити джерело: {{ award.title }}"
+              aria-label="{% translate "Відкрити джерело:" %} {{ award.title }}"
             >
               ↗
             </a>
@@ -148,11 +149,11 @@
 
     <div class="section-heading">
       <p class="eyebrow">
-        {{ service_page.quotes_eyebrow|default:"Цитати" }}
+        {{ service_page.quotes_eyebrow|default:_("Цитати") }}
       </p>
 
       <h2>
-        {{ service_page.quotes_title|default:"Слова, що залишилися" }}
+        {{ service_page.quotes_title|default:_("Слова, що залишилися") }}
       </h2>
     </div>
 
@@ -171,11 +172,13 @@
           {% if quote.is_long %}
             <button
               class="read-more"
+              data-more-label="{{ service_page.quote_more_label|default:_('Дивитись більше') }}"
+              data-less-label="{% translate 'Згорнути' %}"
               type="button"
               aria-expanded="false"
               aria-controls="service-quote-{{ quote.id }}"
             >
-              {{ service_page.quote_more_label|default:"Дивитись більше" }}
+              {{ service_page.quote_more_label|default:_("Дивитись більше") }}
             </button>
           {% endif %}
         </figure>
@@ -193,11 +196,11 @@
 
     <div class="section-heading">
       <p class="eyebrow">
-        {{ service_page.links_eyebrow|default:"Посилання" }}
+        {{ service_page.links_eyebrow|default:_("Посилання") }}
       </p>
 
       <h2>
-        {{ service_page.links_title|default:"Матеріали та джерела" }}
+        {{ service_page.links_title|default:_("Матеріали та джерела") }}
       </h2>
 
       {% if service_page.links_description %}
@@ -209,7 +212,7 @@
 
     {% if mentions and service_page.links_verification_note %}
       <div class="link-check">
-        <strong>{{ mentions|length }} джерел</strong>
+        <strong>{{ mentions|length }} {% translate "джерел" %}</strong>
         <p>
           {{ service_page.links_verification_note }}
         </p>
@@ -228,7 +231,7 @@
                 </time>
               {% else %}
                 <span>
-                  {{ service_page.links_missing_date_label|default:"Дата не вказана" }}
+                  {{ service_page.links_missing_date_label|default:_("Дата не вказана") }}
                 </span>
               {% endif %}
 
@@ -248,7 +251,7 @@
               href="{{ mention.url }}"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Відкрити джерело: {{ mention.title }}"
+              aria-label="{% translate "Відкрити джерело:" %} {{ mention.title }}"
             >
               ↗
             </a>
@@ -261,7 +264,7 @@
 
       <div class="empty-state">
         <h3>
-          {{ service_page.links_empty_title|default:"Матеріалів поки немає" }}
+          {{ service_page.links_empty_title|default:_("Матеріалів поки немає") }}
         </h3>
 
         <p>
