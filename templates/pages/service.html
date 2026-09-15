@@ -29,9 +29,10 @@
         <p>{{ service_page.hero_description|linebreaksbr }}</p>
       {% endif %}
 
-      {% if service_page %}
-        <span class="status-pill">
-          {{ service_page.get_publication_status_display }}
+      {% if service_page.honour_title %}
+        <span class="honour-pill">
+          <span class="honour-pill__icon" aria-hidden="true">✦</span>
+          <span class="honour-pill__text">{{ service_page.honour_title }}</span>
         </span>
       {% endif %}
     </div>

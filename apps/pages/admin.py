@@ -942,6 +942,7 @@ class ServicePageAdmin(
                     "hero_eyebrow",
                     "hero_title",
                     "hero_description",
+                    "honour_title",
                 )
             },
         ),

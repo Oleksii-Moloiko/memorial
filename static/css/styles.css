@@ -752,7 +752,12 @@ p {
   }
 }
 
-.quote-jump:focus-visible {
+.quote-link:hover .quote-subtitle {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.quote-link:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 6px;
 }
@@ -995,14 +1000,33 @@ p {
 .page-lead p {
   margin-bottom: 20px;
 }
-.status-pill {
+.honour-pill {
   display: inline-flex;
-  border: 1px solid rgba(32, 38, 35, 0.32);
-  font-family: var(--sans);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  border: 1px solid rgba(40, 52, 42, 0.45);
+  padding: 12px 18px;
+  font-family: var(--serif);
+  color: #3c4a3e;
+  line-height: 1.55;
+}
+.honour-pill__icon {
+  flex: 0 0 auto;
+  font-size: 17px;
+  line-height: 1;
+  color: rgba(40, 52, 42, 0.8);
+}
+.honour-pill__text {
+  min-width: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 8px 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.service-hero .page-lead > p {
+  margin-bottom: 24px;
 }
 .biography-grid {
   display: grid;
@@ -2053,7 +2077,7 @@ body.wireframe .media-placeholder > span {
 }
 body.wireframe .button,
 body.wireframe .filter-chip,
-body.wireframe .status-pill {
+body.wireframe .honour-pill {
   background: #fff !important;
   color: #111 !important;
   border: 1px solid #111 !important;
@@ -4172,6 +4196,10 @@ body.wireframe .tone-f {
   position: relative;
   margin: 0;
   min-width: 0;
+
+  border-radius: 14px;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .gallery-card.layout-portrait-left {
@@ -4265,16 +4293,29 @@ body.wireframe .tone-f {
 .gallery-card figcaption {
   position: absolute;
   z-index: 2;
-  left: 14px;
-  right: 14px;
-  bottom: 12px;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   margin: 0;
-  padding: 28px 12px 10px;
-  color: #fff;
+  padding: 34px 18px 14px;
+
+  color: #f4f3e7;
+
+  font-family: Inter, "Noto Sans", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
   font-size: 13px;
-  line-height: 1.4;
+  font-weight: 400;
+  line-height: 1.45;
+
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.58));
+
+  background: linear-gradient(
+    to top,
+    rgba(18, 24, 20, 0.78) 0%,
+    rgba(18, 24, 20, 0.42) 45%,
+    rgba(18, 24, 20, 0) 100%
+  );
 }
 
 @media (max-width: 700px) {

@@ -616,6 +616,14 @@ class ServicePage(models.Model):
         "Опис у першому екрані",
         blank=True,
     )
+    honour_title = models.CharField(
+        "Звання",
+        max_length=200,
+        blank=True,
+        default="",
+        help_text="Наприклад: Герой України. Якщо порожньо — плашка не показується.",
+    )
+
     # Навігація по сторінці
 
     index_eyebrow = models.CharField(

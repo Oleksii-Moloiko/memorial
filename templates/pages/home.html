@@ -133,16 +133,16 @@
       «{{ biography.signature_quote }}»
     </blockquote>
 
-    <div class="quote-row">
-      <p class="quote-subtitle">
+    <a
+      class="quote-row quote-link"
+      href="{% url 'pages:service' %}#quotes"
+      aria-label="{{ home_page.quote_subtitle }} — {{ home_page.quote_jump_label }}"
+    >
+      <span class="quote-subtitle">
         {{ home_page.quote_subtitle }}
-      </p>
+      </span>
 
-      <a
-        class="quote-jump"
-        href="{% url 'pages:service' %}#quotes"
-        aria-label="{{ home_page.quote_jump_label }}"
-      >
+      <span class="quote-jump" aria-hidden="true">
         <svg
           viewBox="0 0 96 16"
           fill="none"
@@ -160,9 +160,9 @@
             points="72,2 80,8 72,14"
           />
         </svg>
-      </a>
+      </span>
 
-    </div>
+    </a>
   </div>
 </section>
 {% endif %}

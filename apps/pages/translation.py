@@ -55,6 +55,7 @@ class ServicePageTranslationOptions(TranslationOptions):
         "hero_eyebrow",
         "hero_title",
         "hero_description",
+        "honour_title",
 
         "index_eyebrow",
 
