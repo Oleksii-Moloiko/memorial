@@ -1,6 +1,16 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
-from .models import Memory
+from .models import (
+    MEMORY_TEXT_MAX_LENGTH,
+    Memory,
+    MemoryCategory,
+)
+
+MEMORY_TEXT_LIMIT_MESSAGE = _(
+    "Досягнуто ліміт в 15 000 символів. "
+    "Надішліть цей спогад, а продовження — ще однією формою."
+)
 
 
 class MemoryForm(forms.ModelForm):
@@ -16,78 +26,78 @@ class MemoryForm(forms.ModelForm):
 
     consent = forms.BooleanField(
         required=True,
-        label="Погоджуюся на публікацію після перевірки модератором.",
+        label=_("Погоджуюся на публікацію після перевірки модератором."),
     )
 
     class Meta:
         model = Memory
         fields = (
             "author_name",
-            "author_role",
+            "category",
             "text",
         )
 
         labels = {
-            "author_name": "Ім’я або підпис",
-            "author_role": "Ким ви були знайомі",
-            "text": "Текст спогаду",
+            "author_name": _("Ім’я або підпис"),
+            "category": _("Ким ви були знайомі"),
+            "text": _("Текст спогаду"),
         }
 
         widgets = {
             "author_name": forms.TextInput(
                 attrs={
-                    "placeholder": "Наприклад: Іван або позивний «Сокіл»",
+                    "placeholder": _("Наприклад: Іван або позивний «Сокіл»"),
                     "autocomplete": "name",
                 }
             ),
-            "author_role": forms.Select(
-                choices=[
-                    ("", "Оберіть варіант"),
-                    ("Родина", "Родина"),
-                    ("Друг / подруга", "Друг / подруга"),
-                    ("Побратим", "Побратим"),
-                    ("Однокласник / однокурсник", "Однокласник / однокурсник"),
-                    ("Колега", "Колега"),
-                    ("Інше", "Інше"),
-                ]
-            ),
+            "category": forms.Select(),
             "text": forms.Textarea(
                 attrs={
                     "rows": 6,
-                    "maxlength": 1500,
-                    "placeholder": "Напишіть спогад",
+                    "maxlength": MEMORY_TEXT_MAX_LENGTH,
+                    "placeholder": _("Напишіть спогад"),
                 }
             ),
         }
 
-    def clean_author_name(self):
-        author_name = self.cleaned_data["author_name"].strip()
+        error_messages = {
+            "text": {
+                "max_length": MEMORY_TEXT_LIMIT_MESSAGE,
+            },
+        }
 
-        if len(author_name) < 2:
-            raise forms.ValidationError(
-                "Вкажіть ім’я або підпис щонайменше з двох символів."
-            )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        return author_name
+        self.fields["category"].queryset = MemoryCategory.objects.filter(
+            is_active=True
+        ).order_by("sort_order", "id")
+
+        self.fields["category"].empty_label = _("Оберіть варіант")
 
     def clean_website(self):
         value = self.cleaned_data.get("website", "")
 
         if value:
-            raise forms.ValidationError("Не вдалося надіслати форму.")
+            raise forms.ValidationError(_("Не вдалося надіслати форму."))
 
         return ""
 
-    def clean_author_role(self):
-        return self.cleaned_data.get("author_role", "").strip()
+    def clean_author_name(self):
+        name = self.cleaned_data["author_name"].strip()
+        if len(name) < 2:
+            raise forms.ValidationError(
+                _("Вкажіть ім’я або підпис щонайменше з двох символів.")
+            )
+        return name
 
     def clean_text(self):
         text = self.cleaned_data["text"].strip()
 
         if len(text) < 10:
-            raise forms.ValidationError("Спогад має містити щонайменше 10 символів.")
+            raise forms.ValidationError(_("Спогад має містити щонайменше 10 символів."))
 
-        if len(text) > 1500:
-            raise forms.ValidationError("Спогад не може перевищувати 500 символів.")
+        if len(text) > MEMORY_TEXT_MAX_LENGTH:
+            raise forms.ValidationError(MEMORY_TEXT_LIMIT_MESSAGE)
 
         return text

@@ -5,26 +5,45 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import path
+from modeltranslation.admin import TranslationAdmin
 
-from .models import Memory
+from .models import Memory, MemoryCategory
+
+
+@admin.register(MemoryCategory)
+class MemoryCategoryAdmin(TranslationAdmin):
+    change_list_template = "admin/memories/memorycategory/change_list.html"
+    list_display = (
+        "name",
+        "sort_order",
+        "is_active",
+    )
+    list_editable = (
+        "sort_order",
+        "is_active",
+    )
+    ordering = (
+        "sort_order",
+        "id",
+    )
 
 
 @admin.register(Memory)
-class MemoryAdmin(admin.ModelAdmin):
+class MemoryAdmin(TranslationAdmin):
     """Admin configuration for reviewing and publishing memories."""
 
     change_list_template = "admin/memories/memory/change_list.html"
 
     list_display = (
         "author_name",
-        "author_role",
+        "category",
         "short_text",
         "status",
         "featured",
         "created_at",
     )
     list_editable = ("status", "featured")
-    list_filter = ("status", "featured", "created_at")
+    list_filter = ("status", "category", "featured", "created_at")
     search_fields = ("author_name", "author_role", "text")
     readonly_fields = ("created_at",)
     date_hierarchy = "created_at"
@@ -40,7 +59,7 @@ class MemoryAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Автор",
-            {"fields": ("author_name", "author_role")},
+            {"fields": ("author_name", "category", "author_role")},
         ),
         (
             "Спогад",

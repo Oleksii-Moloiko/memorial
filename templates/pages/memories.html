@@ -1,9 +1,17 @@
 {% extends "base.html" %}
+{% load static i18n %}
 
 {% block page_key %}memories{% endblock %}
 
 {% block title %}
   {{ site_settings.memories_title }} — {{ site_settings.site_title }}
+{% endblock %}
+
+{% block extra_head %}
+  <script
+    src="{% static 'js/memories.js' %}"
+    defer
+  ></script>
 {% endblock %}
 
 {% block content %}
@@ -23,45 +31,73 @@
 
 <section class="section section-paper">
   <div class="container">
+    {% if memory_categories %}
+      <div
+        class="filter-bar"
+        role="group"
+        aria-label="{% translate "Фільтр спогадів за категорією" %}"
+      >
+        {% for category in memory_categories %}
+          <button
+            class="filter-chip"
+            type="button"
+            data-memory-filter="{{ category.id }}"
+            aria-pressed="false"
+          >
+            {{ category.name }}
+
+            <span class="filter-chip__n">
+              {{ category.memories_count }}
+            </span>
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
     <div class="memories-grid">
       {% for memory in memories %}
         <figure
-          class="memory-card{% if memory.featured %} featured{% endif %}{% if not memory.is_long %} is-short{% endif %}"
+          class="memory-card"
+          data-memory-category="{{ memory.category_id|default:'' }}"
+          data-memory-full="{{ memory.text }}"
         >
-          <blockquote>
-            {% if memory.is_long %}
-              <span
-                class="memory-text"
-                id="memory-text-{{ memory.id }}"
-              >
-                «<span class="teaser">{{ memory.teaser }}</span><span class="ellipsis">…</span><span class="full">{{ memory.text }}</span>»
-              </span>
-            {% else %}
-              <span class="memory-text">
-                «{{ memory.text }}»
-              </span>
-            {% endif %}
-          </blockquote>
 
-          <figcaption>
-            {% if memory.author_role %}
-              {{ memory.author_name }}, {{ memory.author_role }}
-            {% else %}
+          <figcaption class="memory-head">
+            <span class="memory-author">
               {{ memory.author_name }}
+            </span>
+
+            {% if memory.category %}
+              <span class="memory-relation">
+                {{ memory.category.name }}
+              </span>
             {% endif %}
           </figcaption>
 
+          <blockquote class="memory-text">{% if memory.is_long %}{{ memory.teaser }}…{% else %}{{ memory.text }}{% endif %}</blockquote>
+
           {% if memory.is_long %}
             <button
-              class="read-more"
+              class="memory-more"
               type="button"
-              aria-expanded="false"
-              aria-controls="memory-text-{{ memory.id }}"
+              data-memory-open
             >
-              Дивитись більше
+              {% translate "Дивитись більше" %}
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
             </button>
           {% endif %}
         </figure>
+
       {% empty %}
         <div class="empty-state">
           <h2>{{ site_settings.memories_empty_title }}</h2>
@@ -72,17 +108,16 @@
       {% endfor %}
     </div><!-- memories-grid -->
 
-    <div class="memories-progress" hidden>
-      <span class="memories-progress__bar" aria-hidden="true">
+    <div class="memories-progress">
+      <span class="memories-progress__bar">
         <span class="memories-progress__fill"></span>
       </span>
 
       <span
         class="memories-progress__count"
         aria-live="polite"
-        aria-atomic="true"
       ></span>
-    </div><!-- memories-progress -->
+    </div>
 
   </div><!-- container -->
 </section>
@@ -117,6 +152,7 @@
       novalidate
     >
       {% csrf_token %}
+      <div hidden aria-hidden="true">{{ form.website }}</div>
 
       {% if form.non_field_errors %}
         <div class="form-errors full" role="alert">
@@ -137,13 +173,13 @@
         {% endif %}
       </label>
 
-      <label for="{{ form.author_role.id_for_label }}">
-        {{ form.author_role.label }}
-        {{ form.author_role }}
+      <label for="{{ form.category.id_for_label }}">
+        {{ form.category.label }}
+        {{ form.category }}
 
-        {% if form.author_role.errors %}
+        {% if form.category.errors %}
           <span class="field-error" role="alert">
-            {{ form.author_role.errors.0 }}
+            {{ form.category.errors.0 }}
           </span>
         {% endif %}
       </label>
@@ -156,7 +192,15 @@
         {{ form.text }}
 
         <span class="field-hint">
-          Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше».
+          Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «{% translate "Дивитись більше" %}».
+        </span>
+
+        <span
+          class="field-hint memory-limit-hint"
+          data-memory-limit-hint
+          hidden
+        >
+          {% translate "Досягнуто ліміт в 15 000 символів. Надішліть цей спогад, а продовження — ще однією формою." %}
         </span>
 
         {% if form.text.errors %}

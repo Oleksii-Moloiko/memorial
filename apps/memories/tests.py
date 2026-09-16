@@ -3,10 +3,11 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from django.utils.translation import override
 
 from .admin import MemoryAdmin
 from .forms import MemoryForm
-from .models import Memory
+from .models import Memory, MemoryCategory
 
 
 class MemoryModelTests(TestCase):
@@ -101,10 +102,11 @@ class MemoryFormTests(TestCase):
         self.assertIn("text", form.errors)
 
     def test_form_trims_whitespace(self):
+        category = MemoryCategory.objects.create(name="Побратим")
         form = MemoryForm(
             data={
                 "author_name": "  Іван  ",
-                "author_role": "  Побратим  ",
+                "category": category.pk,
                 "text": "  Це достатньо довгий текст спогаду.  ",
                 "consent": True,
             }
@@ -112,7 +114,7 @@ class MemoryFormTests(TestCase):
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data["author_name"], "Іван")
-        self.assertEqual(form.cleaned_data["author_role"], "Побратим")
+        self.assertEqual(form.cleaned_data["category"], category)
         self.assertEqual(
             form.cleaned_data["text"],
             "Це достатньо довгий текст спогаду.",
@@ -121,6 +123,9 @@ class MemoryFormTests(TestCase):
 
 class MemoriesPageTests(TestCase):
     def setUp(self):
+        language = override("uk")
+        language.__enter__()
+        self.addCleanup(language.__exit__, None, None, None)
         self.url = reverse("pages:memories")
 
     def test_page_is_available(self):

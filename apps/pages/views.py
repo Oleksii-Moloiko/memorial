@@ -2,6 +2,7 @@ import logging
 
 from django.contrib import messages
 from django.db import DatabaseError, transaction
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django_ratelimit.decorators import ratelimit
@@ -11,7 +12,7 @@ from apps.core.models import SiteSettings
 from apps.gallery.models import Photo
 from apps.media_mentions.models import MediaMention
 from apps.memories.forms import MemoryForm
-from apps.memories.models import Memory
+from apps.memories.models import Memory, MemoryCategory
 from apps.seo.models import SeoPage
 from apps.videos.models import Video
 
@@ -262,8 +263,10 @@ def memories(request):
     else:
         form = MemoryForm()
 
-    memories_queryset = Memory.objects.filter(
-        status=Memory.Status.APPROVED,
+    memories_queryset = (
+        Memory.objects
+        .filter(status=Memory.Status.APPROVED)
+        .select_related("category")
     )
 
     featured_memory = memories_queryset.filter(
@@ -291,8 +294,24 @@ def memories(request):
         memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
         memory.teaser = make_memory_teaser(memory.text)
 
+    memory_categories = (
+        MemoryCategory.objects
+        .filter(is_active=True)
+        .annotate(
+            memories_count=Count(
+                "memories",
+                filter=Q(
+                    memories__status=Memory.Status.APPROVED,
+                ),
+            ),
+        )
+        .filter(memories_count__gt=0)
+        .order_by("sort_order", "id")
+    )
+
     context = {
         "memories": memories_list,
+        "memory_categories": memory_categories,
         "form": form,
         **_seo_context("memories"),
     }

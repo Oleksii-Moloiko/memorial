@@ -157,3 +157,42 @@ msgstr "Untitled"
 
 msgid "джерел"
 msgstr "sources"
+
+msgid "Досягнуто ліміт в 15 000 символів. Надішліть цей спогад, а продовження — ще однією формою."
+msgstr "You have reached the 15,000-character limit. Submit this memory and use another form to continue."
+
+msgid "Погоджуюся на публікацію після перевірки модератором."
+msgstr "I agree to publication after moderator review."
+
+msgid "Ім’я або підпис"
+msgstr "Name or signature"
+
+msgid "Ким ви були знайомі"
+msgstr "Your relationship"
+
+msgid "Текст спогаду"
+msgstr "Your memory"
+
+msgid "Наприклад: Іван або позивний «Сокіл»"
+msgstr "For example: Ivan or the call sign “Falcon”"
+
+msgid "Напишіть спогад"
+msgstr "Write your memory"
+
+msgid "Оберіть варіант"
+msgstr "Choose an option"
+
+msgid "Не вдалося надіслати форму."
+msgstr "The form could not be submitted."
+
+msgid "Спогад має містити щонайменше 10 символів."
+msgstr "Your memory must contain at least 10 characters."
+
+msgid "Вкажіть ім’я або підпис щонайменше з двох символів."
+msgstr "Enter a name or signature with at least two characters."
+
+msgid "Фільтр спогадів за категорією"
+msgstr "Filter memories by category"
+
+msgid "Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше»."
+msgstr "Long memories are shortened in the feed. Select “Read more” to read the full text."

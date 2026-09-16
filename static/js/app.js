@@ -1407,6 +1407,43 @@ const memorySubmitForm =
   document.getElementById("memory-submit-form");
 
 if (memorySubmitForm) {
+    const memoryTextField =
+      memorySubmitForm.elements.text;
+
+    const memoryLimitHint =
+      memorySubmitForm.querySelector(
+        "[data-memory-limit-hint]"
+      );
+
+    const updateMemoryLimitHint = () => {
+      if (!memoryTextField || !memoryLimitHint) {
+        return;
+      }
+
+      const maxLength =
+        Number(memoryTextField.maxLength);
+
+      memoryLimitHint.hidden =
+        !maxLength ||
+        memoryTextField.value.length < maxLength;
+    };
+
+    memoryTextField?.addEventListener(
+      "input",
+      updateMemoryLimitHint
+    );
+
+    memorySubmitForm.addEventListener(
+      "reset",
+      () => {
+        window.requestAnimationFrame(
+          updateMemoryLimitHint
+        );
+      }
+    );
+
+    updateMemoryLimitHint();
+
   memorySubmitForm.addEventListener(
     "submit",
     async (event) => {
@@ -1522,7 +1559,6 @@ if (memorySubmitForm) {
     }
   );
 }
-
 /*
  * Memories: read more
  */
@@ -1681,6 +1717,101 @@ galleryDialog?.addEventListener(
 
 })();
 
+/*
+ * Memories: category filters
+ */
+
+(() => {
+  const grid = document.querySelector(
+    'body[data-page="memories"] .memories-grid'
+  );
+
+  const filters = Array.from(
+    document.querySelectorAll("[data-memory-filter]")
+  );
+
+  if (!grid || !filters.length) {
+    return;
+  }
+
+  const cards = Array.from(
+    grid.querySelectorAll(".memory-card")
+  );
+
+  const readCategories = () => {
+    const selected = (new URLSearchParams(location.search).get("category") || "").split(",");
+    return filters.map((filter) => filter.dataset.memoryFilter)
+      .filter((category) => selected.includes(category));
+  };
+  let activeCategories = readCategories();
+
+  const applyFilters = (updateUrl = false) => {
+    cards.forEach((card) => {
+      const category =
+        card.dataset.memoryCategory || "";
+
+      const visible =
+        activeCategories.length === 0 ||
+        activeCategories.includes(category);
+
+      card.hidden = !visible;
+    });
+
+    filters.forEach((filter) => {
+      const active = activeCategories.includes(
+        filter.dataset.memoryFilter
+      );
+
+      filter.setAttribute(
+        "aria-pressed",
+        String(active)
+      );
+    });
+
+    if (updateUrl) {
+      const url = new URL(location.href);
+      if (activeCategories.length) url.searchParams.set("category", activeCategories.join(","));
+      else url.searchParams.delete("category");
+      history.pushState(null, "", url);
+    }
+
+    // Після зміни категорій на мобільному
+    // повертаємо карусель на початок.
+    grid.scrollLeft = 0;
+
+    window.dispatchEvent(
+      new CustomEvent("memory-filter-change")
+    );
+  };
+
+  filters.forEach((filter) => {
+    filter.addEventListener("click", () => {
+      const category =
+        filter.dataset.memoryFilter;
+
+      if (
+        activeCategories.includes(category)
+      ) {
+        activeCategories =
+          activeCategories.filter(
+            (item) => item !== category
+          );
+      } else {
+        activeCategories.push(category);
+      }
+
+      applyFilters(true);
+    });
+  });
+
+  window.addEventListener("popstate", () => {
+    activeCategories = readCategories();
+    applyFilters();
+  });
+  applyFilters();
+})();
+
+
 (() => {
   const grid = document.querySelector(
     'body[data-page="memories"] .memories-grid'
@@ -1690,77 +1821,122 @@ galleryDialog?.addEventListener(
 
   const progress = grid.nextElementSibling;
 
-  if (!progress?.classList.contains("memories-progress")) return;
+  if (
+    !progress?.classList.contains(
+      "memories-progress"
+    )
+  ) {
+    return;
+  }
 
-  const fill = progress.querySelector(".memories-progress__fill");
-  const count = progress.querySelector(".memories-progress__count");
-  const cards = Array.from(grid.children).filter((element) =>
-    element.classList.contains("memory-card")
+  const fill = progress.querySelector(
+    ".memories-progress__fill"
+  );
+
+  const count = progress.querySelector(
+    ".memories-progress__count"
+  );
+
+  const cards = Array.from(
+    grid.querySelectorAll(".memory-card")
   );
 
   if (!fill || !count) return;
 
-  const total = cards.length;
-  const mobile = window.matchMedia("(max-width: 760px)");
+  const mobile = window.matchMedia(
+    "(max-width: 760px)"
+  );
+
   let frame = null;
 
   const update = () => {
     frame = null;
 
-    // Для порожнього списку й однієї картки індикатор не потрібний.
-    progress.hidden = !mobile.matches || total < 2;
+    const visibleCards = cards.filter(
+      (card) => !card.hidden
+    );
 
-    if (progress.hidden) return;
+    const total = visibleCards.length;
 
-    const maxScroll = Math.max(0, grid.scrollWidth - grid.clientWidth);
-    const scrollLeft = Math.max(0, Math.min(grid.scrollLeft, maxScroll));
+    // На десктопі або якщо залишилась
+    // одна картка — progress не потрібний.
+    progress.hidden =
+      !mobile.matches || total < 2;
 
-    let index = 0;
+    if (progress.hidden) {
+      return;
+    }
 
-    if (maxScroll > 0 && scrollLeft >= maxScroll - 2) {
-      // Остання картка може не доходити до лівого краю контейнера.
+    const cardWidth =
+      visibleCards[0].getBoundingClientRect().width;
+
+    const gap = 14;
+
+    const step = cardWidth + gap;
+
+    let index = Math.round(
+      grid.scrollLeft / step
+    );
+
+    if (index < 0) {
+      index = 0;
+    }
+
+    if (index > total - 1) {
       index = total - 1;
-    } else {
-      const gridLeft = grid.getBoundingClientRect().left;
-      let nearestDistance = Infinity;
-
-      cards.forEach((card, cardIndex) => {
-        const distance = Math.abs(
-          card.getBoundingClientRect().left - gridLeft
-        );
-
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          index = cardIndex;
-        }
-      });
     }
 
-    fill.style.width = `${((index + 1) / total) * 100}%`;
+    count.textContent =
+      `${index + 1} / ${total}`;
 
-    const label = `${index + 1} / ${total}`;
+    fill.style.width =
+      `${100 / total}%`;
 
-    // Не повторюємо повідомлення скринрідеру на кожному scroll.
-    if (count.textContent !== label) {
-      count.textContent = label;
-    }
+    fill.style.transform =
+      `translateX(${index * 100}%)`;
   };
 
   const scheduleUpdate = () => {
-    if (frame === null) {
-      frame = window.requestAnimationFrame(update);
+    if (frame !== null) {
+      return;
     }
+
+    frame =
+      window.requestAnimationFrame(update);
   };
 
-  grid.addEventListener("scroll", scheduleUpdate, { passive: true });
-  window.addEventListener("resize", scheduleUpdate);
-  mobile.addEventListener("change", scheduleUpdate);
+  grid.addEventListener(
+    "scroll",
+    scheduleUpdate,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    scheduleUpdate
+  );
+
+  mobile.addEventListener(
+    "change",
+    scheduleUpdate
+  );
+
+  // Наші category filters кидають цю подію.
+  window.addEventListener(
+    "memory-filter-change",
+    scheduleUpdate
+  );
 
   if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(scheduleUpdate);
+    const observer =
+      new ResizeObserver(scheduleUpdate);
+
     observer.observe(grid);
   }
 
-  document.fonts?.ready.then(scheduleUpdate);
+  document.fonts?.ready.then(
+    scheduleUpdate
+  );
+
   scheduleUpdate();
 })();

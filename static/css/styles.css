@@ -1405,8 +1405,8 @@ p {
 }
 
 .filter-chip:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
 }
 
 .filter-chip span {
@@ -1579,6 +1579,72 @@ p {
 .article-row.is-hidden {
   display: none;
 }
+/* =========================
+   Memories filters
+   ========================= */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin: 38px 0 0;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  border: 1px solid var(--line);
+  border-radius: 999px;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.filter-chip:hover {
+  border-color: var(--ink);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.filter-chip[aria-pressed="true"] {
+  background: var(--stone);
+  border-color: var(--stone);
+}
+
+.filter-chip__n {
+  font-size: 11px;
+  color: var(--olive);
+
+  font-variant-numeric: tabular-nums;
+}
+
+.filter-chip[aria-pressed="true"] .filter-chip__n {
+  color: var(--ink);
+  opacity: 0.7;
+}
+
+.memory-card[hidden] {
+  display: none;
+}
 .memories-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1599,37 +1665,115 @@ p {
   gap: 14px;
 
   min-width: 0;
+  height: auto;
+  min-height: 0;
+  justify-content: flex-start;
 }
 
-.memory-card.featured {
-  grid-column: span 2;
+.memory-head {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 
-  background: var(--stone);
+  padding-bottom: 14px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.memory-author {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+
   color: var(--ink);
 }
 
-.memory-card blockquote {
-  margin: 0;
+.memory-relation {
+  font-size: 11px;
+  line-height: 1.4;
 
-  font-family: var(--serif);
-  font-size: 17px;
-  line-height: 1.62;
-
-  overflow-wrap: anywhere;
-}
-
-.memory-card figcaption {
-  margin: 0;
-
-  font-size: 12.5px;
-  line-height: 1.5;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 
   color: var(--olive);
 }
 
-.memory-card.featured figcaption {
-  color: rgba(40, 52, 42, 0.7);
+.memory-text {
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: var(--serif);
+  font-size: 16.5px;
+  line-height: 1.7;
+
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.memory-more {
+  align-self: flex-start;
+  margin-top: auto;
+
+  min-height: 44px;
+
+  padding: 4px 0 6px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: none;
+
+  border: 0;
+  border-bottom: 1px solid var(--line);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+
+  color: var(--ink);
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.25s ease,
+    gap 0.25s ease;
+}
+
+.memory-more:hover {
+  border-color: currentColor;
+  gap: 12px;
+}
+
+.memory-more:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.memory-more svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+.memory-card blockquote {
+  margin: 0;
+  padding: 0;
+
+  height: auto;
+  min-height: 0;
+
+  flex: 0 0 auto;
+
+  font-family: var(--serif);
+}
+
+/* старий fade більше не використовується */
+.memory-text::after {
+  display: none;
 }
 .submission-grid {
   display: grid;
@@ -1693,12 +1837,6 @@ p {
   border: 0;
 }
 
-.memory-text {
-  position: relative;
-  overflow-wrap: anywhere;
-  white-space: pre-line;
-}
-
 .no-js .memory-text .teaser,
 .no-js .memory-text .ellipsis {
   display: none;
@@ -1726,35 +1864,6 @@ p {
 
 .memory-card.is-open .memory-text .teaser {
   display: none;
-}
-
-/* М'яке згасання тексту у згорнутому стані */
-.memory-text::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2.1em;
-  pointer-events: none;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(222, 219, 201, 0),
-    var(--paper-2)
-  );
-
-  opacity: 1;
-  transition: opacity 0.2s;
-}
-
-.memory-card.featured .memory-text::after {
-  background: linear-gradient(to bottom, rgba(166, 180, 158, 0), var(--stone));
-}
-
-.memory-card.is-open .memory-text::after,
-.memory-card.is-short .memory-text::after {
-  opacity: 0;
 }
 
 /* Кнопка "Дивитись більше" */
@@ -2362,11 +2471,6 @@ body.wireframe .tone-f {
 
 .quote-memory-card.featured blockquote {
   font-size: 19px;
-}
-
-/* Fade повинен відповідати кольору featured-картки */
-.quote-memory-card.featured .memory-text::after {
-  background: linear-gradient(to bottom, rgba(217, 212, 200, 0), var(--stone));
 }
 
 /* External links moved from the former standalone Links page. */
@@ -3109,16 +3213,6 @@ body.wireframe .tone-f {
   .quotes-grid .quote-memory-card.featured blockquote {
     font-size: 15.5px;
     line-height: 1.6;
-  }
-
-  /*
-     * Для цитат Service не використовуємо
-     * мобільний line-clamp із Memories.
-     */
-  .quotes-grid .quote-memory-card:not(.is-open) .memory-text {
-    display: inline;
-    overflow: visible;
-    -webkit-line-clamp: unset;
   }
 
   /* Кнопка на всю ширину */
@@ -4493,6 +4587,25 @@ body.wireframe .tone-f {
 }
 
 @media (max-width: 760px) {
+  .filter-bar {
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    margin-top: 28px;
+    padding-bottom: 2px;
+  }
+
+  .filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+
   .memories-grid {
     display: flex;
     gap: 14px;
@@ -4530,18 +4643,9 @@ body.wireframe .tone-f {
     color: var(--ink);
   }
 
-  /* Текст у згорнутій картці — максимум 10 рядків */
-  .memory-card:not(.is-open) .memory-text {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 10;
-    overflow: hidden;
-  }
-
-  /* Після відкриття показуємо текст нормально */
-  .memory-card.is-open .memory-text {
-    display: inline;
-    overflow: visible;
+  .memory-text {
+    font-size: 19px;
+    line-height: 1.5;
   }
 
   /* Розмір тексту під мобільний макет */
@@ -4553,10 +4657,6 @@ body.wireframe .tone-f {
   .memory-card.featured blockquote {
     font-size: 19px;
     line-height: 1.5;
-  }
-  .memory-text::after,
-  .memory-card.featured .memory-text::after {
-    display: none;
   }
 }
 
@@ -5963,9 +6063,7 @@ main div {
   color: rgba(60, 74, 62, .16);
   pointer-events: none;
 }
-.quotes-grid .memory-text { display: block; }
 .quotes-grid .quote-memory-card { scroll-margin-top: 110px; }
-.no-js .quotes-grid .memory-text::after { display: none; }
 .no-js .quotes-grid .memory-text .teaser,
 .no-js .quotes-grid .memory-text .ellipsis { display: none; }
 .no-js .quotes-grid .memory-text .full { display: inline; }
@@ -5983,17 +6081,6 @@ main div {
 }
 
 .no-js .quotes-grid .is-short .memory-text .teaser { display: inline; }
-.quotes-grid .quote-memory-card:not(.is-short):not(.is-open) .memory-text::after {
-  display: block;
-}
-@media (max-width: 760px) {
-  .quotes-grid .quote-memory-card.featured .memory-text::after {
-    background: linear-gradient(to bottom, transparent, var(--paper-2));
-  }
-}
-.no-js .quotes-grid .quote-memory-card .memory-text::after {
-  display: none !important;
-}
 
 
 @media (max-width: 900px) {
@@ -6022,5 +6109,436 @@ main div {
   #links .link-check p {
     font-size: 15px;
     line-height: 1.75;
+  }
+}
+
+/* =========================================
+   Memories cards — final layout override
+   ========================================= */
+
+body[data-page="memories"] .memories-grid {
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+
+body[data-page="memories"] .memory-card {
+  height: auto !important;
+  min-height: 0 !important;
+
+  align-self: start;
+
+  justify-content: flex-start !important;
+
+  margin: 0;
+  padding: 26px 24px 22px;
+  gap: 14px;
+}
+
+body[data-page="memories"] .memory-head {
+  flex: 0 0 auto;
+
+  margin: 0;
+  padding: 0 0 14px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+body[data-page="memories"] .memory-text {
+  display: block;
+
+  flex: 0 0 auto !important;
+
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-page="memories"] .memory-card blockquote {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-page="memories"] .memory-text::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* =========================================
+   Memory dialog
+   ========================================= */
+
+.memory-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 40px 24px;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition:
+    opacity 0.28s ease,
+    visibility 0.28s ease;
+}
+
+.memory-dialog.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.memory-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+
+  border: 0;
+  padding: 0;
+
+  background:
+    rgba(28, 36, 32, 0.58);
+
+  cursor: pointer;
+}
+
+.memory-dialog__panel {
+  position: relative;
+
+  width: min(720px, 100%);
+  max-height: min(86vh, 900px);
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--paper);
+
+  border:
+    1px solid var(--line);
+
+  box-shadow:
+    0 18px 55px
+    rgba(20, 25, 22, 0.28);
+
+  overflow: hidden;
+
+  transform:
+    translateY(12px);
+
+  transition:
+    transform 0.3s
+    cubic-bezier(
+      0.2,
+      0.7,
+      0.2,
+      1
+    );
+}
+
+.memory-dialog.is-open
+.memory-dialog__panel {
+  transform: none;
+}
+
+.memory-dialog__head {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  padding:
+    26px 30px 18px;
+
+  border-bottom:
+    1px solid var(--line);
+}
+
+.memory-dialog__who {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 0;
+}
+
+.memory-dialog__author {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.memory-dialog__rel {
+  margin: 0;
+
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  color: var(--olive);
+}
+
+.memory-dialog__close {
+  flex: 0 0 auto;
+
+  margin-left: auto;
+
+  width: 44px;
+  height: 44px;
+
+  display: grid;
+  place-items: center;
+
+  background: none;
+
+  border:
+    1px solid var(--line);
+
+  border-radius: 50%;
+
+  color: var(--ink);
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.memory-dialog__close:hover {
+  background:
+    var(--paper-2);
+
+  border-color:
+    currentColor;
+}
+
+.memory-dialog__close:focus-visible {
+  outline:
+    2px solid currentColor;
+
+  outline-offset: 3px;
+}
+
+.memory-dialog__close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.memory-dialog__body {
+  flex: 1 1 auto;
+
+  overflow-y: auto;
+  overscroll-behavior:
+    contain;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  padding:
+    26px 30px 34px;
+
+  scrollbar-width: thin;
+}
+
+.memory-dialog__body p {
+  max-width: 64ch;
+
+  margin:
+    0 0 1.15em;
+
+  font-size: 17px;
+  line-height: 1.78;
+}
+
+.memory-dialog__body p:last-child {
+  margin-bottom: 0;
+}
+
+.memory-dialog__progress {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 2px;
+
+  background:
+    var(--line);
+}
+
+.memory-dialog__progress i {
+  display: block;
+
+  width: 0;
+  height: 100%;
+
+  background:
+    var(--ink);
+}
+
+.memory-dialog__foot {
+  flex: 0 0 auto;
+
+  padding:
+    14px 30px 16px;
+
+  border-top:
+    1px solid var(--line);
+
+  display: flex;
+  align-items: center;
+  justify-content:
+    space-between;
+  gap: 16px;
+
+  font-size: 12px;
+
+  color: var(--olive);
+}
+
+body.has-modal {
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+
+  .memory-dialog {
+    padding: 0;
+
+    place-items:
+      end stretch;
+  }
+
+  .memory-dialog__panel {
+    width: 100%;
+    max-height: 94vh;
+
+    border: 0;
+
+    transform:
+      translateY(100%);
+
+    transition:
+      transform 0.32s
+      cubic-bezier(
+        0.2,
+        0.75,
+        0.2,
+        1
+      );
+  }
+
+  .memory-dialog.is-open
+  .memory-dialog__panel {
+    transform: none;
+  }
+
+  .memory-dialog__panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 9px;
+    left: 50%;
+
+    transform:
+      translateX(-50%);
+
+    width: 42px;
+    height: 4px;
+
+    border-radius: 999px;
+
+    background:
+      rgba(
+        78,
+        99,
+        94,
+        0.3
+      );
+  }
+
+  .memory-dialog__head {
+    padding:
+      26px 20px 16px;
+  }
+
+  .memory-dialog__author {
+    font-size: 20px;
+  }
+
+  .memory-dialog__body {
+    padding:
+      20px 20px 30px;
+  }
+
+  .memory-dialog__body p {
+    max-width: none;
+
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .memory-dialog__foot {
+    padding:
+      12px 20px 18px;
+  }
+
+  .memory-dialog__body p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  .memory-dialog,
+  .memory-dialog__panel,
+  .memory-more {
+    transition: none;
+  }
+}
+
+/* Long unbroken memory text */
+
+body[data-page="memories"] .memory-text,
+.memory-dialog__text,
+.memory-dialog__body p,
+.memory-dialog__author,
+.memory-dialog__rel {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.memory-dialog__body {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.memory-dialog__text {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.memory-dialog__body p {
+  width: 100%;
+  max-width: 64ch;
+}
+@media (max-width: 760px) {
+  body[data-page="memories"] .memory-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 10;
+    overflow: hidden;
   }
 }
