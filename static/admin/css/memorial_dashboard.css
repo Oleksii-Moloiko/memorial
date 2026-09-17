@@ -58,11 +58,11 @@
 
     box-sizing: border-box;
 
-    color: #4e635e !important;
+    color: var(--admin-ink) !important;
 
     text-decoration: none !important;
 
-    background: #eceadb;
+    background: var(--admin-paper-light);
 
     border: 1px solid rgba(78, 99, 94, .16);
 
@@ -81,7 +81,7 @@
 }
 
 .memorial-admin-card:hover {
-    background: #f1f0e4;
+    background: var(--admin-control-bg);
 
     border-color: rgba(78, 99, 94, .3);
 
@@ -108,7 +108,7 @@
 
     font-size: 21px;
 
-    color: #4e635e;
+    color: var(--admin-ink);
 
     background: rgba(78, 99, 94, .07);
 

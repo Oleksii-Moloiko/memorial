@@ -3,6 +3,10 @@
 
 {% block extrastyle %}
     {{ block.super }}
+{% endblock %}
+
+{% block responsive %}
+    {{ block.super }}
 
     <link
         rel="stylesheet"
@@ -13,14 +17,7 @@
 {% block extrahead %}
     {{ block.super }}
 
-    <script>
-        if (window.matchMedia("(max-width: 767px)").matches) {
-            localStorage.setItem(
-                "django.admin.navSidebarIsOpen",
-                "false"
-            );
-        }
-    </script>
+
 
     <script
         src="{% static 'admin/js/content_language.js' %}"

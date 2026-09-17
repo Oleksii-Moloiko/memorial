@@ -28,6 +28,83 @@
     --admin-bronze: #818C78;
     --admin-line: rgba(78, 99, 94, .18);
     --admin-white: #f8f7ef;
+    --admin-button-bg: #4e635e;
+    --admin-button-hover: #354a44;
+    /* Form controls */
+    --admin-control-bg: #f7f5e9;
+    --admin-control-text: #3d4e4a;
+    --admin-control-muted: #6f786b;
+    --admin-control-border: rgba(78, 99, 94, .28);
+    --admin-control-disabled-bg: #e8e6d8;
+}
+
+
+/* Map Django's components to the same palette, in every theme mode. */
+:root, html[data-theme="light"], html[data-theme="dark"] {
+    --primary: var(--admin-button-bg);
+    --primary-fg: var(--admin-white);
+    --secondary: var(--admin-button-bg);
+    --body-fg: var(--admin-ink);
+    --body-bg: var(--admin-paper);
+    --body-quiet-color: var(--admin-olive);
+    --body-medium-color: var(--admin-ink);
+    --body-loud-color: var(--admin-ink-dark);
+    --header-bg: var(--admin-button-bg);
+    --header-color: var(--admin-white);
+    --header-link-color: var(--admin-white);
+    --link-fg: var(--admin-ink);
+    --link-hover-color: var(--admin-ink-dark);
+    --link-selected-fg: var(--admin-ink-dark);
+    --hairline-color: var(--admin-line);
+    --border-color: var(--admin-control-border);
+    --darkened-bg: var(--admin-paper-light);
+    --selected-bg: var(--admin-control-disabled-bg);
+    --selected-row: var(--admin-control-disabled-bg);
+    --button-fg: var(--admin-white);
+    --button-bg: var(--admin-button-bg);
+    --button-hover-bg: var(--admin-button-hover);
+    --default-button-bg: var(--admin-button-bg);
+    --default-button-hover-bg: var(--admin-button-hover);
+    --object-tools-fg: var(--admin-white);
+    --object-tools-bg: var(--admin-button-bg);
+    --object-tools-hover-bg: var(--admin-button-hover);
+    color-scheme: light;
+}
+
+html[data-theme="dark"] {
+    --admin-ink: #d6dfd3;
+    --admin-ink-dark: #f1f2e6;
+    --admin-paper: #1d2724;
+    --admin-paper-light: #28342f;
+    --admin-stone: #9eae97;
+    --admin-olive: #b4c0ad;
+    --admin-bronze: #a6b49e;
+    --admin-line: rgba(200, 218, 192, .2);
+    --admin-control-bg: #202d27;
+    --admin-control-text: #eef1e5;
+    --admin-control-muted: #b4c0ad;
+    --admin-control-border: #71816e;
+    --admin-control-disabled-bg: #354239;
+    color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"], html:not([data-theme]) {
+    --admin-ink: #d6dfd3;
+    --admin-ink-dark: #f1f2e6;
+    --admin-paper: #1d2724;
+    --admin-paper-light: #28342f;
+    --admin-stone: #9eae97;
+    --admin-olive: #b4c0ad;
+    --admin-bronze: #a6b49e;
+    --admin-line: rgba(200, 218, 192, .2);
+    --admin-control-bg: #202d27;
+    --admin-control-text: #eef1e5;
+    --admin-control-muted: #b4c0ad;
+    --admin-control-border: #71816e;
+    --admin-control-disabled-bg: #354239;
+    color-scheme: dark;
+    }
 }
 
 /* =========================================================
@@ -50,8 +127,8 @@ body {
    ========================================================= */
 
 #header {
-    background: var(--admin-ink) !important;
-    color: var(--admin-paper) !important;
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
 
     min-height: 64px;
 
@@ -68,7 +145,7 @@ body {
 
 #branding h1,
 #branding h1 a {
-    color: var(--admin-paper) !important;
+    color: var(--admin-white) !important;
 
     font-family: var(--font-family-primary);
 
@@ -107,7 +184,7 @@ body {
 }
 
 #user-tools a {
-    color: var(--admin-paper) !important;
+    color: var(--admin-white) !important;
 
     text-decoration: none;
 
@@ -118,7 +195,7 @@ body {
 
 #user-tools a:hover {
     color: white !important;
-    border-bottom-color: var(--admin-paper);
+    border-bottom-color: var(--admin-white);
 }
 
 
@@ -172,7 +249,7 @@ body {
     border-right: 1px solid rgba(226, 224, 200, .35);
 
     background: transparent;
-    color: var(--admin-paper);
+    color: var(--admin-white);
 
     font: inherit;
     font-size: 11px;
@@ -191,8 +268,8 @@ body {
 }
 
 .admin-language-switcher__options button.is-active {
-    background: var(--admin-paper);
-    color: var(--admin-ink-dark);
+    background: var(--admin-white);
+    color: #354a44;
 }
 
 @media (max-width: 767px) {
@@ -306,7 +383,49 @@ a {
 a:hover {
     color: var(--admin-ink-dark) !important;
 }
+/* =========================================================
+   DJANGO CALENDAR / CLOCK
+   ========================================================= */
 
+/* Normal calendar dates */
+.calendar td a,
+.timelist a {
+    color: var(--body-quiet-color) !important;
+}
+
+/* Selected date */
+.calendar td.selected a {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+/* Hover / focus / active states */
+.calendar td a:hover,
+.calendar td a:focus,
+.calendar td a:active,
+.timelist a:hover,
+.timelist a:focus,
+.timelist a:active {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+/* Calendar footer links */
+.calendar-shortcuts a {
+    color: var(--admin-ink) !important;
+}
+
+.calendar-shortcuts a:hover,
+.calendar-shortcuts a:focus {
+    color: var(--admin-ink-dark) !important;
+}
+
+/* Cancel button must stay readable on dark background */
+.calendar-cancel a,
+.calendar-cancel a:hover,
+.calendar-cancel a:focus {
+    color: var(--admin-white) !important;
+}
 /* =========================================================
    MODULES / CARDS
    ========================================================= */
@@ -326,9 +445,9 @@ a:hover {
 .module h2,
 .module caption,
 .inline-group h2 {
-    background: var(--admin-ink) !important;
+    background: var(--admin-button-bg) !important;
 
-    color: var(--admin-paper) !important;
+    color: var(--admin-white) !important;
 
     font-size: 12px !important;
 
@@ -412,8 +531,50 @@ a:hover {
     }
 
     .inline-related h3 {
-        align-items: flex-start;
-        flex-direction: column;
+        display: grid;
+
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+
+        column-gap: 8px;
+
+        width: 100%;
+        min-width: 0;
+
+        box-sizing: border-box;
+    }
+    .inline-related h3 > b {
+        grid-column: 1;
+
+        min-width: 0;
+
+        white-space: nowrap;
+    }
+
+    .inline-related h3 .inline_label {
+        grid-column: 2;
+
+        min-width: 0;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .inline-related h3 span.delete {
+        grid-column: 3;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        margin: 0 !important;
+
+        float: none !important;
+        white-space: nowrap;
+    }
+
+    .inline-related h3 span.delete input[type="checkbox"] {
+        margin: 0;
     }
 
     .tabular {
@@ -539,11 +700,11 @@ textarea,
 select,
 .vTextField,
 .vLargeTextField {
-    background: #f7f5e9 !important;
+    background: var(--admin-control-bg) !important;
 
-    color: var(--admin-ink-dark) !important;
+    color: var(--admin-control-text) !important;
 
-    border: 1px solid rgba(78, 99, 94, .25) !important;
+    border: 1px solid var(--admin-control-border) !important;
 
     border-radius: 6px !important;
 
@@ -551,7 +712,42 @@ select,
 
     box-shadow: none !important;
 }
+/*
+ * Native selects.
+ * Explicit colors are required because browsers may render
+ * the opened option list using their own default color scheme.
+ */
+select {
+    color: var(--admin-control-text) !important;
+    background-color: var(--admin-control-bg) !important;
 
+    color-scheme: inherit;
+}
+
+select option {
+    background-color: var(--admin-control-bg);
+    color: var(--admin-control-text);
+}
+
+select option:disabled {
+    color: var(--admin-control-muted);
+}
+input::placeholder,
+textarea::placeholder {
+    color: var(--admin-control-muted);
+    opacity: 1;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background: var(--admin-control-disabled-bg) !important;
+    color: var(--admin-control-muted) !important;
+
+    opacity: 1;
+
+    cursor: not-allowed;
+}
 input:focus,
 textarea:focus,
 select:focus {
@@ -592,9 +788,9 @@ input[type="submit"],
 input[type="button"],
 .submit-row input,
 a.button {
-    background: var(--admin-ink) !important;
+    background: var(--admin-button-bg) !important;
 
-    color: var(--admin-paper) !important;
+    color: var(--admin-white) !important;
 
     border: 0 !important;
 
@@ -613,11 +809,40 @@ a.button {
 input[type="submit"]:hover,
 input[type="button"]:hover,
 .submit-row input:hover {
-    background: var(--admin-ink-dark) !important;
+    background: var(--admin-button-hover) !important;
 
     color: white !important;
 
     transform: translateY(-1px);
+}
+
+/* Django object tools:
+   "Додати", "Історія" та інші кнопки у верхній частині сторінки */
+.object-tools a:link,
+.object-tools a:visited {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+.object-tools a:focus,
+.object-tools a:hover,
+.object-tools a:active {
+    background: var(--admin-button-hover) !important;
+    color: #fff !important;
+}
+
+
+/* Destructive Django actions keep their red background,
+   but must always have readable light text. */
+.submit-row a.deletelink:link,
+.submit-row a.deletelink:visited {
+    color: #fff !important;
+}
+
+.submit-row a.deletelink:focus,
+.submit-row a.deletelink:hover,
+.submit-row a.deletelink:active {
+    color: #fff !important;
 }
 
 /* secondary buttons */
@@ -669,7 +894,7 @@ input[type="submit"].default {
 }
 
 #searchbar {
-    background: #f7f5e9 !important;
+    background: var(--admin-control-bg) !important;
 
     border: 1px solid var(--admin-line) !important;
 
@@ -736,6 +961,10 @@ input[type="submit"].default {
 
 #changelist .actions select {
     max-width: 100%;
+    min-height: 42px;
+
+    background-color: var(--admin-control-bg) !important;
+    color: var(--admin-control-text) !important;
 }
 
 /* =========================================================
@@ -822,117 +1051,55 @@ body.login {
 }
 
 /* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 767px) {
-
-    #header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-
-        min-height: 0;
-        padding: 16px 18px;
-    }
-
-    #branding {
-        width: 100%;
-    }
-
-    #branding h1,
-    #branding h1 a {
-        width: 100%;
-    }
-
-    #user-tools {
-        width: 100%;
-        line-height: 1.6;
-    }
-
-    #content {
-        padding: 28px 18px 50px;
-    }
-
-    #content h1 {
-        font-size: 28px;
-    }
-
-    div.breadcrumbs {
-        padding: 14px 18px;
-    }
-}
-
-/* =========================================================
-   MEMORIAL SIDEBAR
+   MEMORIAL SIDEBAR / MAIN LAYOUT
    ========================================================= */
 
 #nav-sidebar.memorial-sidebar {
     position: sticky;
-
     top: 0;
 
     width: 240px;
-
     min-width: 240px;
-
     height: calc(100vh - 64px);
 
     box-sizing: border-box;
-
     padding: 28px 16px;
 
-    background: #eceadb;
-
+    background: var(--admin-paper-light);
     border-right: 1px solid rgba(78, 99, 94, .16);
 
     overflow-y: auto;
 }
 
-
-/* SECTION */
-
 .memorial-sidebar__section {
     margin-bottom: 32px;
 }
 
-
 .memorial-sidebar__title {
     margin: 0 10px 10px;
 
-    color: #818c78;
+    color: var(--admin-bronze);
 
     font-size: 10px;
-
     font-weight: 700;
-
     letter-spacing: .12em;
-
     text-transform: uppercase;
 }
 
-
-/* ITEM */
-
 .memorial-sidebar__item {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 
     min-width: 0;
-
     min-height: 42px;
 
     padding: 9px 11px;
 
     box-sizing: border-box;
-
     border-radius: 7px;
 
-    color: #4e635e !important;
-
+    color: var(--admin-ink) !important;
     text-decoration: none !important;
 
     font-size: 13px;
@@ -942,57 +1109,21 @@ body.login {
         transform .18s ease;
 }
 
-
 .memorial-sidebar__item span {
     width: 22px;
     min-width: 22px;
     flex-shrink: 0;
 
-    color: #818c78;
+    color: var(--admin-bronze);
 
     font-size: 17px;
-
     text-align: center;
 }
 
-
 .memorial-sidebar__item:hover {
     background: rgba(78, 99, 94, .08);
-
     transform: translateX(2px);
 }
-
-
-/* MAIN LAYOUT */
-
-.main {
-    display: flex !important;
-
-    min-height: calc(100vh - 64px);
-
-    background: #e2e0c8;
-}
-
-
-/* CONTENT */
-
-.main #content-start {
-    flex: 1;
-
-    min-width: 0;
-}
-
-
-.main #content {
-    width: 100%;
-    max-width: 1280px !important;
-    margin: 0 auto;
-    box-sizing: border-box;
-    padding: 40px;
-}
-
-
-/* HIDE DEFAULT DJANGO SIDEBAR STYLES */
 
 #nav-sidebar .current-app,
 #nav-sidebar .module,
@@ -1001,9 +1132,141 @@ body.login {
     display: none;
 }
 
+.main {
+    display: flex !important;
 
-/* MOBILE */
+    min-height: calc(100vh - 64px);
+
+    background: var(--admin-paper);
+}
+
+.main #content-start {
+    flex: 1;
+    min-width: 0;
+}
+
+.main #content {
+    width: 100%;
+    max-width: 1280px !important;
+
+    margin: 0 auto;
+    padding: 40px;
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ADMIN PAGE HELPERS
+   ========================================================= */
+
+.home-admin-section__header,
+.life-admin__section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.home-admin-section__header > div,
+.life-admin__section-header h2 {
+    min-width: 0;
+}
+
+.home-admin-section__header .button,
+.life-admin__section-action {
+    flex-shrink: 0;
+}
+
+.life-admin__section-header {
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.life-admin__section-header h2 {
+    margin: 0;
+}
+
+.life-admin,
+.life-admin section {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.life-admin p,
+.life-admin td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* =========================================================
+   LAYOUT CONTAINMENT
+   ========================================================= */
+
+#container,
+.main,
+#content,
+#content-main,
+#changelist,
+#changelist .changelist-form-container {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#user-tools {
+    min-width: 0;
+    white-space: normal;
+    text-align: right;
+    flex-shrink: 1;
+}
+
+.object-tools {
+    float: none !important;
+    position: static !important;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   RESPONSIVE: COMPACT DESKTOP / TABLET
+   ========================================================= */
+
 @media (min-width: 768px) and (max-width: 1100px) {
+    #header {
+        gap: 18px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .admin-branding {
+        flex: 1 1 auto;
+        gap: 18px;
+    }
+
+    #user-tools {
+        flex: 0 1 42%;
+        max-width: 42%;
+        line-height: 1.45;
+    }
+
+    #content,
+    .main #content {
+        padding: 32px 28px 56px;
+    }
+
+    #content h1 {
+        font-size: 32px;
+        line-height: 1.15;
+    }
+
+    .object-tools {
+        margin-top: 0;
+    }
+
     #nav-sidebar.memorial-sidebar {
         width: 190px;
         min-width: 190px;
@@ -1012,252 +1275,20 @@ body.login {
 
     .memorial-sidebar__item {
         align-items: flex-start;
-
         gap: 9px;
 
         padding-left: 9px;
         padding-right: 9px;
 
         line-height: 1.35;
-
         overflow-wrap: anywhere;
     }
 
     .memorial-sidebar__item span {
         width: 18px;
         min-width: 18px;
-        flex-shrink: 0;
-
         line-height: 1.35;
     }
-}
-
-@media (max-width: 767px) {
-    #toggle-nav-sidebar {
-        display: flex !important;
-        position: fixed !important;
-        top: auto !important;
-        left: 24px;
-        bottom: 24px;
-        z-index: 1001;
-
-        width: 44px;
-        height: 44px;
-        flex: 0 0 44px;
-
-        box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
-
-        border: 1px solid var(--hairline-color);
-        border-radius: 50%;
-        background: var(--body-bg);
-    }
-
-    #nav-sidebar.memorial-sidebar {
-        display: block !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-
-        width: min(280px, 85vw);
-        min-width: 0;
-        height: 100dvh;
-        max-height: 100dvh;
-        margin-left: 0;
-
-        overflow-y: auto;
-
-        visibility: hidden;
-        transform: translateX(-100%);
-        transition:
-            transform 0.2s ease,
-            visibility 0.2s ease;
-    }
-
-    .main.shifted > #nav-sidebar.memorial-sidebar {
-        margin-left: 0;
-        visibility: visible;
-        transform: translateX(0);
-    }
-
-    .main {
-        display: block !important;
-    }
-
-    .main #content {
-        width: 100%;
-        padding: 24px 18px;
-    }
-}
-
-.admin-table-scroll {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.admin-table-scroll table {
-    width: 100%;
-    min-width: 720px;
-}
-
-.home-admin-section__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.home-admin-section__header > div {
-    min-width: 0;
-}
-
-.home-admin-section__header .button {
-    flex-shrink: 0;
-}
-
-@media (max-width: 767px) {
-    .home-admin-section__header {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .home-admin-section__header .button {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-    }
-
-    #changelist-search > div {
-        align-items: stretch;
-    }
-
-    #changelist-search #searchbar {
-        flex: 1 1 100%;
-        width: 100%;
-        margin: 0;
-    }
-
-    #changelist-search input[type="submit"] {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    #changelist .actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    #changelist .actions label {
-        align-items: stretch;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    #changelist .actions select,
-    #changelist .actions .button {
-        width: 100%;
-        margin: 0;
-        box-sizing: border-box;
-    }
-}
-
-@media (max-width: 767px) {
-    .submit-row {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .submit-row input,
-    .submit-row a,
-    .submit-row .button {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-    }
-    .object-tools {
-        align-items: stretch;
-        flex-direction: column;
-
-        width: 100%;
-        margin-top: -16px;
-    }
-
-    .object-tools li {
-        width: 100%;
-    }
-
-    .object-tools a {
-        width: 100%;
-    }
-}
-
-@media (max-width: 1024px) {
-    #changelist {
-        min-width: 0;
-    }
-
-    #changelist .results {
-        overflow-x: auto;
-    }
-
-    #changelist table {
-        min-width: 850px;
-    }
-}
-
-.life-admin__section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-
-    width: 100%;
-    min-width: 0;
-    margin-bottom: 16px;
-}
-
-.life-admin__section-header h2 {
-    min-width: 0;
-    margin: 0;
-}
-
-.life-admin__section-action {
-    flex-shrink: 0;
-}
-
-@media (max-width: 767px) {
-    .life-admin__section-header {
-        align-items: stretch;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .life-admin__section-action {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-    }
-}
-
-.life-admin {
-    min-width: 0;
-    max-width: 100%;
-}
-
-.life-admin section {
-    min-width: 0;
-    max-width: 100%;
-}
-
-.life-admin p {
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-.life-admin td {
-    overflow-wrap: anywhere;
-    word-break: break-word;
 }
 
 @media (max-width: 1100px) {
@@ -1289,7 +1320,466 @@ body.login {
     }
 }
 
-/* Native buttons do not consistently inherit the document font. */
+@media (max-width: 1024px) {
+    #changelist {
+        min-width: 0;
+    }
+
+    #changelist .results {
+        overflow-x: auto;
+    }
+
+    #changelist table {
+        min-width: 850px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE: MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    #container {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    /* Header */
+    #header {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 12px;
+
+        width: 100%;
+        height: auto;
+        min-height: 0;
+
+        padding: 16px 18px;
+
+        box-sizing: border-box;
+
+        overflow: visible;
+    }
+
+    #branding {
+        display: block;
+
+        width: 100%;
+        min-width: 0;
+
+        margin: 0;
+    }
+
+    .admin-branding {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+
+        width: 100%;
+        min-width: 0;
+    }
+
+    #site-name {
+        width: 100%;
+
+        margin: 0;
+
+        line-height: 1.25;
+    }
+
+    #site-name a {
+        display: block;
+
+        width: 100%;
+
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+
+    .admin-language-switcher {
+        width: 100%;
+
+        padding-left: 0;
+
+        border-left: 0;
+    }
+
+    .admin-language-switcher__label {
+        display: none;
+    }
+
+    #user-tools {
+        width: 100%;
+
+        margin: 0;
+
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    #content {
+        padding: 28px 18px 50px;
+    }
+
+    #content h1 {
+        font-size: 28px;
+    }
+
+    div.breadcrumbs {
+        padding: 14px 18px;
+    }
+
+    .main {
+        display: block !important;
+
+        width: 100%;
+        min-width: 0;
+    }
+
+    .main #content {
+        width: 100%;
+        max-width: none !important;
+
+        margin: 0;
+        padding: 28px 16px 112px !important;
+
+        box-sizing: border-box;
+    }
+
+    #content h1 {
+        max-width: 100%;
+
+        margin: 0 0 28px;
+
+        font-size: clamp(26px, 8vw, 32px);
+        line-height: 1.15;
+
+        overflow-wrap: anywhere;
+    }
+
+    /* Object tools */
+    .object-tools {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        width: 100%;
+        margin: 0 0 20px;
+    }
+
+    .object-tools li {
+        width: 100%;
+        margin: 0;
+    }
+
+    .object-tools a,
+    .object-tools a:link,
+    .object-tools a:visited {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        min-height: 44px;
+
+        padding: 10px 18px;
+
+        box-sizing: border-box;
+
+        line-height: 1.2;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Search */
+    #toolbar {
+        width: 100%;
+        padding: 14px !important;
+        box-sizing: border-box;
+    }
+
+    #changelist-search {
+        width: 100%;
+    }
+
+    #changelist-search > div {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+
+        gap: 10px !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist-search label {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        width: 44px !important;
+        min-width: 44px !important;
+        height: 44px !important;
+
+        flex: 0 0 44px !important;
+
+        margin: 0 !important;
+    }
+
+    #changelist-search #searchbar {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: 44px !important;
+
+        flex: 1 1 calc(100% - 54px) !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist-search input[type="submit"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+
+        flex: 1 0 100% !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box;
+    }
+
+    /* Actions */
+    #changelist .actions {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 10px;
+
+        width: 100%;
+        padding: 12px !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist .actions label {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 8px;
+
+        width: 100%;
+        margin: 0;
+    }
+
+    #changelist .actions select,
+    #changelist .actions .button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+
+        margin: 0;
+
+        box-sizing: border-box;
+    }
+
+    #changelist .actions .action-counter {
+        display: block;
+
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Tables */
+    #changelist .results,
+    .admin-table-scroll,
+    .tabular {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #changelist .results table,
+    .admin-table-scroll table,
+    .tabular table {
+        min-width: 720px;
+    }
+
+    /* Filter */
+    #changelist-filter {
+        width: 100%;
+        min-width: 0;
+
+        padding: 16px;
+
+        box-sizing: border-box;
+    }
+
+    /* Submit rows */
+    .submit-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .submit-row input,
+    .submit-row a,
+    .submit-row .button {
+        width: 100%;
+        min-height: 44px;
+
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .submit-row input {
+        height: auto;
+        line-height: 1.2;
+    }
+
+    .submit-row a,
+    .submit-row .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        height: auto;
+        line-height: 1.2;
+    }
+
+    /* Django gives the delete link a fixed 0.9375rem height,
+       which breaks with our admin font on mobile. */
+    .submit-row a.deletelink {
+        height: auto;
+        min-height: 44px;
+
+        margin: 0;
+        padding: 10px 18px;
+
+        line-height: 1.2;
+    }
+
+    /* Custom page section headers */
+    .home-admin-section__header,
+    .life-admin__section-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .home-admin-section__header .button,
+    .life-admin__section-action {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    /* Off-canvas navigation */
+    #nav-sidebar.memorial-sidebar {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+
+        width: min(300px, 86vw);
+        min-width: 0;
+        height: 100dvh;
+        max-height: 100dvh;
+
+        margin-left: 0;
+        padding: 24px 16px 80px;
+
+        overflow-y: auto;
+
+        visibility: hidden;
+        transform: translateX(-100%);
+
+        box-shadow: 10px 0 30px rgb(30 40 35 / 14%);
+
+        transition:
+            transform .2s ease,
+            visibility .2s ease;
+    }
+
+    .main.shifted > #nav-sidebar.memorial-sidebar {
+        margin-left: 0;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    #toggle-nav-sidebar {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
+        position: fixed !important;
+
+        top: auto !important;
+        left: auto !important;
+        right: 16px !important;
+        bottom: max(16px, env(safe-area-inset-bottom)) !important;
+
+        z-index: 1100 !important;
+
+        width: 48px !important;
+        height: 48px !important;
+        flex: 0 0 48px !important;
+
+        margin: 0 !important;
+
+        border: 1px solid var(--hairline-color);
+        border-radius: 50%;
+        background: var(--body-bg);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+    }
+
+    /* Paginator / save action */
+    .paginator {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    .paginator input[type="submit"] {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 360px) {
+    .paginator input[type="submit"] {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Native controls do not consistently inherit the document font. */
 input,
 select,
 textarea,
@@ -1297,4 +1787,249 @@ button,
 .theme-toggle,
 .theme-toggle svg {
     font-family: var(--font-family-primary);
+}
+
+/* Native checkbox/radio sizing must not inherit text-field padding. */
+input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--admin-button-bg);
+    padding: 0 !important;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.module caption a.section:link, .module caption a.section:visited {
+    color: var(--admin-white) !important;
+}
+
+#nav-sidebar.memorial-sidebar {
+    flex: 0 0 240px;
+    left: -240px;
+    margin-left: -240px;
+}
+.main.shifted > #nav-sidebar.memorial-sidebar { margin-left: 0; }
+.main > #nav-sidebar + .content,
+.main.shifted > #nav-sidebar + .content { max-width: none; }
+
+#changelist .actions select {
+    height: auto;
+    text-overflow: ellipsis;
+}
+
+.home-admin-section__header, .life-admin__section-header {
+    flex-wrap: wrap;
+}
+.home-admin-section__header > div { flex: 1 1 240px; }
+.home-admin-section__header .button, .life-admin__section-action {
+    max-width: 100%;
+    white-space: normal;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+    #nav-sidebar.memorial-sidebar {
+        flex-basis: 190px;
+        left: -190px;
+        margin-left: -190px;
+    }
+}
+@media (max-width: 1100px) {
+    #changelist { flex-direction: column; }
+}
+@media (max-width: 767px) {
+    #nav-sidebar.memorial-sidebar { left: 0; margin-left: 0; }
+    .home-admin-section__header > div { flex-basis: auto; }
+    .aligned .flex-container { flex-wrap: wrap; }
+    .related-widget-wrapper {
+        display: grid !important;
+        grid-template-columns: repeat(4, 32px);
+        gap: 8px 10px;
+
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) {
+        display: grid !important;
+        grid-template-columns: repeat(4, 32px);
+        gap: 8px 10px;
+
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    /* Сам select займає весь перший рядок */
+    .related-widget-wrapper > select {
+        grid-column: 1 / -1;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > select {
+        grid-column: 1 / -1;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    /* Django action icons — окремий акуратний ряд */
+    .related-widget-wrapper > .related-widget-wrapper-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        align-self: auto !important;
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > .related-widget-wrapper-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        align-self: auto !important;
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > .related-widget-wrapper-link img {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+
+        margin: 0;
+    }
+
+    .related-widget-wrapper > .related-widget-wrapper-link img {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+
+        margin: 0;
+    }
+    .selector { width: 100%; max-width: 100%; }
+    .selector-available, .selector-chosen { width: 100%; }
+    .selector select { width: 100%; }
+    .memories-admin-tabs { flex-wrap: wrap; }
+    .login #container { width: calc(100% - 32px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #nav-sidebar.memorial-sidebar, .memorial-sidebar__item { transition: none; }
+}
+
+/* Long admin forms must grow the document instead of compressing its header. */
+#container { height: auto; min-height: 100vh; }
+#header, #container > nav { flex-shrink: 0; }
+.login #container { min-height: 0; }
+
+.button.default, input[type="submit"].default {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+#changelist .actions .button { height: auto; min-height: 42px; }
+.aligned .flex-container > div { min-width: 0; max-width: 100%; }
+@media (max-width: 767px) {
+    .aligned .flex-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .aligned .checkbox-row .flex-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .form-row textarea {
+        width: 100%;
+    }
+
+    /* Keep selects inside the mobile viewport. */
+    .form-row select,
+    .inline-related select,
+    .related-widget-wrapper select {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    .related-widget-wrapper {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* Django permissions selector */
+.related-widget-wrapper:has(> .selector) {
+    display: flex !important;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.related-widget-wrapper > .selector {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .related-widget-wrapper > .selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .selector-available,
+    .selector-chosen {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .selector select {
+        display: block;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+
+        overflow-x: auto;
+        overflow-y: auto;
+
+        white-space: nowrap;
+
+        -webkit-overflow-scrolling: touch;
+    }
+    .selector select option {
+        white-space: nowrap;
+    }
 }
