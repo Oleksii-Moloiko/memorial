@@ -90,9 +90,8 @@
     {% if site_settings.demo_strip_enabled %}
         <div class="demo-strip">
             <div class="container">
-                <strong>Демонстраційний макет.</strong>
-                Усі персональні дані та матеріали умовні й мають бути
-                замінені після перевірки родиною.
+                <strong>{{ site_settings.demo_title }}</strong>
+                {{ site_settings.demo_text }}
             </div>
         </div>
     {% endif %}

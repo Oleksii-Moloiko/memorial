@@ -246,6 +246,146 @@ class SiteSettings(models.Model):
         ),
     )
 
+    memories_name_label = models.TextField(
+        "Спогади — підпис поля імені", default="Ім’я або підпис"
+    )
+
+    memories_name_placeholder = models.TextField(
+        "Спогади — приклад імені", default="Наприклад: Іван або позивний «Сокіл»"
+    )
+
+    memories_category_label = models.TextField(
+        "Спогади — підпис категорії", default="Ким ви були знайомі"
+    )
+
+    memories_category_placeholder = models.TextField(
+        "Спогади — порожня категорія", default="Оберіть варіант"
+    )
+
+    memories_text_label = models.TextField(
+        "Спогади — підпис тексту", default="Текст спогаду"
+    )
+
+    memories_text_placeholder = models.TextField(
+        "Спогади — підказка тексту", default="Напишіть спогад"
+    )
+
+    memories_text_hint = models.TextField(
+        "Спогади — пояснення скорочення",
+        default="Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше».",
+    )
+
+    memories_consent_label = models.TextField(
+        "Спогади — згода",
+        default="Погоджуюся на публікацію після перевірки модератором.",
+    )
+
+    memories_more_label = models.TextField(
+        "Спогади — кнопка розгортання", default="Дивитись більше"
+    )
+
+    memories_limit_message = models.TextField(
+        "Спогади — ліміт тексту",
+        default="Досягнуто ліміт в 15 000 символів. Надішліть цей спогад, а продовження — ще однією формою.",
+    )
+
+    memories_name_error = models.TextField(
+        "Спогади — коротке ім’я",
+        default="Вкажіть ім’я або підпис щонайменше з двох символів.",
+    )
+
+    memories_text_error = models.TextField(
+        "Спогади — короткий текст", default="Спогад має містити щонайменше 10 символів."
+    )
+
+    memories_required_error = models.TextField(
+        "Спогади — обов’язкове поле", default="Це поле обов’язкове."
+    )
+
+    memories_invalid_error = models.TextField(
+        "Спогади — помилка поля", default="Перевірте це поле."
+    )
+
+    memories_close_label = models.TextField("Спогади — закриття", default="Закрити")
+
+    memories_close_dialog_label = models.TextField(
+        "Спогади — закриття діалогу", default="Закрити спогад"
+    )
+
+    memories_characters_label = models.TextField(
+        "Спогади — одиниця лічильника", default="символів"
+    )
+
+    memories_escape_label = models.TextField(
+        "Спогади — підказка клавіші", default="Esc — закрити"
+    )
+
+    footer_dedication = models.TextField(
+        "Футер — пам’ятний напис",
+        default="Сторінка розроблена в світлу пам’ять Назара Боровицького",
+    )
+
+    language_label = models.TextField("Хедер — мова", default="Мова")
+
+    mobile_language_label = models.TextField(
+        "Хедер — мова в мобільному меню", default="МОВА / LANGUAGE"
+    )
+
+    photos_all_label = models.TextField("Фото — всі категорії", default="Усі фото")
+
+    videos_date_label = models.TextField("Відео — дата", default="Дата запису")
+
+    videos_category_label = models.TextField("Відео — категорія", default="Категорія")
+
+    videos_duration_label = models.TextField("Відео — тривалість", default="Тривалість")
+
+    demo_title = models.TextField("Демо — заголовок", default="Демонстраційний макет.")
+
+    demo_text = models.TextField(
+        "Демо — пояснення",
+        default="Усі персональні дані та матеріали умовні й мають бути замінені після перевірки родиною.",
+    )
+
+    photo_category_family = models.TextField(
+        "Фото — назва категорії «Сім’я та дитинство»", default="Сім’я та дитинство"
+    )
+
+    photo_category_study = models.TextField(
+        "Фото — назва категорії «Навчання»", default="Навчання"
+    )
+
+    photo_category_service = models.TextField(
+        "Фото — назва категорії «Служба та побратими»", default="Служба та побратими"
+    )
+
+    photo_category_memory = models.TextField(
+        "Фото — назва категорії «Вшанування»", default="Вшанування"
+    )
+
+    video_category_family = models.TextField(
+        "Відео — назва категорії «Сімейний архів»", default="Сімейний архів"
+    )
+
+    video_category_interview = models.TextField(
+        "Відео — назва категорії «Інтерв’ю»", default="Інтерв’ю"
+    )
+
+    video_category_service = models.TextField(
+        "Відео — назва категорії «Служба»", default="Служба"
+    )
+
+    video_category_memory = models.TextField(
+        "Відео — назва категорії «Вшанування»", default="Вшанування"
+    )
+
+    video_category_media = models.TextField(
+        "Відео — назва категорії «Матеріали ЗМІ»", default="Матеріали ЗМІ"
+    )
+
+    video_category_other = models.TextField(
+        "Відео — назва категорії «Інше»", default="Інше"
+    )
+
     class Meta:
         verbose_name = "Налаштування сайту"
         verbose_name_plural = "Налаштування сайту"

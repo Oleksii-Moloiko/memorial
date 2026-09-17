@@ -15,7 +15,12 @@
 {% endblock %}
 
 {% block content %}
-<section class="page-hero section-dark memories-hero">
+<section class="page-hero section-dark memories-hero"
+  data-memory-labels
+  data-close="{{ site_settings.memories_close_label }}"
+  data-close-memory="{{ site_settings.memories_close_dialog_label }}"
+  data-characters="{{ site_settings.memories_characters_label }}"
+  data-esc="{{ site_settings.memories_escape_label }}">
   <div class="container page-hero-grid grid-guide">
     <div>
       <p class="eyebrow">{{ site_settings.memories_hero_eyebrow }}</p>
@@ -81,7 +86,7 @@
               type="button"
               data-memory-open
             >
-              {% translate "Дивитись більше" %}
+              {{ site_settings.memories_more_label }}
 
               <svg
                 viewBox="0 0 24 24"
@@ -147,6 +152,7 @@
       class="memory-form"
       method="post"
       action="{% url 'pages:memories' %}"
+      data-invalid-message="{{ site_settings.memories_invalid_error }}"
       data-success-message="{{ site_settings.memories_success_message }}"
       data-error-message="{{ site_settings.memories_error_message }}"
       novalidate
@@ -192,7 +198,7 @@
         {{ form.text }}
 
         <span class="field-hint">
-          Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «{% translate "Дивитись більше" %}».
+          {{ site_settings.memories_text_hint }}
         </span>
 
         <span
@@ -200,7 +206,7 @@
           data-memory-limit-hint
           hidden
         >
-          {% translate "Досягнуто ліміт в 15 000 символів. Надішліть цей спогад, а продовження — ще однією формою." %}
+          {{ site_settings.memories_limit_message }}
         </span>
 
         {% if form.text.errors %}

@@ -62,23 +62,23 @@
           <dl class="media-meta">
             {% if featured_video.recorded_at %}
               <div>
-                <dt>{% translate "Дата запису" %}</dt>
+                <dt>{{ site_settings.videos_date_label }}</dt>
                 <dd>{{ featured_video.recorded_at }}</dd>
               </div>
             {% endif %}
 
             {% if featured_video.category %}
               <div>
-                <dt>{% translate "Категорія" %}</dt>
+                <dt>{{ site_settings.videos_category_label }}</dt>
                 <dd>
-                  {{ featured_video.get_category_display }}
+                  {{ featured_category_label }}
                 </dd>
               </div>
             {% endif %}
 
             {% if featured_video.duration %}
               <div>
-                <dt>{% translate "Тривалість" %}</dt>
+                <dt>{{ site_settings.videos_duration_label }}</dt>
                 <dd>{{ featured_video.duration }}</dd>
               </div>
             {% endif %}

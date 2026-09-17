@@ -1531,7 +1531,7 @@ if (memorySubmitForm) {
 
             errorElement.textContent =
               fieldErrors[0]?.message ||
-              "Перевірте це поле.";
+              memorySubmitForm.dataset.invalidMessage;
 
             const label =
               field.closest("label");

@@ -7,6 +7,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gettext \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock ./
@@ -21,6 +25,12 @@ COPY . .
 RUN uv sync \
     --frozen \
     --no-dev
+
+RUN SECRET_KEY=build-only \
+    DB_NAME=build \
+    DB_USER=build \
+    DB_PASSWORD=build \
+    .venv/bin/python manage.py compilemessages -l uk
 
 EXPOSE 8000
 

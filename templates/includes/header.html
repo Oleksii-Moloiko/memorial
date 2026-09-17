@@ -124,11 +124,7 @@
                 <path d="M12 3c-2.5 2.6-2.5 15.4 0 18"></path>
               </svg>
 
-              {% if CURRENT_LANGUAGE == "en" %}
-                Language
-              {% else %}
-                Мова
-              {% endif %}
+              {{ site_settings.language_label }}
             </p>
 
             <form
@@ -211,7 +207,7 @@
             hidden
           >
             <div class="language-switcher__label">
-              МОВА / LANGUAGE
+              {{ site_settings.mobile_language_label }}
             </div>
 
             <form

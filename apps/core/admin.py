@@ -85,7 +85,65 @@ class SiteSettingsAdmin(TranslationAdmin):
             {
                 "fields": (
                     "footer_text",
+                    "footer_dedication",
                     "copyright_holder",
+                )
+            },
+        ),
+        (
+            "СПОГАДИ — ФОРМА ТА ДІАЛОГ",
+            {
+                "fields": (
+                    "memories_name_label",
+                    "memories_name_placeholder",
+                    "memories_category_label",
+                    "memories_category_placeholder",
+                    "memories_text_label",
+                    "memories_text_placeholder",
+                    "memories_text_hint",
+                    "memories_consent_label",
+                    "memories_more_label",
+                    "memories_limit_message",
+                    "memories_name_error",
+                    "memories_text_error",
+                    "memories_required_error",
+                    "memories_invalid_error",
+                    "memories_close_label",
+                    "memories_close_dialog_label",
+                    "memories_characters_label",
+                    "memories_escape_label",
+                )
+            },
+        ),
+        (
+            "ПІДПИСИ І КАТЕГОРІЇ ФОТО ТА ВІДЕО",
+            {
+                "fields": (
+                    "photos_all_label",
+                    "videos_date_label",
+                    "videos_category_label",
+                    "videos_duration_label",
+                    "photo_category_family",
+                    "photo_category_study",
+                    "photo_category_service",
+                    "photo_category_memory",
+                    "video_category_family",
+                    "video_category_interview",
+                    "video_category_service",
+                    "video_category_memory",
+                    "video_category_media",
+                    "video_category_other",
+                )
+            },
+        ),
+        (
+            "МОВА ТА ДЕМО",
+            {
+                "fields": (
+                    "language_label",
+                    "mobile_language_label",
+                    "demo_title",
+                    "demo_text",
                 )
             },
         ),

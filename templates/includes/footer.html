@@ -80,7 +80,7 @@
     </div>
     <div class="footer-meta">
       <p>© {% now "Y" %} {{ site_settings.copyright_holder|default:_("Родина Назара Боровицького") }}</p>
-      <p>{% translate "Сторінка розроблена в світлу пам*ять Назара Боровицького" %}</p>
+      <p>{{ site_settings.footer_dedication }}</p>
     </div>
   </div>
 </footer>

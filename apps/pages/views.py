@@ -162,13 +162,14 @@ def photos(request):
             category=value,
         ).count()
 
+    settings = SiteSettings.load()
     photo_filters = [
         {
             "value": value,
-            "label": label,
+            "label": getattr(settings, f"photo_category_{value}"),
             "count": category_counts[value],
         }
-        for value, label in Photo.Category.choices
+        for value, _label in Photo.Category.choices
     ]
 
     context = {
@@ -197,6 +198,10 @@ def videos(request):
     context = {
         "video_page": video_page,
         "featured_video": featured_video,
+        "featured_category_label": (
+            getattr(SiteSettings.load(), f"video_category_{featured_video.category}", "")
+            if featured_video else ""
+        ),
         "videos": regular_videos,
         **_seo_context("videos"),
     }

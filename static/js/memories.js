@@ -21,24 +21,7 @@
   mobile.addEventListener("change", renderPreviews);
   renderPreviews();
 
-  const lang =
-    document.documentElement.lang || "uk";
-
-  const isEnglish =
-    lang.toLowerCase().startsWith("en");
-
-  const labels = {
-    close: isEnglish ? "Close" : "Закрити",
-    closeMemory: isEnglish
-      ? "Close memory"
-      : "Закрити спогад",
-    characters: isEnglish
-      ? "characters"
-      : "символів",
-    esc: isEnglish
-      ? "Esc — close"
-      : "Esc — закрити",
-  };
+  const labels = document.querySelector("[data-memory-labels]").dataset;
 
   const dialog =
     document.createElement("div");
@@ -70,7 +53,7 @@
       class="memory-dialog__backdrop"
       type="button"
       tabindex="-1"
-      aria-label="${labels.close}"
+      aria-label=""
     ></button>
 
     <div class="memory-dialog__panel">
@@ -91,7 +74,7 @@
         <button
           class="memory-dialog__close"
           type="button"
-          aria-label="${labels.closeMemory}"
+          aria-label=""
         >
           <svg
             viewBox="0 0 24 24"
@@ -131,13 +114,16 @@
         ></span>
 
         <span>
-          ${labels.esc}
+
         </span>
       </div>
 
     </div>
   `;
 
+  dialog.querySelector(".memory-dialog__backdrop").setAttribute("aria-label", labels.close);
+  dialog.querySelector(".memory-dialog__close").setAttribute("aria-label", labels.closeMemory);
+  dialog.querySelector(".memory-dialog__foot span:last-child").textContent = labels.esc;
   document.body.appendChild(dialog);
 
   const dialogBody =

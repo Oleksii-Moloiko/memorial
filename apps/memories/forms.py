@@ -1,103 +1,72 @@
 from django import forms
-from django.utils.translation import gettext_lazy as _
 
-from .models import (
-    MEMORY_TEXT_MAX_LENGTH,
-    Memory,
-    MemoryCategory,
-)
+from apps.core.models import SiteSettings
 
-MEMORY_TEXT_LIMIT_MESSAGE = _(
-    "Досягнуто ліміт в 15 000 символів. "
-    "Надішліть цей спогад, а продовження — ще однією формою."
-)
+from .models import MEMORY_TEXT_MAX_LENGTH, Memory, MemoryCategory
 
 
 class MemoryForm(forms.ModelForm):
     website = forms.CharField(
         required=False,
-        widget=forms.TextInput(
-            attrs={
-                "tabindex": "-1",
-                "autocomplete": "off",
-            }
-        ),
+        widget=forms.TextInput(attrs={"tabindex": "-1", "autocomplete": "off"}),
     )
-
-    consent = forms.BooleanField(
-        required=True,
-        label=_("Погоджуюся на публікацію після перевірки модератором."),
-    )
+    consent = forms.BooleanField(required=True)
 
     class Meta:
         model = Memory
-        fields = (
-            "author_name",
-            "category",
-            "text",
-        )
-
-        labels = {
-            "author_name": _("Ім’я або підпис"),
-            "category": _("Ким ви були знайомі"),
-            "text": _("Текст спогаду"),
-        }
-
+        fields = ("author_name", "category", "text")
         widgets = {
-            "author_name": forms.TextInput(
-                attrs={
-                    "placeholder": _("Наприклад: Іван або позивний «Сокіл»"),
-                    "autocomplete": "name",
-                }
-            ),
+            "author_name": forms.TextInput(attrs={"autocomplete": "name"}),
             "category": forms.Select(),
             "text": forms.Textarea(
-                attrs={
-                    "rows": 6,
-                    "maxlength": MEMORY_TEXT_MAX_LENGTH,
-                    "placeholder": _("Напишіть спогад"),
-                }
+                attrs={"rows": 6, "maxlength": MEMORY_TEXT_MAX_LENGTH}
             ),
         }
 
-        error_messages = {
-            "text": {
-                "max_length": MEMORY_TEXT_LIMIT_MESSAGE,
-            },
-        }
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, site_settings=None, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.copy = site_settings if site_settings is not None else SiteSettings.load()
+        for field, setting in (
+            ("author_name", "name"),
+            ("category", "category"),
+            ("text", "text"),
+            ("consent", "consent"),
+        ):
+            self.fields[field].label = getattr(self.copy, f"memories_{setting}_label")
+        self.fields["author_name"].widget.attrs["placeholder"] = (
+            self.copy.memories_name_placeholder
+        )
+        self.fields["text"].widget.attrs["placeholder"] = (
+            self.copy.memories_text_placeholder
+        )
         self.fields["category"].queryset = MemoryCategory.objects.filter(
             is_active=True
         ).order_by("sort_order", "id")
-
-        self.fields["category"].empty_label = _("Оберіть варіант")
+        self.fields["category"].empty_label = self.copy.memories_category_placeholder
+        for field in self.fields.values():
+            field.error_messages["required"] = self.copy.memories_required_error
+        self.fields["category"].error_messages["invalid_choice"] = (
+            self.copy.memories_invalid_error
+        )
+        self.fields["text"].error_messages["max_length"] = (
+            self.copy.memories_limit_message
+        )
 
     def clean_website(self):
-        value = self.cleaned_data.get("website", "")
-
-        if value:
-            raise forms.ValidationError(_("Не вдалося надіслати форму."))
-
+        if self.cleaned_data.get("website", ""):
+            raise forms.ValidationError(self.copy.memories_error_message)
         return ""
 
     def clean_author_name(self):
         name = self.cleaned_data["author_name"].strip()
         if len(name) < 2:
-            raise forms.ValidationError(
-                _("Вкажіть ім’я або підпис щонайменше з двох символів.")
-            )
+            raise forms.ValidationError(self.copy.memories_name_error)
         return name
 
     def clean_text(self):
         text = self.cleaned_data["text"].strip()
-
         if len(text) < 10:
-            raise forms.ValidationError(_("Спогад має містити щонайменше 10 символів."))
-
+            raise forms.ValidationError(self.copy.memories_text_error)
         if len(text) > MEMORY_TEXT_MAX_LENGTH:
-            raise forms.ValidationError(MEMORY_TEXT_LIMIT_MESSAGE)
-
+            raise forms.ValidationError(self.copy.memories_limit_message)
         return text
