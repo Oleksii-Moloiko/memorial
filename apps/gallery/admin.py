@@ -37,6 +37,8 @@ class PhotoAdmin(TranslationAdmin):
                     "preview_crop_editor",
                     "preview_focus_x",
                     "preview_focus_y",
+                    "portrait_focus_x",
+                    "portrait_focus_y",
                     "large_preview",
                     "caption",
                     "alt_text",
@@ -70,10 +72,12 @@ class PhotoAdmin(TranslationAdmin):
             **kwargs,
         )
 
-        if (
-            formfield is not None
-            and db_field.name in {"preview_focus_x", "preview_focus_y"}
-        ):
+        if formfield is not None and db_field.name in {
+            "preview_focus_x",
+            "preview_focus_y",
+            "portrait_focus_x",
+            "portrait_focus_y",
+        }:
             formfield.widget = forms.HiddenInput()
 
         return formfield
@@ -111,13 +115,12 @@ class PhotoAdmin(TranslationAdmin):
                     <strong>Оберіть, яка частина фото буде в прев’ю</strong>
                     <p>
                         Перетягуйте фото всередині рамки або використовуйте стрілки.
-                        Праворуч одразу видно, як цей самий фокус виглядатиме
-                        у вертикальному форматі.
+                        Кожен формат має власне кадрування та скидається окремо.
                     </p>
                 </div>
 
                 <div class="photo-crop-editor__previews">
-                    <div class="photo-crop-editor__preview-group">
+                    <div class="photo-crop-editor__preview-group" data-crop-variant="preview">
                         <span class="photo-crop-editor__label">Горизонтальне · 16:9</span>
                         <div
                             class="photo-crop-editor__stage photo-crop-editor__stage--landscape"
@@ -131,9 +134,18 @@ class PhotoAdmin(TranslationAdmin):
                                 Перетягніть фото
                             </span>
                         </div>
+                        <div class="photo-crop-editor__footer">
+                            <span>
+                                Фокус: <output data-crop-position>50% × 50%</output>
+                            </span>
+                            <button type="button" class="button" data-crop-reset>
+                                По центру
+                            </button>
+                        </div>
+
                     </div>
 
-                    <div class="photo-crop-editor__preview-group photo-crop-editor__preview-group--portrait">
+                    <div class="photo-crop-editor__preview-group photo-crop-editor__preview-group--portrait" data-crop-variant="portrait">
                         <span class="photo-crop-editor__label">Вертикальне · 9:16</span>
                         <div
                             class="photo-crop-editor__stage photo-crop-editor__stage--portrait"
@@ -144,16 +156,16 @@ class PhotoAdmin(TranslationAdmin):
                             <img alt="" data-crop-image draggable="false">
                             <span class="photo-crop-editor__grid" aria-hidden="true"></span>
                         </div>
-                    </div>
-                </div>
+                        <div class="photo-crop-editor__footer">
+                            <span>
+                                Фокус: <output data-crop-position>50% × 50%</output>
+                            </span>
+                            <button type="button" class="button" data-crop-reset>
+                                По центру
+                            </button>
+                        </div>
 
-                <div class="photo-crop-editor__footer">
-                    <span>
-                        Фокус: <output data-crop-position>50% × 50%</output>
-                    </span>
-                    <button type="button" class="button" data-crop-reset>
-                        По центру
-                    </button>
+                    </div>
                 </div>
 
                 <p class="photo-crop-editor__empty" data-crop-empty>

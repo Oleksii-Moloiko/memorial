@@ -6,16 +6,14 @@ const initPhotoCropper = () => {
   }
 
   const imageInput = document.querySelector("#id_image");
-  const xInput = document.querySelector("#id_preview_focus_x");
-  const yInput = document.querySelector("#id_preview_focus_y");
+
   const stages = Array.from(editor.querySelectorAll("[data-crop-stage]"));
   const images = Array.from(editor.querySelectorAll("[data-crop-image]"));
-  const resetButton = editor.querySelector("[data-crop-reset]");
-  const positionOutput = editor.querySelector("[data-crop-position]");
+
   const emptyState = editor.querySelector("[data-crop-empty]");
   const hint = editor.querySelector("[data-crop-hint]");
 
-  if (!xInput || !yInput || !stages.length || !images.length) {
+  if (!stages.length || !images.length) {
     return;
   }
 
@@ -27,10 +25,7 @@ const initPhotoCropper = () => {
     return Number.isFinite(value) ? clamp(value) : 50;
   };
 
-  let focusX = readPercent(xInput);
-  let focusY = readPercent(yInput);
   let objectUrl = null;
-  let dragState = null;
 
   const getExistingImageUrl = () => {
     const configuredUrl = (editor.dataset.imageUrl || "").trim();
@@ -51,21 +46,6 @@ const initPhotoCropper = () => {
     );
 
     return currentImageLink?.href || "";
-  };
-
-  const updateUI = () => {
-    const position = `${focusX}% ${focusY}%`;
-
-    images.forEach((image) => {
-      image.style.objectPosition = position;
-    });
-
-    xInput.value = String(Math.round(focusX));
-    yInput.value = String(Math.round(focusY));
-
-    if (positionOutput) {
-      positionOutput.textContent = `${Math.round(focusX)}% × ${Math.round(focusY)}%`;
-    }
   };
 
   const setImage = (src) => {
@@ -92,20 +72,44 @@ const initPhotoCropper = () => {
     }
   };
 
-  const moveFocus = (deltaX, deltaY, stage) => {
-    const rect = stage.getBoundingClientRect();
+  const variants = Array.from(editor.querySelectorAll("[data-crop-variant]")).map(group => {
+    const prefix = group.dataset.cropVariant;
+    const xInput = document.getElementById(`id_${prefix}_focus_x`);
+    const yInput = document.getElementById(`id_${prefix}_focus_y`);
+    const stage = group.querySelector("[data-crop-stage]");
+    const image = group.querySelector("[data-crop-image]");
+    const resetButton = group.querySelector("[data-crop-reset]");
+    const positionOutput = group.querySelector("[data-crop-position]");
+    let focusX = readPercent(xInput);
+    let focusY = readPercent(yInput);
+    let dragState = null;
+    const updateUI = () => {
+      const position = `${focusX}% ${focusY}%`;
 
-    if (!rect.width || !rect.height) {
-      return;
-    }
+      image.style.objectPosition = position;
 
-    // Moving the photo left reveals more of its right side, matching Telegram-like crop UX.
-    focusX = clamp(focusX - (deltaX / rect.width) * 100);
-    focusY = clamp(focusY - (deltaY / rect.height) * 100);
-    updateUI();
-  };
+      xInput.value = String(Math.round(focusX));
+      yInput.value = String(Math.round(focusY));
 
-  stages.forEach((stage) => {
+      if (positionOutput) {
+        positionOutput.textContent = `${Math.round(focusX)}% × ${Math.round(focusY)}%`;
+      }
+    };
+
+    const moveFocus = (deltaX, deltaY, stage) => {
+      const rect = stage.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) {
+        return;
+      }
+
+      // Moving the photo left reveals more of its right side, matching Telegram-like crop UX.
+      focusX = clamp(focusX - (deltaX / rect.width) * 100);
+      focusY = clamp(focusY - (deltaY / rect.height) * 100);
+      updateUI();
+    };
+
+
     stage.addEventListener("pointerdown", (event) => {
       if (stage.classList.contains("is-empty")) {
         return;
@@ -149,6 +153,7 @@ const initPhotoCropper = () => {
 
     stage.addEventListener("pointerup", endDrag);
     stage.addEventListener("pointercancel", endDrag);
+    stage.addEventListener("lostpointercapture", endDrag);
 
     stage.addEventListener("keydown", (event) => {
       if (stage.classList.contains("is-empty")) {
@@ -180,12 +185,17 @@ const initPhotoCropper = () => {
         event.preventDefault();
       }
     });
-  });
 
-  resetButton?.addEventListener("click", () => {
-    focusX = 50;
-    focusY = 50;
+    resetButton?.addEventListener("click", () => {
+      focusX = 50;
+      focusY = 50;
+      updateUI();
+    });
+
     updateUI();
+    return {
+      reset() { focusX = 50; focusY = 50; updateUI(); },
+    };
   });
 
   imageInput?.addEventListener("change", () => {
@@ -205,9 +215,7 @@ const initPhotoCropper = () => {
     setImage(objectUrl);
 
     // New image starts centered; the user can immediately reposition it.
-    focusX = 50;
-    focusY = 50;
-    updateUI();
+    variants.forEach(variant => variant.reset());
   });
 
   window.addEventListener("beforeunload", () => {
@@ -217,7 +225,6 @@ const initPhotoCropper = () => {
   });
 
   setImage(getExistingImageUrl());
-  updateUI();
 };
 
 if (document.readyState === "loading") {

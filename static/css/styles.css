@@ -6542,3 +6542,12 @@ body[data-page="memories"] .memory-text,
     overflow: hidden;
   }
 }
+
+/* Follow the gallery slot, including slots reassigned by filtering. */
+.gallery-open img {
+  object-position: var(--photo-landscape-position, 50% 50%);
+}
+.gallery-card.layout-portrait-left img,
+.gallery-card.layout-portrait-right img {
+  object-position: var(--photo-portrait-position, 50% 50%);
+}

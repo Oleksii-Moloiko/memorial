@@ -139,7 +139,7 @@ class PhotosPageTests(TestCase):
 
         self.assertContains(
             response,
-            "object-position: 28% 71%;",
+            "--photo-landscape-position: 28% 71%;",
         )
 
     def test_empty_state_is_displayed(self):

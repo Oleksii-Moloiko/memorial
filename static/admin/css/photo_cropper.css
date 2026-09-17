@@ -1,5 +1,7 @@
 .field-preview_focus_x,
-.field-preview_focus_y {
+.field-preview_focus_y,
+.field-portrait_focus_x,
+.field-portrait_focus_y {
     display: none;
 }
 
@@ -144,6 +146,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    flex-wrap: wrap;
     margin-top: 12px;
     color: var(--body-quiet-color);
     font-size: 12px;

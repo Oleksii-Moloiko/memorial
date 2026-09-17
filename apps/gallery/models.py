@@ -38,10 +38,7 @@ class Photo(models.Model):
         max_length=20,
         choices=Category.choices,
         default=Category.FAMILY,
-        help_text=(
-            "Визначає, у якій категорії фото буде показане "
-            "на сторінці."
-        ),
+        help_text=("Визначає, у якій категорії фото буде показане на сторінці."),
     )
 
     layout_size = models.CharField(
@@ -67,6 +64,18 @@ class Photo(models.Model):
         default=50,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         help_text="0 — верхній край, 100 — нижній край.",
+    )
+
+    portrait_focus_x = models.PositiveSmallIntegerField(
+        "Фокус вертикального прев’ю по горизонталі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+
+    portrait_focus_y = models.PositiveSmallIntegerField(
+        "Фокус вертикального прев’ю по вертикалі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
 
     is_published = models.BooleanField(

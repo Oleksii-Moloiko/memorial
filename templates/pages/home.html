@@ -276,7 +276,7 @@
               loading="lazy"
               width="{{ photo.image.width }}"
               height="{{ photo.image.height }}"
-              style="object-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%;"
+              style="object-position: {% if forloop.first %}{{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%{% else %}{{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%{% endif %};"
             >
             {% if photo.caption %}
               <span>{{ photo.caption }}</span>
