@@ -3411,6 +3411,204 @@ body.wireframe .tone-f {
   display: block;
 }
 
+/* =========================================
+   Video dialog
+   ========================================= */
+
+.video-dialog {
+  /*
+   * Розмір modal НЕ залежить від пропорцій
+   * конкретного відео.
+   */
+  width: min(1180px, calc(100vw - 180px));
+}
+
+.video-dialog-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  /*
+   * Це ключ до стабільності.
+   * Media frame завжди має однакову висоту.
+   */
+  height: min(72dvh, 720px);
+  min-height: 320px;
+
+  overflow: hidden;
+
+  background: #000;
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.video-dialog-player {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain;
+
+  background: #000;
+}
+
+.video-dialog-title {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 16px auto 0;
+
+  overflow-wrap: anywhere;
+}
+.video-dialog-nav.next::before {
+  content: "";
+
+  width: 10px;
+  height: 10px;
+
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+
+  transform: rotate(45deg);
+}
+.video-dialog-nav.prev::before {
+  content: "";
+
+  width: 10px;
+  height: 10px;
+
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+
+  transform: rotate(45deg);
+}
+
+/* =========================================
+   Video preview buttons
+   ========================================= */
+
+.video-open {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  appearance: none;
+  border: 0;
+
+  background: transparent;
+
+  color: inherit;
+  font: inherit;
+
+  cursor: pointer;
+
+  overflow: hidden;
+}
+.video-open img,
+.video-open > video {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.video-open .video-play {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 64px;
+  height: 64px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 999px;
+
+  color: #fff;
+
+  background: rgba(14, 17, 15, 0.72);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  pointer-events: none;
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.video-open:hover .video-play {
+  transform:
+    translate(-50%, -50%)
+    scale(1.06);
+
+  background: rgba(14, 17, 15, 0.86);
+}
+
+
+/* =========================================
+   Mobile video dialog
+   ========================================= */
+
+@media (max-width: 900px) {
+  .video-dialog {
+    width: 100vw;
+  }
+
+
+
+  .video-dialog-title {
+    margin: 18px auto 0;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-size: 18px;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .video-dialog-nav:disabled {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .video-dialog-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    line-height: 1;
+
+    padding: 0;
+  }
+
+  .video-open .video-play {
+    width: 54px;
+    height: 54px;
+  }
+}
+
 .dialog-caption:empty {
   display: none;
 }
@@ -3647,28 +3845,50 @@ body.wireframe .tone-f {
 
 .featured-video {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 18px;
-  align-items: stretch;
+
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(320px, 0.65fr);
+
+  gap: clamp(32px, 5vw, 72px);
+
+  align-items: center;
 }
 
 .featured-video-media,
 .video-card-media {
   position: relative;
+
   width: 100%;
   min-width: 0;
+
   overflow: hidden;
-  background: #111;
-  aspect-ratio: 9 / 16;
+
+  background: #161a17;
+  border-radius: 12px;
+
+  aspect-ratio: 16 / 9;
 }
 
 .featured-video-media video,
-.video-card-media video {
+.video-card-media video,
+.featured-video-media img,
+.video-card-media img {
   display: block;
+
   width: 100%;
   height: 100%;
+
   object-fit: cover;
-  background: #111;
+
+  background: #161a17;
+
+  transition: transform 0.35s ease;
+}
+
+.video-open:hover img,
+.video-open:hover > video {
+  transform: scale(1.025);
 }
 .video-play {
   position: absolute;
@@ -3684,12 +3904,15 @@ body.wireframe .tone-f {
 
 .featured-video-copy {
   width: 100%;
-  padding-top: 4px;
+  padding: 0;
 }
 
 .featured-video-copy h2 {
-  margin-bottom: 22px;
-  font-size: clamp(36px, 4vw, 48px);
+  margin: 8px 0 18px;
+
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.12;
+  font-weight: 400;
 }
 
 .media-meta {
@@ -3718,25 +3941,35 @@ body.wireframe .tone-f {
 
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 34px 24px;
+
   width: 100%;
 }
 
 .video-card {
   width: 100%;
   min-width: 0;
+
   overflow: hidden;
-  background: var(--paper);
-  border: 1px solid rgba(32, 38, 35, 0.15);
+
+  background: transparent;
+  border: 0;
 }
 
 .video-card-copy {
-  padding: 24px 26px 28px;
+  padding: 16px 2px 0;
 }
 
 .video-card-copy h3 {
-  margin-bottom: 12px;
+  margin: 6px 0 10px;
+
+  font-size: 21px;
+  line-height: 1.28;
+  font-weight: 500;
 }
 
 .video-card-copy > p:last-child {
@@ -3744,17 +3977,24 @@ body.wireframe .tone-f {
 }
 
 .meta-line {
-  margin-bottom: 10px;
-  color: #747b76;
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  margin: 0 0 7px;
+
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+
+  color: var(--olive);
 }
 
 .video-duration {
-  margin-top: 14px;
-  color: #686e6a;
-  font-size: 14px;
+  margin: 10px 0 0;
+
+  font-size: 12px;
+
+  color: rgba(78, 99, 94, 0.72);
 }
 
 .video-transcript {
@@ -3777,18 +4017,36 @@ body.wireframe .tone-f {
   margin-bottom: 0;
 }
 
+@media (max-width: 1100px) {
+  .video-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 960px) {
   .featured-video {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .featured-video-media {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .video-grid {
     grid-template-columns: 1fr;
     gap: 30px;
   }
 
-  .featured-video-media {
-    max-width: 100%;
+  .featured-video-copy h2 {
+    font-size: 32px;
   }
 
-  .video-grid {
-    grid-template-columns: 1fr;
+  .video-card-copy {
+    padding-top: 14px;
   }
 }
 
@@ -6550,4 +6808,110 @@ body[data-page="memories"] .memory-text,
 .gallery-card.layout-portrait-left img,
 .gallery-card.layout-portrait-right img {
   object-position: var(--photo-portrait-position, 50% 50%);
+}
+
+/* Final video dialog arrows */
+
+.video-dialog-nav {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: 1;
+}
+
+.video-dialog-nav::before {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 10px;
+  height: 10px;
+
+  border-style: solid;
+  border-color: currentColor;
+
+  transform-origin: center;
+}
+
+.video-dialog-nav.next::before {
+  border-width: 2px 2px 0 0;
+
+  transform:
+    translate(-65%, -50%)
+    rotate(45deg);
+}
+
+.video-dialog-nav.prev::before {
+  border-width: 0 0 2px 2px;
+
+  transform:
+    translate(-35%, -50%)
+    rotate(45deg);
+}
+
+.accessibility-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  margin-top: 48px;
+  padding-top: 24px;
+
+  border-top: 1px solid var(--line);
+
+  color: var(--olive);
+}
+
+.accessibility-note > span {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 42px;
+  height: 28px;
+
+  padding: 0 9px;
+
+  border: 1px solid rgba(78, 99, 94, 0.35);
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 0.08em;
+}
+
+.accessibility-note p {
+  max-width: 720px;
+
+  margin: 1px 0 0;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.accessibility-note strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .accessibility-note {
+    gap: 12px;
+
+    margin-top: 36px;
+    padding-top: 20px;
+  }
+
+  .accessibility-note p {
+    font-size: 12.5px;
+  }
 }

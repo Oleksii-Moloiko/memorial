@@ -1940,3 +1940,244 @@ galleryDialog?.addEventListener(
 
   scheduleUpdate();
 })();
+
+(() => {
+  /*
+   * Video dialog
+   */
+
+  const videoDialog =
+    document.querySelector(".video-dialog");
+
+  const videoDialogPlayer =
+    videoDialog?.querySelector(".video-dialog-player");
+
+  const videoDialogTitle =
+    videoDialog?.querySelector(".video-dialog-title");
+
+  const videoDialogClose =
+    videoDialog?.querySelector(".video-dialog-close");
+
+  const videoDialogPrev =
+    videoDialog?.querySelector(".video-dialog-nav.prev");
+
+  const videoDialogNext =
+    videoDialog?.querySelector(".video-dialog-nav.next");
+
+  const videoDialogCounter =
+    videoDialog?.querySelector(".video-dialog-counter");
+
+  let videoDialogList = [];
+  let videoDialogIndex = 0;
+  let videoDialogScrollY = 0;
+
+
+  function lockVideoDialogScroll() {
+    videoDialogScrollY = window.scrollY;
+
+    document.documentElement.classList.add(
+      "dialog-open"
+    );
+
+    document.body.classList.add(
+      "dialog-open"
+    );
+
+    document.body.style.top =
+      `-${videoDialogScrollY}px`;
+  }
+
+
+  function unlockVideoDialogScroll() {
+    const html = document.documentElement;
+    const body = document.body;
+
+    html.style.scrollBehavior = "auto";
+
+    html.classList.remove("dialog-open");
+    body.classList.remove("dialog-open");
+
+    body.style.top = "";
+
+    window.scrollTo({
+      top: videoDialogScrollY,
+      left: 0,
+      behavior: "auto",
+    });
+
+    requestAnimationFrame(() => {
+      html.style.scrollBehavior = "";
+    });
+  }
+
+
+  function getVideoDialogItems() {
+    return [
+      ...document.querySelectorAll(".video-open"),
+    ];
+  }
+
+
+  function showDialogVideo(index) {
+    if (
+      !videoDialogPlayer ||
+      !videoDialogList.length ||
+      index < 0 ||
+      index >= videoDialogList.length
+    ) {
+      return;
+    }
+
+    const button = videoDialogList[index];
+
+    videoDialogIndex = index;
+
+  /*
+   * Зупиняємо попереднє відео перед
+   * перемиканням на нове.
+   */
+    videoDialogPlayer.pause();
+
+    videoDialogPlayer.src =
+      button.dataset.video || "";
+
+    videoDialogPlayer.poster =
+      button.dataset.poster || "";
+
+    videoDialogPlayer.load();
+
+    if (videoDialogTitle) {
+      videoDialogTitle.textContent =
+        button.dataset.title || "";
+    }
+
+    if (videoDialogCounter) {
+      videoDialogCounter.textContent =
+        `${index + 1} / ${videoDialogList.length}`;
+    }
+
+    if (videoDialogPrev) {
+      videoDialogPrev.disabled =
+        index === 0;
+    }
+
+    if (videoDialogNext) {
+      videoDialogNext.disabled =
+        index === videoDialogList.length - 1;
+    }
+  }
+
+
+  document.addEventListener("click", (event) => {
+    const button =
+      event.target.closest(".video-open");
+
+    if (!button || !videoDialog) {
+      return;
+    }
+
+    videoDialogList =
+      getVideoDialogItems();
+
+    videoDialogIndex =
+      videoDialogList.indexOf(button);
+
+    if (videoDialogIndex === -1) {
+      return;
+    }
+
+    showDialogVideo(videoDialogIndex);
+
+    if (!videoDialog.open) {
+      lockVideoDialogScroll();
+
+      videoDialog.showModal();
+
+      videoDialog.focus({
+        preventScroll: true,
+      });
+    }
+  });
+
+
+  videoDialogPrev?.addEventListener(
+    "click",
+    () => {
+      showDialogVideo(
+        videoDialogIndex - 1
+      );
+    }
+  );
+
+
+  videoDialogNext?.addEventListener(
+    "click",
+    () => {
+      showDialogVideo(
+        videoDialogIndex + 1
+      );
+    }
+  );
+
+
+  videoDialogClose?.addEventListener(
+    "click",
+    () => {
+      videoDialog?.close();
+    }
+  );
+
+  videoDialog?.addEventListener("click", (event) => {
+    if (event.target === videoDialog) {
+      videoDialog.close();
+    }
+  });
+
+
+  videoDialog?.addEventListener(
+    "close",
+    () => {
+      if (videoDialogPlayer) {
+        videoDialogPlayer.pause();
+
+        videoDialogPlayer.removeAttribute("src");
+        videoDialogPlayer.removeAttribute("poster");
+
+        videoDialogPlayer.load();
+      }
+
+      if (videoDialogTitle) {
+        videoDialogTitle.textContent = "";
+      }
+
+      videoDialogList = [];
+
+      unlockVideoDialogScroll();
+    }
+  );
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (!videoDialog?.open) {
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+
+        showDialogVideo(
+          videoDialogIndex - 1
+        );
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+
+        showDialogVideo(
+          videoDialogIndex + 1
+        );
+      }
+    }
+  );
+})();

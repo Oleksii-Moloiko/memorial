@@ -306,11 +306,7 @@
 
       <a
         class="media-feature-card__visual media-feature-card__visual--video"
-        href="{% if featured_video %}{{ featured_video.video_file.url }}{% else %}{% url 'pages:videos' %}{% endif %}"
-        {% if featured_video %}
-          target="_blank"
-          rel="noopener"
-        {% endif %}
+        href="{% url 'pages:videos' %}#featured-video"
         aria-label="{% translate "Дивитися відео" %}"
       >
         {% if featured_video and featured_video.thumbnail %}
@@ -370,11 +366,7 @@
 
         <a
           class="media-feature-card__action"
-          href="{% if featured_video %}{{ featured_video.video_file.url }}{% else %}{% url 'pages:videos' %}{% endif %}"
-          {% if featured_video %}
-            target="_blank"
-            rel="noopener"
-          {% endif %}
+          href="{% url 'pages:videos' %}#featured-video"
         >
           {{ home_page.video_button_label }}
           <span aria-hidden="true">→</span>

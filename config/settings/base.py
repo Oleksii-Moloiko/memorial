@@ -17,6 +17,12 @@ CSRF_TRUSTED_ORIGINS = env.list(
     default=[],
 )
 
+R2_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
+R2_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
+R2_BUCKET_NAME = env("R2_BUCKET_NAME")
+R2_ENDPOINT_URL = env("R2_ENDPOINT_URL")
+R2_PUBLIC_HOST = env("R2_PUBLIC_HOST")
+
 INSTALLED_APPS = [
     "modeltranslation",
     "django.contrib.admin",
@@ -125,5 +131,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+VIDEO_UPLOAD_STALE_AFTER_HOURS = env.int(
+    "VIDEO_UPLOAD_STALE_AFTER_HOURS",
+    default=24,
+)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

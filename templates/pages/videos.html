@@ -23,28 +23,40 @@
 </section>
 
 {% if featured_video %}
-  <section class="section section-paper">
+  <section
+    id="featured-video"
+    class="section section-paper"
+  >
     <div class="container">
       <article class="featured-video">
 
         <div class="featured-video-media">
-          <video
-            class="video-player"
-            preload="metadata"
-            {% if featured_video.thumbnail %}
-            poster="{{ featured_video.thumbnail.url }}"
-            {% endif %}
-          >
-            <source src="{{ featured_video.video_file.url }}">
-              {% translate "Ваш браузер не підтримує відео." %}
-          </video>
-
           <button
-            class="video-play"
+            class="video-open"
             type="button"
-            aria-label="{% translate "Відтворити відео" %}"
+            data-video="{{ featured_video.video_file.url }}"
+            data-title="{{ featured_video.title }}"
+            data-poster="{% if featured_video.thumbnail %}{{ featured_video.thumbnail.url }}{% endif %}"
+            aria-label="{% translate 'Відкрити відео:' %} {{ featured_video.title }}"
           >
-            &#x25B6;&#xFE0E;
+            {% if featured_video.thumbnail %}
+              <img
+                src="{{ featured_video.thumbnail.url }}"
+                alt="{{ featured_video.title }}"
+              >
+            {% else %}
+              <video
+                preload="metadata"
+                muted
+                playsinline
+              >
+                <source src="{{ featured_video.video_file.url }}">
+              </video>
+            {% endif %}
+
+            <span class="video-play" aria-hidden="true">
+              ▶
+            </span>
           </button>
         </div>
 
@@ -52,6 +64,7 @@
           <p class="eyebrow">
             {{ video_page.featured_label }}
           </p>
+
 
           <h2>{{ featured_video.title }}</h2>
 
@@ -70,9 +83,7 @@
             {% if featured_video.category %}
               <div>
                 <dt>{{ site_settings.videos_category_label }}</dt>
-                <dd>
-                  {{ featured_category_label }}
-                </dd>
+                <dd>{{ featured_category_label }}</dd>
               </div>
             {% endif %}
 
@@ -121,31 +132,63 @@
         {% for video in videos %}
           <article class="video-card">
               <div class="video-card-media">
-                <video
-                  class="video-player"
-                  preload="metadata"
-                  {% if video.thumbnail %}
-                    poster="{{ video.thumbnail.url }}"
-                  {% endif %}
-                >
-                  <source src="{{ video.video_file.url }}">
-                  {% translate "Ваш браузер не підтримує відео." %}
-                </video>
-
                 <button
-                  class="video-play"
+                  class="video-open"
                   type="button"
-                  aria-label="{% translate "Відтворити відео" %}"
+                  data-video="{{ video.video_file.url }}"
+                  data-title="{{ video.title }}"
+                  data-poster="{% if video.thumbnail %}{{ video.thumbnail.url }}{% endif %}"
+                  aria-label="{% translate 'Відкрити відео:' %} {{ video.title }}"
                 >
-                  &#x25B6;&#xFE0E;
+                  {% if video.thumbnail %}
+                    <img
+                      src="{{ video.thumbnail.url }}"
+                      alt="{{ video.title }}"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <video
+                      preload="metadata"
+                      muted
+                      playsinline
+                    >
+                      <source src="{{ video.video_file.url }}">
+                    </video>
+                  {% endif %}
+
+                  <span class="video-play" aria-hidden="true">
+                    ▶
+                  </span>
                 </button>
               </div>
 
               <div class="video-card-copy">
+                {% if video.category %}
+                  <p class="meta-line">
+                    {{ video.get_category_display }}
+                  </p>
+                {% endif %}
+
                 <h3>{{ video.title }}</h3>
 
                 {% if video.description %}
                   <p>{{ video.description }}</p>
+                {% endif %}
+
+                {% if video.recorded_at or video.duration %}
+                  <p class="video-duration">
+                    {% if video.recorded_at %}
+                      {{ video.recorded_at }}
+                    {% endif %}
+
+                    {% if video.recorded_at and video.duration %}
+                      <span aria-hidden="true"> · </span>
+                    {% endif %}
+
+                    {% if video.duration %}
+                      {{ video.duration }}
+                    {% endif %}
+                  </p>
                 {% endif %}
               </div>
             </article>
@@ -172,5 +215,46 @@
 
   </div>
 </section>
+{% if featured_video or videos %}
+  <dialog
+    class="gallery-dialog video-dialog"
+    tabindex="-1"
+  >
+    <span
+      class="dialog-counter video-dialog-counter"
+      aria-live="polite"
+    ></span>
 
+    <button
+      class="dialog-close video-dialog-close"
+      type="button"
+      aria-label="{% translate 'Закрити відео' %}"
+    >
+      ×
+    </button>
+
+    <button
+      class="dialog-nav video-dialog-nav prev"
+      type="button"
+      aria-label="{% translate 'Попереднє відео' %}"
+    ></button>
+
+    <button
+      class="dialog-nav video-dialog-nav next"
+      type="button"
+      aria-label="{% translate 'Наступне відео' %}"
+    ></button>
+
+    <div class="video-dialog-media">
+      <video
+        class="video-dialog-player"
+        controls
+        playsinline
+        preload="metadata"
+      ></video>
+    </div>
+
+    <p class="dialog-caption video-dialog-title"></p>
+  </dialog>
+{% endif %}
 {% endblock %}

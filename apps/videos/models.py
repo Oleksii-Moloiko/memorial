@@ -1,24 +1,101 @@
+import uuid
 from pathlib import Path
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models.fields.files import FieldFile
+
+from .storage import get_video_storage
+
+
+VIDEO_ALLOWED_EXTENSIONS = {".mp4", ".webm", ".mov"}
+VIDEO_MAX_SIZE = 300 * 1024 * 1024  # 300 MB
 
 
 def validate_video_extension(file):
-    allowed_extensions = {".mp4", ".webm", ".mov"}
     extension = Path(file.name).suffix.lower()
 
-    if extension not in allowed_extensions:
+    if extension not in VIDEO_ALLOWED_EXTENSIONS:
         raise ValidationError("Дозволені формати відео: MP4, WebM або MOV.")
 
 
 def validate_video_size(file):
-    max_size = 300 * 1024 * 1024  # 300 MB
+    # Уже збережені файли повторно не перевіряємо через storage.
+    # Direct upload перевіряється через HEAD у confirm_video_upload().
+    if isinstance(file, FieldFile) and file._committed:
+        return
 
-    if file.size > max_size:
-        raise ValidationError("Розмір відео не повинен перевищувати 300 MB.")
+    if file.size > VIDEO_MAX_SIZE:
+        raise ValidationError(
+            "Розмір відео не повинен перевищувати 300 MB."
+        )
 
+class VideoUpload(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Очікує завантаження"
+        VERIFIED = "verified", "Завантажено та перевірено"
+        ATTACHED = "attached", "Прив’язано до відео"
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="video_uploads",
+    )
+
+    object_key = models.CharField(
+        max_length=500,
+        unique=True,
+    )
+
+    original_name = models.CharField(
+        max_length=255,
+    )
+
+    content_type = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    declared_size = models.PositiveBigIntegerField()
+
+    actual_size = models.PositiveBigIntegerField(
+        null=True,
+        blank=True,
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    verified_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    attached_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.original_name} ({self.status})"
 
 class Video(models.Model):
     class Category(models.TextChoices):
@@ -37,6 +114,7 @@ class Video(models.Model):
     video_file = models.FileField(
         "Відеофайл",
         upload_to="videos/files/",
+        storage=get_video_storage,
         validators=[
             validate_video_extension,
             validate_video_size,
