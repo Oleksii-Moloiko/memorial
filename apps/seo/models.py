@@ -14,7 +14,6 @@ class SeoPage(models.Model):
         SERVICE = "service", "Подвиг і служба"
         PHOTOS = "photos", "Фото"
         VIDEOS = "videos", "Відео"
-        MEDIA = "media", "У ЗМІ"
         MEMORIES = "memories", "Спогади"
 
     page_key = models.CharField(

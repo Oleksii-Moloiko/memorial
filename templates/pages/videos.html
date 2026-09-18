@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block page_key %}videos{% endblock %}
 
 {% block title %}
-  Відео — Пам’ять про Олександра Мельника
+  {{ site_settings.videos_title }} — {{ site_settings.site_title }}
 {% endblock %}
 
 {% block content %}
@@ -11,42 +12,59 @@
 <section class="page-hero section-dark">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Архівні записи</p>
-      <h1>Відео</h1>
+      <p class="eyebrow">{{ video_page.hero_eyebrow }}</p>
+      <h1>{{ site_settings.videos_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Сімейні записи, інтерв’ю, матеріали зі служби
-      та відео вшанування.
+      {{ video_page.hero_description }}
     </p>
   </div>
 </section>
 
 {% if featured_video %}
-  <section class="section section-paper">
+  <section
+    id="featured-video"
+    class="section section-paper"
+  >
     <div class="container">
       <article class="featured-video">
 
         <div class="featured-video-media">
-          <video
-            controls
-            preload="metadata"
-            {% if featured_video.thumbnail %}
-              poster="{{ featured_video.thumbnail.url }}"
-            {% endif %}
+          <button
+            class="video-open"
+            type="button"
+            data-video="{{ featured_video.video_file.url }}"
+            data-title="{{ featured_video.title }}"
+            data-poster="{% if featured_video.thumbnail %}{{ featured_video.thumbnail.url }}{% endif %}"
+            aria-label="{% translate 'Відкрити відео:' %} {{ featured_video.title }}"
           >
-            <source
-              src="{{ featured_video.video_file.url }}"
-            >
+            {% if featured_video.thumbnail %}
+              <img
+                src="{{ featured_video.thumbnail.url }}"
+                alt="{{ featured_video.title }}"
+              >
+            {% else %}
+              <video
+                preload="metadata"
+                muted
+                playsinline
+              >
+                <source src="{{ featured_video.video_file.url }}">
+              </video>
+            {% endif %}
 
-            Ваш браузер не підтримує відео.
-          </video>
+            <span class="video-play" aria-hidden="true">
+              ▶
+            </span>
+          </button>
         </div>
 
         <div class="featured-video-copy">
           <p class="eyebrow">
-            Рекомендоване відео
+            {{ video_page.featured_label }}
           </p>
+
 
           <h2>{{ featured_video.title }}</h2>
 
@@ -57,23 +75,21 @@
           <dl class="media-meta">
             {% if featured_video.recorded_at %}
               <div>
-                <dt>Дата запису</dt>
+                <dt>{{ site_settings.videos_date_label }}</dt>
                 <dd>{{ featured_video.recorded_at }}</dd>
               </div>
             {% endif %}
 
             {% if featured_video.category %}
               <div>
-                <dt>Категорія</dt>
-                <dd>
-                  {{ featured_video.get_category_display }}
-                </dd>
+                <dt>{{ site_settings.videos_category_label }}</dt>
+                <dd>{{ featured_category_label }}</dd>
               </div>
             {% endif %}
 
             {% if featured_video.duration %}
               <div>
-                <dt>Тривалість</dt>
+                <dt>{{ site_settings.videos_duration_label }}</dt>
                 <dd>{{ featured_video.duration }}</dd>
               </div>
             {% endif %}
@@ -82,7 +98,7 @@
           {% if featured_video.transcript %}
             <details class="video-transcript">
               <summary>
-                Текстовий опис відео
+                {{ video_page.transcript_label }}
               </summary>
 
               <div>
@@ -102,13 +118,12 @@
 
     <div class="section-heading split-heading">
       <div>
-        <p class="eyebrow">Усі записи</p>
-        <h2>Відеоархів</h2>
+        <p class="eyebrow">{{ video_page.archive_eyebrow }}</p>
+        <h2>{{ video_page.archive_title }}</h2>
       </div>
 
       <p>
-        Усі матеріали додаються та публікуються
-        тільки через адміністративну панель.
+        {{ video_page.archive_note }}
       </p>
     </div>
 
@@ -117,23 +132,63 @@
         {% for video in videos %}
           <article class="video-card">
               <div class="video-card-media">
-                <video
-                  controls
-                  preload="metadata"
-                  {% if video.thumbnail %}
-                    poster="{{ video.thumbnail.url }}"
-                  {% endif %}
+                <button
+                  class="video-open"
+                  type="button"
+                  data-video="{{ video.video_file.url }}"
+                  data-title="{{ video.title }}"
+                  data-poster="{% if video.thumbnail %}{{ video.thumbnail.url }}{% endif %}"
+                  aria-label="{% translate 'Відкрити відео:' %} {{ video.title }}"
                 >
-                  <source src="{{ video.video_file.url }}">
-                  Ваш браузер не підтримує відео.
-                </video>
+                  {% if video.thumbnail %}
+                    <img
+                      src="{{ video.thumbnail.url }}"
+                      alt="{{ video.title }}"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <video
+                      preload="metadata"
+                      muted
+                      playsinline
+                    >
+                      <source src="{{ video.video_file.url }}">
+                    </video>
+                  {% endif %}
+
+                  <span class="video-play" aria-hidden="true">
+                    ▶
+                  </span>
+                </button>
               </div>
 
               <div class="video-card-copy">
+                {% if video.category %}
+                  <p class="meta-line">
+                    {{ video.get_category_display }}
+                  </p>
+                {% endif %}
+
                 <h3>{{ video.title }}</h3>
 
                 {% if video.description %}
                   <p>{{ video.description }}</p>
+                {% endif %}
+
+                {% if video.recorded_at or video.duration %}
+                  <p class="video-duration">
+                    {% if video.recorded_at %}
+                      {{ video.recorded_at }}
+                    {% endif %}
+
+                    {% if video.recorded_at and video.duration %}
+                      <span aria-hidden="true"> · </span>
+                    {% endif %}
+
+                    {% if video.duration %}
+                      {{ video.duration }}
+                    {% endif %}
+                  </p>
                 {% endif %}
               </div>
             </article>
@@ -141,11 +196,10 @@
       </div>
     {% elif not featured_video %}
       <div class="empty-state">
-        <h2>Відеоархів ще наповнюється</h2>
+        <h2>{{ video_page.empty_title }}</h2>
 
         <p>
-          Перевірені відеоматеріали з’являться тут
-          після публікації адміністратором.
+          {{ video_page.empty_text }}
         </p>
       </div>
     {% endif %}
@@ -154,13 +208,53 @@
       <span aria-hidden="true">CC</span>
 
       <p>
-        <strong>Доступність:</strong>
-        за можливості до відео додається текстовий опис
-        або розшифровка.
+        <strong>{{ video_page.accessibility_label }}</strong>
+        {{ video_page.accessibility_text }}
       </p>
     </div>
 
   </div>
 </section>
+{% if featured_video or videos %}
+  <dialog
+    class="gallery-dialog video-dialog"
+    tabindex="-1"
+  >
+    <span
+      class="dialog-counter video-dialog-counter"
+      aria-live="polite"
+    ></span>
 
+    <button
+      class="dialog-close video-dialog-close"
+      type="button"
+      aria-label="{% translate 'Закрити відео' %}"
+    >
+      ×
+    </button>
+
+    <button
+      class="dialog-nav video-dialog-nav prev"
+      type="button"
+      aria-label="{% translate 'Попереднє відео' %}"
+    ></button>
+
+    <button
+      class="dialog-nav video-dialog-nav next"
+      type="button"
+      aria-label="{% translate 'Наступне відео' %}"
+    ></button>
+
+    <div class="video-dialog-media">
+      <video
+        class="video-dialog-player"
+        controls
+        playsinline
+        preload="metadata"
+      ></video>
+    </div>
+
+    <p class="dialog-caption video-dialog-title"></p>
+  </dialog>
+{% endif %}
 {% endblock %}

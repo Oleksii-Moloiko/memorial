@@ -2,22 +2,12 @@ from datetime import date
 
 from django.test import TestCase
 from django.urls import reverse
+from apps.pages.models import ServicePage
 
 from .models import MediaMention
 
 
 class MediaMentionModelTests(TestCase):
-    def test_string_representation(self):
-        mention = MediaMention.objects.create(
-            source_name="Українська правда",
-            url="https://example.com/article/",
-        )
-
-        self.assertEqual(
-            str(mention),
-            "Українська правда",
-        )
-
     def test_default_order_is_zero(self):
         mention = MediaMention.objects.create(
             source_name="Офіційне джерело",
@@ -44,6 +34,60 @@ class MediaMentionModelTests(TestCase):
         self.assertEqual(
             list(MediaMention.objects.all()),
             [first, second],
+        )
+
+    def test_string_representation_uses_title(self):
+        mention = MediaMention.objects.create(
+            title="Матеріал про військового",
+            source_name="Українська правда",
+            url="https://example.com/article/",
+        )
+
+        self.assertEqual(
+            str(mention),
+            "Матеріал про військового",
+        )
+
+    def test_category_default_is_press(self):
+        mention = MediaMention.objects.create(
+            title="Новина",
+            source_name="Видання",
+            url="https://example.com/article/",
+        )
+
+        self.assertEqual(
+            mention.category,
+            MediaMention.Category.PRESS,
+        )
+
+    def test_hidden_mentions_are_not_displayed(self):
+        from apps.pages.models import ServicePage
+
+        page = ServicePage.objects.create(
+            hero_title="Подвиг і служба",
+            is_published=True,
+        )
+
+        MediaMention.objects.create(
+            service_page=page,
+            title="Прихований матеріал",
+            source_name="Тестове видання",
+            url="https://example.com/hidden/",
+            is_published=False,
+        )
+
+        response = self.client.get(
+            reverse("pages:service"),
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertNotContains(
+            response,
+            "Прихований матеріал",
         )
 
     def test_mentions_with_same_order_are_sorted_by_newest_date(self):
@@ -74,76 +118,14 @@ class MediaMentionModelTests(TestCase):
 
         self.assertIsNone(mention.published_date)
 
+class MediaRedirectTests(TestCase):
+    def test_media_url_redirects_to_service_links(self):
+        response = self.client.get(
+            reverse("pages:media")
+        )
 
-class MediaPageTests(TestCase):
-    def setUp(self):
-        self.url = reverse("pages:media")
-
-    def test_media_page_is_available(self):
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
+        self.assertRedirects(
             response,
-            "pages/media.html",
-        )
-
-    def test_mentions_are_added_to_context(self):
-        mention = MediaMention.objects.create(
-            source_name="Українська правда",
-            url="https://example.com/article/",
-            published_date=date(2024, 5, 10),
-        )
-
-        response = self.client.get(self.url)
-
-        self.assertIn("mentions", response.context)
-        self.assertIn(
-            mention,
-            response.context["mentions"],
-        )
-
-    def test_all_mentions_are_added_to_context(self):
-        first = MediaMention.objects.create(
-            source_name="Перше джерело",
-            url="https://example.com/first/",
-        )
-
-        second = MediaMention.objects.create(
-            source_name="Друге джерело",
-            url="https://example.com/second/",
-        )
-
-        response = self.client.get(self.url)
-
-        self.assertQuerySetEqual(
-            response.context["mentions"],
-            [first, second],
-            ordered=False,
-        )
-
-    def test_database_mention_is_displayed(self):
-        mention = MediaMention.objects.create(
-            source_name="Тестове видання",
-            url="https://example.com/test-article/",
-            published_date=date(2024, 5, 10),
-        )
-
-        response = self.client.get(self.url)
-
-        self.assertContains(
-            response,
-            mention.source_name,
-        )
-        self.assertContains(
-            response,
-            mention.url,
-        )
-
-    def test_empty_state_is_displayed(self):
-        response = self.client.get(self.url)
-
-        self.assertContains(
-            response,
-            "Матеріалів поки немає",
+            "/service/#links",
+            fetch_redirect_response=False,
         )

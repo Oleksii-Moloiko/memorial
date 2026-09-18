@@ -1,0 +1,21 @@
+.video-upload-status {
+    margin-top: 12px;
+    max-width: 620px;
+}
+
+.video-upload-status__text {
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.video-upload-status progress {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: 8px;
+    margin-bottom: 10px;
+}
+
+.video-upload-status button {
+    margin-right: 8px;
+}

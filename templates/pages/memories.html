@@ -1,81 +1,164 @@
 {% extends "base.html" %}
+{% load static i18n %}
 
 {% block page_key %}memories{% endblock %}
 
 {% block title %}
-  Спогади — Пам’ять про Олександра Мельника
+  {{ site_settings.memories_title }} — {{ site_settings.site_title }}
+{% endblock %}
+
+{% block extra_head %}
+  <script
+    src="{% static 'js/memories.js' %}"
+    defer
+  ></script>
 {% endblock %}
 
 {% block content %}
-<section class="page-hero section-dark memories-hero">
+<section class="page-hero section-dark memories-hero"
+  data-memory-labels
+  data-close="{{ site_settings.memories_close_label }}"
+  data-close-memory="{{ site_settings.memories_close_dialog_label }}"
+  data-characters="{{ site_settings.memories_characters_label }}"
+  data-esc="{{ site_settings.memories_escape_label }}">
   <div class="container page-hero-grid grid-guide">
     <div>
-      <p class="eyebrow">Слова близьких</p>
-      <h1>Спогади</h1>
+      <p class="eyebrow">{{ site_settings.memories_hero_eyebrow }}</p>
+      <h1>{{ site_settings.memories_title }}</h1>
     </div>
 
     <p class="page-lead">
-      Слова родини, побратимів, друзів і однокласників.
-      Кожен текст публікується лише після ручної модерації.
+      {{ site_settings.memories_hero_description }}
+      {{ site_settings.memories_moderation_note }}
     </p>
   </div>
 </section>
 
 <section class="section section-paper">
   <div class="container">
+    {% if memory_categories %}
+      <div
+        class="filter-bar"
+        role="group"
+        aria-label="{% translate "Фільтр спогадів за категорією" %}"
+      >
+        {% for category in memory_categories %}
+          <button
+            class="filter-chip"
+            type="button"
+            data-memory-filter="{{ category.id }}"
+            aria-pressed="false"
+          >
+            {{ category.name }}
+
+            <span class="filter-chip__n">
+              {{ category.memories_count }}
+            </span>
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
     <div class="memories-grid">
       {% for memory in memories %}
-        <figure class="memory-card{% if memory.featured %} featured{% endif %}">
-          <blockquote>
-            «{{ memory.text }}»
-          </blockquote>
+        <figure
+          class="memory-card"
+          data-memory-category="{{ memory.category_id|default:'' }}"
+          data-memory-full="{{ memory.text }}"
+        >
 
-          <figcaption>
-            {% if memory.author_role %}
-              {{ memory.author_name }}, {{ memory.author_role }}
-            {% else %}
+          <figcaption class="memory-head">
+            <span class="memory-author">
               {{ memory.author_name }}
+            </span>
+
+            {% if memory.category %}
+              <span class="memory-relation">
+                {{ memory.category.name }}
+              </span>
             {% endif %}
           </figcaption>
+
+          <blockquote class="memory-text">{% if memory.is_long %}{{ memory.teaser }}…{% else %}{{ memory.text }}{% endif %}</blockquote>
+
+          {% if memory.is_long %}
+            <button
+              class="memory-more"
+              type="button"
+              data-memory-open
+            >
+              {{ site_settings.memories_more_label }}
+
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </button>
+          {% endif %}
         </figure>
+
       {% empty %}
         <div class="empty-state">
-          <h2>Спогадів поки немає</h2>
+          <h2>{{ site_settings.memories_empty_title }}</h2>
           <p>
-            Після перевірки модератором опубліковані спогади
-            з’являться тут.
+            {{ site_settings.memories_empty_text }}
           </p>
         </div>
       {% endfor %}
+    </div><!-- memories-grid -->
+
+    <div class="memories-progress">
+      <span class="memories-progress__bar">
+        <span class="memories-progress__fill"></span>
+      </span>
+
+      <span
+        class="memories-progress__count"
+        aria-live="polite"
+      ></span>
     </div>
-  </div>
+
+  </div><!-- container -->
 </section>
 
-<section class="section section-stone submission-section">
+<section
+  id="memory-form"
+  class="section section-stone submission-section"
+>
   <div class="container submission-grid">
     <div>
-      <p class="eyebrow">Поділитися спогадом</p>
+      <p class="eyebrow">{{ site_settings.memories_submit_eyebrow }}</p>
 
-      <h2>Залиште кілька слів</h2>
+      <h2>{{ site_settings.memories_submit_title }}</h2>
 
       <p>
-        Кожне повідомлення потрапляє на ручну модерацію
-        й не з’являється на сайті автоматично.
+        {{ site_settings.memories_submit_description }}
       </p>
 
       <div class="moderation-note">
-        <strong>Модерація</strong>
-        <span>Відповідальна особа від родини</span>
+        <strong>{{ site_settings.memories_moderation_label }}</strong>
+        <span>{{ site_settings.memories_moderator_text }}</span>
       </div>
     </div>
 
     <form
+      id="memory-submit-form"
       class="memory-form"
       method="post"
       action="{% url 'pages:memories' %}"
+      data-invalid-message="{{ site_settings.memories_invalid_error }}"
+      data-success-message="{{ site_settings.memories_success_message }}"
+      data-error-message="{{ site_settings.memories_error_message }}"
       novalidate
     >
       {% csrf_token %}
+      <div hidden aria-hidden="true">{{ form.website }}</div>
 
       {% if form.non_field_errors %}
         <div class="form-errors full" role="alert">
@@ -96,13 +179,13 @@
         {% endif %}
       </label>
 
-      <label for="{{ form.author_role.id_for_label }}">
-        {{ form.author_role.label }}
-        {{ form.author_role }}
+      <label for="{{ form.category.id_for_label }}">
+        {{ form.category.label }}
+        {{ form.category }}
 
-        {% if form.author_role.errors %}
+        {% if form.category.errors %}
           <span class="field-error" role="alert">
-            {{ form.author_role.errors.0 }}
+            {{ form.category.errors.0 }}
           </span>
         {% endif %}
       </label>
@@ -114,8 +197,16 @@
         {{ form.text.label }}
         {{ form.text }}
 
-        <span class="counter" data-memory-counter>
-          {{ form.text.value|default:""|length }} / 500
+        <span class="field-hint">
+          {{ site_settings.memories_text_hint }}
+        </span>
+
+        <span
+          class="field-hint memory-limit-hint"
+          data-memory-limit-hint
+          hidden
+        >
+          {{ site_settings.memories_limit_message }}
         </span>
 
         {% if form.text.errors %}
@@ -143,9 +234,11 @@
         class="button button-primary full"
         type="submit"
       >
-        Надіслати на модерацію
+        {{ site_settings.memories_submit_button_label }}
       </button>
     </form>
   </div>
+
+
 </section>
 {% endblock %}

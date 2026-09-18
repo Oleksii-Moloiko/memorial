@@ -1,0 +1,67 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/settings_admin.css' %}"
+    >
+{% endblock %}
+
+{% block after_field_sets %}
+
+    {{ block.super }}
+
+    <section class="settings-seo">
+
+        <h2>SEO</h2>
+
+        <p class="settings-seo__description">
+            Налаштування заголовків, описів і зображень для пошукових систем та соцмереж.
+        </p>
+
+        <div class="settings-seo__list">
+
+            {% for page in seo_pages %}
+
+                <a
+                    href="{{ page.url }}"
+                    class="settings-seo__item"
+                >
+
+                    <div>
+                        <strong>{{ page.label }}</strong>
+
+                        {% if page.object %}
+                            <span>
+                                {% if page.object.title %}
+                                    {{ page.object.title }}
+                                {% else %}
+                                    SEO не заповнено
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <span>
+                                SEO ще не створено
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <span class="settings-seo__action">
+                        {% if page.object %}
+                            Редагувати
+                        {% else %}
+                            Додати
+                        {% endif %}
+                    </span>
+
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+{% endblock %}

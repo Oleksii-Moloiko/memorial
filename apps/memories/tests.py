@@ -1,8 +1,13 @@
-from django.test import TestCase
+from django.contrib.admin.sites import AdminSite
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from django.utils.translation import override
 
+from .admin import MemoryAdmin
 from .forms import MemoryForm
-from .models import Memory
+from .models import Memory, MemoryCategory
 
 
 class MemoryModelTests(TestCase):
@@ -97,10 +102,11 @@ class MemoryFormTests(TestCase):
         self.assertIn("text", form.errors)
 
     def test_form_trims_whitespace(self):
+        category = MemoryCategory.objects.create(name="Побратим")
         form = MemoryForm(
             data={
                 "author_name": "  Іван  ",
-                "author_role": "  Побратим  ",
+                "category": category.pk,
                 "text": "  Це достатньо довгий текст спогаду.  ",
                 "consent": True,
             }
@@ -108,7 +114,7 @@ class MemoryFormTests(TestCase):
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data["author_name"], "Іван")
-        self.assertEqual(form.cleaned_data["author_role"], "Побратим")
+        self.assertEqual(form.cleaned_data["category"], category)
         self.assertEqual(
             form.cleaned_data["text"],
             "Це достатньо довгий текст спогаду.",
@@ -117,6 +123,9 @@ class MemoryFormTests(TestCase):
 
 class MemoriesPageTests(TestCase):
     def setUp(self):
+        language = override("uk")
+        language.__enter__()
+        self.addCleanup(language.__exit__, None, None, None)
         self.url = reverse("pages:memories")
 
     def test_page_is_available(self):
@@ -219,3 +228,39 @@ class MemoriesPageTests(TestCase):
             response,
             "Дякуємо. Ваш спогад надіслано на модерацію.",
         )
+
+
+class MemoryAdminStatusTests(TestCase):
+    def setUp(self):
+        self.admin = MemoryAdmin(Memory, AdminSite())
+        self.factory = RequestFactory()
+
+    def test_rejected_featured_memory_is_unfeatured(self):
+        memory = Memory.objects.create(
+            author_name="Іван",
+            text="Достатньо довгий текст спогаду.",
+            status=Memory.Status.APPROVED,
+            featured=True,
+        )
+
+        request = self.factory.post("/admin/")
+
+        middleware = SessionMiddleware(lambda req: None)
+        middleware.process_request(request)
+        request.session.save()
+
+        request._messages = FallbackStorage(request)
+
+        self.admin._update_status(
+            request,
+            Memory.objects.filter(pk=memory.pk),
+            Memory.Status.REJECTED,
+        )
+
+        memory.refresh_from_db()
+
+        self.assertEqual(
+            memory.status,
+            Memory.Status.REJECTED,
+        )
+        self.assertFalse(memory.featured)
