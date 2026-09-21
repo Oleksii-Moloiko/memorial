@@ -892,6 +892,9 @@
   const dialogImage =
     galleryDialog?.querySelector("[data-dialog-image]");
 
+  const dialogImageContainer =
+    galleryDialog?.querySelector(".dialog-image");
+
   const dialogCaption =
     galleryDialog?.querySelector(".dialog-caption");
 
@@ -910,6 +913,36 @@
   let dialogPhotoList = [];
   let dialogPhotoIndex = 0;
   let dialogScrollY = 0;
+  function updatePhotoDialogNavPosition() {
+    if (
+      !dialogImage ||
+      !dialogImageContainer
+    ) {
+      return;
+    }
+
+    const imageRect =
+      dialogImage.getBoundingClientRect();
+
+    const containerRect =
+      dialogImageContainer.getBoundingClientRect();
+
+    const leftInset =
+      imageRect.left - containerRect.left;
+
+    const rightInset =
+      containerRect.right - imageRect.right;
+
+    dialogImageContainer.style.setProperty(
+      "--photo-left-inset",
+      `${leftInset}px`
+    );
+
+    dialogImageContainer.style.setProperty(
+      "--photo-right-inset",
+      `${rightInset}px`
+    );
+  }
   function lockDialogScroll() {
     dialogScrollY = window.scrollY;
 

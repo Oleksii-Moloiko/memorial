@@ -25,7 +25,6 @@
 
 <section class="section section-paper gallery-page">
   <div class="container">
-
     {% if photos %}
       <div
         class="filter-bar"
@@ -135,24 +134,22 @@
       ×
     </button>
 
-    <button
-      class="dialog-nav prev"
-      type="button"
-      aria-label="{% translate "Попереднє фото" %}"
-    >
-      ‹
-    </button>
-
-    <button
-      class="dialog-nav next"
-      type="button"
-      aria-label="{% translate "Наступне фото" %}"
-    >
-      ›
-    </button>
-
     <div class="dialog-image">
+
+      <button
+        class="dialog-nav prev"
+        type="button"
+        aria-label="{% translate "Попереднє фото" %}"
+      ></button>
+
       <img src="" alt="" data-dialog-image>
+
+      <button
+        class="dialog-nav next"
+        type="button"
+        aria-label="{% translate "Наступне фото" %}"
+      ></button>
+
     </div>
 
     <p class="dialog-caption"></p>

@@ -115,7 +115,6 @@
 
 <section class="section section-stone">
   <div class="container">
-
     <div class="section-heading split-heading">
       <div>
         <p class="eyebrow">{{ video_page.archive_eyebrow }}</p>
@@ -233,25 +232,27 @@
       ×
     </button>
 
-    <button
-      class="dialog-nav video-dialog-nav prev"
-      type="button"
-      aria-label="{% translate 'Попереднє відео' %}"
-    ></button>
-
-    <button
-      class="dialog-nav video-dialog-nav next"
-      type="button"
-      aria-label="{% translate 'Наступне відео' %}"
-    ></button>
-
     <div class="video-dialog-media">
+
+      <button
+        class="dialog-nav video-dialog-nav prev"
+        type="button"
+        aria-label="{% translate 'Попереднє відео' %}"
+      ></button>
+
       <video
         class="video-dialog-player"
         controls
         playsinline
         preload="metadata"
       ></video>
+
+      <button
+        class="dialog-nav video-dialog-nav next"
+        type="button"
+        aria-label="{% translate 'Наступне відео' %}"
+      ></button>
+
     </div>
 
     <p class="dialog-caption video-dialog-title"></p>
