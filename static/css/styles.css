@@ -6982,3 +6982,18 @@ body[data-page="memories"] .memory-text,
     translate(-35%, -50%)
     rotate(45deg);
 }
+
+/* Final video play icon */
+
+.video-open .video-play::before {
+  content: "";
+
+  width: 0;
+  height: 0;
+
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 14px solid currentColor;
+
+  margin-left: 4px;
+}
