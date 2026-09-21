@@ -213,7 +213,7 @@
       !relationBox.textContent;
 
     lengthBox.textContent =
-      `${full.trim().length.toLocaleString(lang)} ${labels.characters}`;
+      `${full.trim().length.toLocaleString(document.documentElement.lang)} ${labels.characters}`;
 
     lastFocus =
       document.activeElement;

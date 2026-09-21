@@ -1396,12 +1396,14 @@ p {
     transform 0.2s ease;
 }
 
-.filter-chip:not(.active):hover {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .filter-chip:not(.active):hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
 
-  transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
 }
 
 .filter-chip:focus-visible {
@@ -1616,8 +1618,10 @@ p {
     border-color 0.2s ease;
 }
 
-.filter-chip:hover {
-  border-color: var(--ink);
+@media (hover: hover) and (pointer: fine) {
+  .filter-chip:hover {
+    border-color: var(--ink);
+  }
 }
 
 .filter-chip:focus-visible {
