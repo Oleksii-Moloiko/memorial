@@ -780,6 +780,125 @@ fieldset.module,
 }
 
 /* =========================================================
+   ADMIN FORM CONTROL SYSTEM
+   ========================================================= */
+
+:root {
+    --admin-field-width: 520px;
+    --admin-field-height: 58px;
+    --admin-field-padding-x: 16px;
+}
+
+/* ---------------------------------------------------------
+   Standard single-line fields
+   --------------------------------------------------------- */
+
+.aligned .form-row input:not([type="checkbox"])
+                       :not([type="radio"])
+                       :not([type="file"])
+                       :not([type="submit"])
+                       :not([type="button"])
+                       :not([type="number"]),
+
+.aligned .form-row select {
+    width: var(--admin-field-width) !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+/* Text-like inputs */
+
+.aligned .form-row input:not([type="checkbox"])
+                       :not([type="radio"])
+                       :not([type="file"])
+                       :not([type="submit"])
+                       :not([type="button"])
+                       :not([type="number"]) {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: var(--admin-field-padding-x) !important;
+}
+
+/* Select */
+
+.aligned .form-row select {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: 44px !important;
+}
+
+/* ---------------------------------------------------------
+   Django ForeignKey / related widget
+   select + edit/add/delete/view icons
+   --------------------------------------------------------- */
+
+.aligned .form-row .related-widget-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+.aligned .form-row .related-widget-wrapper > select {
+    flex: 0 1 var(--admin-field-width) !important;
+
+    width: var(--admin-field-width) !important;
+    min-width: 0 !important;
+    max-width: var(--admin-field-width) !important;
+}
+
+/* Keep Django action icons from shrinking */
+
+.aligned .form-row
+.related-widget-wrapper
+> .related-widget-wrapper-link {
+    flex: 0 0 auto;
+}
+
+/* ---------------------------------------------------------
+   Number fields
+   --------------------------------------------------------- */
+
+.aligned .form-row input[type="number"] {
+    width: 140px !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding: 0 var(--admin-field-padding-x) !important;
+
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   Textareas
+   --------------------------------------------------------- */
+
+.aligned .form-row textarea {
+    width: min(100%, 920px) !important;
+    max-width: 100% !important;
+
+    min-height: 180px;
+
+    padding: 16px !important;
+
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* =========================================================
    BUTTONS
    ========================================================= */
 
@@ -820,14 +939,14 @@ input[type="button"]:hover,
    "Додати", "Історія" та інші кнопки у верхній частині сторінки */
 .object-tools a:link,
 .object-tools a:visited {
-    background: var(--admin-button-bg) !important;
+    background-color: var(--admin-button-bg) !important;
     color: var(--admin-white) !important;
 }
 
 .object-tools a:focus,
 .object-tools a:hover,
 .object-tools a:active {
-    background: var(--admin-button-hover) !important;
+    background-color: var(--admin-button-hover) !important;
     color: #fff !important;
 }
 
@@ -2032,4 +2151,102 @@ input[type="checkbox"], input[type="radio"] {
     .selector select option {
         white-space: nowrap;
     }
+}
+
+/* Memories admin — equal field widths */
+
+#id_author_name,
+#id_author_role {
+    width: 520px !important;
+    min-width: 520px !important;
+    max-width: 520px !important;
+    box-sizing: border-box;
+}
+
+#id_category {
+    width: 520px !important;
+    min-width: 520px !important;
+    max-width: 520px !important;
+
+    flex: 0 0 520px !important;
+
+    box-sizing: border-box;
+}
+
+.form-row.field-category .related-widget-wrapper {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    overflow: visible !important;
+}
+
+@media (max-width: 767px) {
+    #id_author_name,
+    #id_author_role,
+    #id_category {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    #id_category {
+        flex: 1 1 100% !important;
+    }
+
+    .form-row.field-category .related-widget-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Memories admin — equal control heights */
+
+body.app-memories.model-memory
+#id_author_name,
+
+body.app-memories.model-memory
+#id_author_role,
+
+body.app-memories.model-memory
+#id_category {
+    height: 58px !important;
+    min-height: 58px !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+body.app-memories.model-memory
+#id_author_name,
+
+body.app-memories.model-memory
+#id_author_role {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+body.app-memories.model-memory
+#id_category {
+    padding-left: 16px !important;
+    padding-right: 44px !important;
+}
+
+.aligned .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="number"]),
+.aligned .form-row select {
+    width: var(--admin-field-width) !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+.aligned .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="number"]) {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: var(--admin-field-padding-x) !important;
 }

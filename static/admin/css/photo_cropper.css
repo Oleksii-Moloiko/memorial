@@ -177,3 +177,20 @@
         width: min(220px, 55%);
     }
 }
+
+/* Photo admin — gallery display fields */
+
+#id_category,
+#id_layout_size {
+    width: 390px !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.form-row.field-category .help,
+.form-row.field-layout_size .help {
+    width: 390px;
+    max-width: 100%;
+    margin-top: 8px;
+    line-height: 1.4;
+}

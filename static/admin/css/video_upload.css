@@ -19,3 +19,19 @@
 .video-upload-status button {
     margin-right: 8px;
 }
+
+/* Video admin — category field */
+
+#id_category {
+    width: 320px !important;
+    height: 45px !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.form-row.field-category .help {
+    width: 320px;
+    max-width: 100%;
+    margin-top: 8px;
+    line-height: 1.4;
+}

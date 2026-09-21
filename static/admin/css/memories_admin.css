@@ -163,6 +163,14 @@
     line-height: 1.6;
 
     border: none;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .memory-card__footer {
