@@ -17,7 +17,8 @@
    MEMORIAL ADMIN THEME
    ========================================================= */
 
-:root {
+:root,
+html[data-theme] {
     --font-family-primary: Inter, "Noto Sans", Arial, sans-serif;
     --admin-ink: #4E635E;
     --admin-ink-dark: #3d4e4a;

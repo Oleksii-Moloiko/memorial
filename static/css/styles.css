@@ -4678,7 +4678,7 @@ body.wireframe .tone-f {
 
   color: #f4f3e7;
 
-  font-family: Inter, "Noto Sans", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  font-family: var(--serif);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.45;

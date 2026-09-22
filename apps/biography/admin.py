@@ -12,6 +12,9 @@ from .models import Biography, TimelineEvent
 class BiographyAdmin(TranslationAdmin):
     """Admin configuration for the memorial biography."""
 
+    class Media:
+        js = ("admin/js/portrait_preview.js",)
+
     list_display = (
         "portrait_preview",
         "full_name",
