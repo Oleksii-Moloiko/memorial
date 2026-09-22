@@ -6254,6 +6254,16 @@ main div {
 .footer-language-switcher button:not(.is-active):hover {
   background: rgba(236, 234, 219, .5);
 }
+.footer-branding {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+.footer-branding > .brand-footer,
+.footer-branding > p,
+.footer-branding > .footer-language-switcher { margin: 0; }
+
 @media (min-width: 961px) {
   .language-switcher__trigger {
     width: 84px;
@@ -6301,15 +6311,6 @@ main div {
   .language-switcher__option.is-active { color: var(--ink); }
   .language-switcher__code { font-size: 9.5px; letter-spacing: .1em; }
   .language-switcher__check { font-size: 11px; }
-  .footer-branding {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
-  .footer-branding > .brand-footer,
-  .footer-branding > p,
-  .footer-branding > .footer-language-switcher { margin: 0; }
   .footer-language-switcher { border-radius: 0; }
   .footer-language-switcher button {
     min-width: 59px;
