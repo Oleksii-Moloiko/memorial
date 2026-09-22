@@ -203,6 +203,20 @@ body {
    CONTENT LANGUAGE SWITCHER
    ========================================================= */
 
+#content label.admin-file-input-control {
+    display: inline-block;
+    float: none;
+    width: var(--admin-field-width, 520px);
+    max-width: 100%;
+    padding: 0;
+    cursor: pointer;
+}
+
+.admin-file-input-control > input[type="file"] {
+    width: 100%;
+    pointer-events: none;
+}
+
 .admin-branding {
     display: flex;
     align-items: center;
