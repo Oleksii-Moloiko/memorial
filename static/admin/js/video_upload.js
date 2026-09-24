@@ -27,10 +27,8 @@
         const MAX_SIZE = 300 * 1024 * 1024;
         const ALLOWED_EXTENSIONS = [".mp4", ".webm", ".mov"];
 
-        const submitButtons = Array.from(
-            form.querySelectorAll(
-                'input[type="submit"], button[type="submit"]'
-            )
+        const submitButtons = Array.from(form.elements).filter(
+            (element) => element.matches('input[type="submit"], button[type="submit"]')
         );
 
         let activeRequest = null;

@@ -1477,13 +1477,13 @@ body.login {
     body {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
+        overflow-x: clip;
     }
 
     #container {
         width: 100%;
         min-width: 0;
-        overflow-x: hidden;
+        overflow-x: clip;
     }
 
     /* Header */
@@ -2264,4 +2264,74 @@ body.app-memories.model-memory
 .aligned .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="number"]) {
     padding-left: var(--admin-field-padding-x) !important;
     padding-right: var(--admin-field-padding-x) !important;
+}
+
+/* Keep language and save controls accessible throughout long admin forms. */
+.admin-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+    background: var(--admin-paper);
+    box-shadow: 0 3px 8px rgb(30 40 35 / 8%);
+}
+
+.admin-sticky-header > nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 10px 32px;
+    border-bottom: 1px solid var(--admin-line);
+}
+
+.admin-sticky-header div.breadcrumbs {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 8px 0;
+    border-bottom: 0;
+}
+
+.admin-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+    max-width: 100%;
+}
+
+.admin-header-actions input[type="submit"] {
+    max-width: 100%;
+    margin: 0;
+    white-space: normal;
+    cursor: pointer;
+}
+
+html {
+    scroll-padding-top: calc(var(--admin-sticky-header-height, 0px) + 16px);
+}
+
+@media (min-width: 768px) {
+    .admin-sticky-header ~ .main #nav-sidebar.memorial-sidebar,
+    .admin-sticky-header ~ .main #toggle-nav-sidebar {
+        top: var(--admin-sticky-header-height);
+        height: calc(100dvh - var(--admin-sticky-header-height));
+    }
+}
+
+@media (max-width: 767px) {
+    .admin-sticky-header > nav {
+        padding: 8px 18px;
+    }
+
+    .admin-header-actions {
+        width: 100%;
+    }
+
+    .admin-header-actions input[type="submit"] {
+        flex: 1 1 auto;
+        padding: 8px 10px !important;
+    }
 }

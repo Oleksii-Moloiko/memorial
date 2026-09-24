@@ -10,15 +10,13 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'admin/css/admin_theme.css' %}?v=NZRQR-9"
+        href="{% static 'admin/css/admin_theme.css' %}?v=NZRQR-63"
     >
 {% endblock %}
 
 {% block extrahead %}
     {{ block.super }}
-
-
-
+    <script src="{% static 'admin/js/sticky_header.js' %}?v=NZRQR-63" defer></script>
     <script
         src="{% static 'admin/js/content_language.js' %}"
         defer
