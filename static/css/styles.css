@@ -1,13 +1,13 @@
 @font-face {
   font-family: "Noto Serif";
-  src: url("../fonts/noto-serif-normal.ttf") format("truetype");
+  src: url("../fonts/noto-serif-normal.woff2") format("woff2");
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
 }
 @font-face {
   font-family: "Noto Serif";
-  src: url("../fonts/noto-serif-italic.ttf") format("truetype");
+  src: url("../fonts/noto-serif-italic.woff2") format("woff2");
   font-style: italic;
   font-weight: 100 900;
   font-display: swap;
@@ -111,37 +111,6 @@ img {
 :focus-visible {
   outline: 3px solid var(--bronze);
   outline-offset: 4px;
-}
-.prototype-toolbar {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 110;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px;
-  background: rgba(245, 241, 232, 0.96);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-}
-.prototype-toolbar > span {
-  padding: 0 8px;
-  color: #5a625d;
-}
-.mode-link,
-.grid-toggle {
-  border: 0;
-  background: transparent;
-  padding: 7px 10px;
-  border-radius: 2px;
-}
-.mode-link.active,
-.grid-toggle[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--paper);
 }
 .site-header {
   height: 82px;
@@ -2130,131 +2099,6 @@ p {
 .toast.is-error::before {
   content: "!";
 }
-.grid-overlay .grid-guide::before {
-  content: "";
-  position: absolute;
-  z-index: 20;
-  pointer-events: none;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to right,
-    rgba(175, 140, 85, 0.13) 0,
-    rgba(175, 140, 85, 0.13) calc((100% - 132px) / 12),
-    transparent calc((100% - 132px) / 12),
-    transparent calc((100% - 132px) / 12 + 12px)
-  );
-}
-body.wireframe {
-  --ink: #111;
-  --paper: #fff;
-  --paper-2: #fff;
-  --stone: #eee;
-  --olive: #111;
-  --bronze: #555;
-  --line: #aaa;
-  background: #fff;
-  color: #111;
-}
-body.wireframe * {
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-body.wireframe .site-header,
-body.wireframe .demo-strip,
-body.wireframe .section-paper,
-body.wireframe .section-stone,
-body.wireframe .section-dark,
-body.wireframe .site-footer {
-  background: #fff !important;
-  color: #111 !important;
-}
-body.wireframe .demo-strip {
-  border-bottom: 1px solid #111;
-}
-body.wireframe .section {
-  border-bottom: 1px dashed #999;
-}
-body.wireframe .media-placeholder {
-  background: #eee !important;
-  border: 2px solid #111 !important;
-}
-body.wireframe .media-placeholder::before,
-body.wireframe .media-placeholder::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to top right,
-      transparent calc(50% - 1px),
-      #999 50%,
-      transparent calc(50% + 1px)
-    ),
-    linear-gradient(
-      to bottom right,
-      transparent calc(50% - 1px),
-      #999 50%,
-      transparent calc(50% + 1px)
-    );
-  z-index: 0;
-  mix-blend-mode: normal;
-}
-body.wireframe .media-placeholder > span {
-  z-index: 2 !important;
-  color: #111 !important;
-  background: #fff;
-  padding: 3px 6px;
-  text-shadow: none !important;
-}
-body.wireframe .button,
-body.wireframe .filter-chip,
-body.wireframe .honour-pill {
-  background: #fff !important;
-  color: #111 !important;
-  border: 1px solid #111 !important;
-}
-body.wireframe .button-primary,
-body.wireframe .button-secondary,
-body.wireframe .filter-chip.active {
-  background: #ddd !important;
-}
-body.wireframe .eyebrow,
-body.wireframe .hero-dates,
-body.wireframe .award-line,
-body.wireframe .split-heading > p,
-body.wireframe .footer-grid p {
-  color: #111 !important;
-}
-body.wireframe .award-line {
-  border-color: #999;
-}
-body.wireframe .memory-card.featured {
-  background: #eee;
-  color: #111;
-}
-body.wireframe .map-placeholder::before {
-  display: none;
-}
-body.wireframe .prototype-toolbar {
-  background: #fff;
-}
-body.wireframe .section-dark .button-ghost {
-  color: #111;
-}
-body.wireframe .play-icon,
-body.wireframe .play-large {
-  border: 1px solid #111;
-  background: #fff;
-}
-body.wireframe .tone-a,
-body.wireframe .tone-b,
-body.wireframe .tone-c,
-body.wireframe .tone-d,
-body.wireframe .tone-e,
-body.wireframe .tone-f {
-  background: #eee !important;
-}
-
 .awards-list {
   border-top: 1px solid var(--line);
 }
@@ -2854,16 +2698,6 @@ body.wireframe .tone-f {
   .narrow {
     width: calc(100% - 40px);
   }
-  .prototype-toolbar {
-    right: 10px;
-    bottom: 10px;
-  }
-  .prototype-toolbar > span {
-    display: none;
-  }
-  .grid-toggle {
-    display: none;
-  }
   .demo-strip {
     font-size: 11px;
   }
@@ -3301,7 +3135,6 @@ body.wireframe .tone-f {
   }
 }
 @media print {
-  .prototype-toolbar,
   .nav-toggle {
     display: none !important;
   }
@@ -7066,4 +6899,18 @@ body.app-memories.model-memory
         min-width: 0 !important;
         max-width: 100% !important;
     }
+}
+
+
+.memories-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+.memories-pagination [aria-current="page"] {
+  background: var(--ink);
+  color: var(--paper);
 }

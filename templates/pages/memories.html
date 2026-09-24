@@ -4,7 +4,11 @@
 {% block page_key %}memories{% endblock %}
 
 {% block title %}
-  {{ site_settings.memories_title }} — {{ site_settings.site_title }}
+  {% if seo_title %}
+    {{ seo_title }}
+  {% else %}
+    {{ site_settings.memories_title }} — {{ site_settings.site_title }}
+  {% endif %}
 {% endblock %}
 
 {% block extra_head %}
@@ -43,18 +47,19 @@
         aria-label="{% translate "Фільтр спогадів за категорією" %}"
       >
         {% for category in memory_categories %}
-          <button
+          <a
             class="filter-chip"
-            type="button"
+            href="{{ category.filter_url }}"
             data-memory-filter="{{ category.id }}"
-            aria-pressed="false"
+            role="button"
+            aria-pressed="{{ category.selected|yesno:'true,false' }}"
           >
             {{ category.name }}
 
             <span class="filter-chip__n">
               {{ category.memories_count }}
             </span>
-          </button>
+          </a>
         {% endfor %}
       </div>
     {% endif %}
@@ -112,6 +117,27 @@
         </div>
       {% endfor %}
     </div><!-- memories-grid -->
+
+    {% if page_obj.has_other_pages %}
+      <nav class="memories-pagination" aria-label="{% translate 'Сторінки спогадів' %}">
+        {% if page_obj.has_previous %}
+          <a class="filter-chip" rel="prev" href="{% querystring page=page_obj.previous_page_number %}">{% translate 'Попередня' %}</a>
+        {% endif %}
+        {% for link in page_links %}
+          {% if link.ellipsis %}
+            <span aria-hidden="true">…</span>
+          {% elif link.number == page_obj.number %}
+            <span class="filter-chip" aria-current="page">{{ link.number }}</span>
+          {% else %}
+            <a class="filter-chip" href="{% querystring page=link.number %}">{{ link.number }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <a class="filter-chip" rel="next" href="{% querystring page=page_obj.next_page_number %}">{% translate 'Наступна' %}</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+
 
     <div class="memories-progress">
       <span class="memories-progress__bar">

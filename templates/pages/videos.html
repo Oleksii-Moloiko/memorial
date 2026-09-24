@@ -4,7 +4,11 @@
 {% block page_key %}videos{% endblock %}
 
 {% block title %}
-  {{ site_settings.videos_title }} — {{ site_settings.site_title }}
+  {% if seo_title %}
+    {{ seo_title }}
+  {% else %}
+    {{ site_settings.videos_title }} — {{ site_settings.site_title }}
+  {% endif %}
 {% endblock %}
 
 {% block content %}

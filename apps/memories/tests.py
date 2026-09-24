@@ -229,6 +229,127 @@ class MemoriesPageTests(TestCase):
             "Дякуємо. Ваш спогад надіслано на модерацію.",
         )
 
+    def test_memories_are_paginated_by_twelve(self):
+        for index in range(13):
+            Memory.objects.create(
+                author_name=f"Автор {index}",
+                text=f"Опублікований спогад номер {index}.",
+                status=Memory.Status.APPROVED,
+            )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(
+            len(response.context["memories"]),
+            12,
+        )
+
+        self.assertTrue(
+            response.context["page_obj"].has_next()
+        )
+
+    def test_second_page_contains_remaining_memories(self):
+        for index in range(13):
+            Memory.objects.create(
+                author_name=f"Автор {index}",
+                text=f"Опублікований спогад номер {index}.",
+                status=Memory.Status.APPROVED,
+            )
+
+        response = self.client.get(
+            self.url,
+            {"page": 2},
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200,
+        )
+
+        self.assertEqual(
+            len(response.context["memories"]),
+            1,
+        )
+
+        self.assertEqual(
+            response.context["page_obj"].number,
+            2,
+        )
+
+    def test_memories_page_orders_newest_first(self):
+        older = Memory.objects.create(
+            author_name="Старіший",
+            text="Старіший опублікований спогад.",
+            status=Memory.Status.APPROVED,
+        )
+
+        newer = Memory.objects.create(
+            author_name="Новіший",
+            text="Новіший опублікований спогад.",
+            status=Memory.Status.APPROVED,
+        )
+
+        response = self.client.get(self.url)
+
+        memories = list(
+            response.context["memories"]
+        )
+
+        self.assertEqual(
+            memories[:2],
+            [newer, older],
+        )
+
+class MemoryPaginationTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.category = MemoryCategory.objects.create(name="Друзі")
+        Memory.objects.bulk_create([
+            Memory(author_name=f"Автор {index}", text="Світлий спогад. " * 80,
+                   status=Memory.Status.APPROVED,
+                   category=cls.category if index < 13 else None)
+            for index in range(300)
+        ])
+        Memory.objects.create(author_name="Прихований", text="Неопублікований спогад.")
+
+    def test_three_hundred_memories_are_bounded_and_navigable(self):
+        response = self.client.get(reverse("pages:memories"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["page_obj"].paginator.count, 300)
+        self.assertEqual(len(response.context["memories"]), 12)
+        self.assertLessEqual(len(response.content), 150_000)
+        self.assertContains(response, 'rel="next" href="?page=2"')
+        self.assertNotContains(response, "Прихований")
+        last = self.client.get(reverse("pages:memories"), {"page": 25})
+        self.assertEqual(len(last.context["memories"]), 12)
+        self.assertNotContains(last, 'rel="next"')
+        self.assertTrue(last.context["page_obj"].has_previous())
+
+    def test_filters_apply_before_pagination_and_survive_navigation(self):
+        url = reverse("pages:memories")
+        response = self.client.get(url, {"category": self.category.pk})
+        self.assertEqual(response.context["page_obj"].paginator.count, 13)
+        self.assertContains(response, f'?category={self.category.pk}&amp;page=2')
+        second = self.client.get(url, {"category": self.category.pk, "page": 2})
+        self.assertEqual(len(second.context["memories"]), 1)
+        self.assertEqual(second.context["memories"][0].category_id, self.category.pk)
+
+    def test_invalid_and_out_of_range_pages(self):
+        for value, expected in [("bad", 1), ("0", 25), ("999", 25)]:
+            with self.subTest(value=value):
+                response = self.client.get(reverse("pages:memories"), {"page": value})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.context["page_obj"].number, expected)
+
+    def test_empty_page_and_english_navigation(self):
+        response = self.client.get("/en/memories/")
+        self.assertContains(response, "Memory pages")
+        self.assertContains(response, "Next")
+        Memory.objects.all().delete()
+        response = self.client.get(reverse("pages:memories"))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'class="memories-pagination"')
+
 
 class MemoryAdminStatusTests(TestCase):
     def setUp(self):

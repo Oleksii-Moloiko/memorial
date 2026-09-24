@@ -4,7 +4,9 @@
 {% block page_key %}life{% endblock %}
  
 {% block title %}
-  {% if biography %}
+  {% if seo_title %}
+    {{ seo_title }}
+  {% elif biography %}
     {{ site_settings.life_title }} — {{ biography.full_name }}
   {% else %}
     {{ site_settings.life_title }} — {{ life_page.page_title_fallback }}

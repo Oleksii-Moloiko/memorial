@@ -68,23 +68,6 @@
         {% translate "Перейти до основного вмісту" %}
     </a>
 
-    {% if debug and site_settings.demo_strip_enabled|default:True %}
-        <div class="prototype-toolbar" aria-label="Режим перегляду прототипу">
-            <span>Прототип</span>
-            <a class="mode-link mode-design" href="?view=design">Дизайн</a>
-            <a class="mode-link mode-wireframe" href="?view=wireframe">
-                Wireframe
-            </a>
-            <button
-                class="grid-toggle"
-                type="button"
-                aria-pressed="false"
-            >
-                Сітка
-            </button>
-        </div>
-    {% endif %}
-
     {% include "includes/header.html" %}
 
     {% if site_settings.demo_strip_enabled %}

@@ -30,6 +30,11 @@ RUN SECRET_KEY=build-only \
     DB_NAME=build \
     DB_USER=build \
     DB_PASSWORD=build \
+    R2_ACCESS_KEY_ID=build-only \
+    R2_SECRET_ACCESS_KEY=build-only \
+    R2_BUCKET_NAME=build \
+    R2_ENDPOINT_URL=https://build.invalid \
+    R2_PUBLIC_HOST=build.invalid \
     .venv/bin/python manage.py compilemessages -l uk
 
 EXPOSE 8000

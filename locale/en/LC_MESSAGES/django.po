@@ -196,3 +196,20 @@ msgstr "Filter memories by category"
 
 msgid "Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше»."
 msgstr "Long memories are shortened in the feed. Select “Read more” to read the full text."
+
+msgid "Сторінку не знайдено"
+msgstr "Page not found"
+
+msgid "Схоже, такої сторінки не існує або її адресу було змінено."
+msgstr "It looks like this page does not exist or its address has changed."
+
+msgid "Повернутися на головну"
+msgstr "Return to home"
+msgid "Сторінки спогадів"
+msgstr "Memory pages"
+
+msgid "Попередня"
+msgstr "Previous"
+
+msgid "Наступна"
+msgstr "Next"

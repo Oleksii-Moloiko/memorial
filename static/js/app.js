@@ -1,47 +1,4 @@
 (() => {
-  const qs = new URLSearchParams(location.search);
-  const mode =
-    qs.get("view") === "wireframe"
-      ? "wireframe"
-      : "design";
-
-  document.body.classList.toggle(
-    "wireframe",
-    mode === "wireframe"
-  );
-
-  document
-    .querySelector(`.mode-${mode}`)
-    ?.classList.add("active");
-
-  const navigationBase =
-    location.protocol === "about:"
-      ? "https://prototype.local/"
-      : location.href;
-
-  document
-    .querySelectorAll("[data-preserve-query]")
-    .forEach((link) => {
-      const href = link.getAttribute("href");
-
-      if (
-        !href ||
-        href.startsWith("#") ||
-        href.startsWith("http")
-      ) {
-        return;
-      }
-
-      const url = new URL(href, navigationBase);
-
-      url.searchParams.set("view", mode);
-
-      link.setAttribute(
-        "href",
-        url.pathname.split("/").pop() + url.search
-      );
-    });
-
   /*
  * Mobile navigation
  */
@@ -164,34 +121,6 @@
     });
   });
 
-  /*
-   * Grid overlay
-   */
-
-  const gridToggle =
-    document.querySelector(".grid-toggle");
-
-  gridToggle?.addEventListener("click", () => {
-    const active =
-      document.body.classList.toggle("grid-overlay");
-
-    gridToggle.setAttribute(
-      "aria-pressed",
-      String(active)
-    );
-  });
-
-  /*
-   * Current year
-   */
-
-  document
-    .querySelectorAll("[data-year]")
-    .forEach((element) => {
-      element.textContent =
-        new Date().getFullYear();
-    });
-
 /*
  * Toast messages
  */
@@ -245,40 +174,6 @@
       toast.classList.remove("show");
     }, 5000);
   };
-
-  document
-    .querySelectorAll(".demo-action")
-    .forEach((element) => {
-      element.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        showToast(
-          "Демонстраційна дія: додайте перевірене посилання або файл."
-        );
-      });
-    });
-
-  /*
-   * Legacy demo form
-   *
-   * Працює лише для елементів із класом .demo-form.
-   * Реальна форма спогадів не повинна мати цей клас.
-   */
-
-  const demoForm =
-    document.querySelector(".demo-form");
-
-  demoForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    showToast(
-      "Демо: повідомлення передано б на ручну модерацію."
-    );
-
-    demoForm.reset();
-
-
-  });
 
   /*
  * Life biography sidebar
@@ -1760,7 +1655,7 @@ galleryDialog?.addEventListener(
   );
 
   const filters = Array.from(
-    document.querySelectorAll("[data-memory-filter]")
+    document.querySelectorAll("button[data-memory-filter]")
   );
 
   if (!grid || !filters.length) {

@@ -1,6 +1,8 @@
 import logging
+from urllib.parse import urlencode
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Q
 from django.http import JsonResponse
@@ -272,32 +274,36 @@ def memories(request):
         Memory.objects
         .filter(status=Memory.Status.APPROVED)
         .select_related("category")
+        .order_by("-created_at", "-id")
     )
 
-    featured_memory = memories_queryset.filter(
-        featured=True,
-    ).first()
+    selected_categories = sorted({
+        int(value) for value in request.GET.get("category", "").split(",")
+        if value.isascii() and value.isdigit() and len(value) <= 10
+    })
+    selected_categories = list(MemoryCategory.objects.filter(
+        pk__in=selected_categories, is_active=True,
+    ).values_list("pk", flat=True))
+    if selected_categories:
+        memories_queryset = memories_queryset.filter(category_id__in=selected_categories)
 
-    regular_memories = list(
-        memories_queryset.filter(
-            featured=False,
+    paginator = Paginator(
+        memories_queryset,
+        12,
+    )
+
+    page_obj = paginator.get_page(
+        request.GET.get("page")
+    )
+
+    for memory in page_obj.object_list:
+        memory.is_long = (
+                len(memory.text)
+                > MEMORY_TEASER_LIMIT
         )
-    )
-
-    if featured_memory and regular_memories:
-        memories_list = [
-            regular_memories[0],
-            featured_memory,
-            *regular_memories[1:],
-        ]
-    elif featured_memory:
-        memories_list = [featured_memory]
-    else:
-        memories_list = regular_memories
-
-    for memory in memories_list:
-        memory.is_long = len(memory.text) > MEMORY_TEASER_LIMIT
-        memory.teaser = make_memory_teaser(memory.text)
+        memory.teaser = make_memory_teaser(
+            memory.text
+        )
 
     memory_categories = (
         MemoryCategory.objects
@@ -314,8 +320,22 @@ def memories(request):
         .order_by("sort_order", "id")
     )
 
+    for category in memory_categories:
+        category.selected = category.pk in selected_categories
+        toggled = set(selected_categories) ^ {category.pk}
+        category.filter_url = "?" + urlencode({"category": ",".join(map(str, sorted(toggled)))})
+
+    page_links = []
+    for number in paginator.get_elided_page_range(page_obj.number, on_each_side=1):
+        page_links.append({
+            "number": number,
+            "ellipsis": number == paginator.ELLIPSIS,
+        })
+
     context = {
-        "memories": memories_list,
+        "page_links": page_links,
+        "memories": page_obj.object_list,
+        "page_obj": page_obj,
         "memory_categories": memory_categories,
         "form": form,
         **_seo_context("memories"),
@@ -330,3 +350,10 @@ def memories(request):
 
 def styleguide(request):
     return render(request, "pages/styleguide.html", {})
+
+def custom_404(request, exception):
+    return render(
+        request,
+        "404.html",
+        status=404,
+    )
