@@ -2640,6 +2640,9 @@ p {
     grid-row: auto;
     justify-self: start;
   }
+  .biography-grid {
+    gap: 40px;
+  }
   .biography-aside {
     position: static;
     display: grid;
