@@ -1,9 +1,14 @@
 from datetime import date
 
-from django.test import TestCase
+from django.contrib import admin
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
+from apps.biography.admin import BiographyAdmin
+from apps.biography.models import Biography
+
 from .models import Biography, TimelineEvent
+from .admin import BiographyAdmin, TimelineEventAdmin
 
 
 class BiographyModelTests(TestCase):
@@ -18,7 +23,11 @@ class BiographyModelTests(TestCase):
         )
 
     def test_timeline_event_string_representation(self):
+        biography = Biography.objects.create(
+            full_name="Олександр Мельник",
+        )
         event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="1994",
             title="Народився",
             order=10,
@@ -30,13 +39,18 @@ class BiographyModelTests(TestCase):
         )
 
     def test_timeline_events_are_ordered(self):
+        biography = Biography.objects.create(
+            full_name="Олександр Мельник",
+        )
         second_event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="2010",
             title="Друга подія",
             order=20,
         )
 
         first_event = TimelineEvent.objects.create(
+            biography=biography,
             date_label="2000",
             title="Перша подія",
             order=10,
@@ -95,6 +109,7 @@ class LifePageTests(TestCase):
 
     def test_life_page_displays_timeline(self):
         event = TimelineEvent.objects.create(
+            biography=self.biography,
             date_label="2001–2011",
             title="Навчання у школі",
             description="Підтверджений опис події.",
@@ -124,4 +139,117 @@ class LifePageTests(TestCase):
         self.assertContains(
             response,
             "Хронологія ще наповнюється",
+        )
+
+class BiographyAdminRedirectTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_biography_change_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+        biography = Biography(
+            full_name="Тест",
+        )
+
+        response = model_admin.response_change(
+            request,
+            biography,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
+        )
+
+    def test_biography_add_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+        biography = Biography(
+            full_name="Тест",
+        )
+
+        response = model_admin.response_add(
+            request,
+            biography,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
+        )
+
+    def test_timeline_change_returns_to_life_page(self):
+        request = self.factory.post("/admin/")
+
+        model_admin = TimelineEventAdmin(
+            TimelineEvent,
+            admin.site,
+        )
+
+        event = TimelineEvent(
+            date_label="2000",
+            title="Подія",
+        )
+
+        response = model_admin.response_change(
+            request,
+            event,
+        )
+
+        self.assertEqual(
+            response.url,
+            reverse("admin:pages_lifepage_changelist"),
+        )
+
+class BiographyAdminReturnToTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.model_admin = BiographyAdmin(
+            Biography,
+            admin.site,
+        )
+
+    def test_response_change_returns_to_home(self):
+        request = self.factory.post(
+            "/admin/biography/biography/1/change/?return_to=home",
+            data={},
+        )
+
+        response = self.model_admin.response_change(
+            request,
+            object(),
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:pages_homepage_changelist"),
+            fetch_redirect_response=False,
+        )
+
+    def test_response_change_returns_to_life(self):
+        request = self.factory.post(
+            "/admin/biography/biography/1/change/?return_to=life",
+            data={},
+        )
+
+        response = self.model_admin.response_change(
+            request,
+            object(),
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:pages_lifepage_changelist"),
+            fetch_redirect_response=False,
         )

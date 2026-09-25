@@ -1,0 +1,77 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block dark-mode-vars %}
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/dark_mode.css' %}"
+    >
+    <script src="{% static 'admin/js/theme_toggle.js' %}?v=NZRQR-57"></script>
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+{% endblock %}
+
+{% block responsive %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/admin_theme.css' %}?v=NZRQR-63"
+    >
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script src="{% static 'admin/js/sticky_header.js' %}?v=NZRQR-63" defer></script>
+    <script
+        src="{% static 'admin/js/content_language.js' %}"
+        defer
+    ></script>
+    <script
+        src="{% static 'admin/js/file_input_tooltips.js' %}?v=NZRQR-53-2"
+        defer
+    ></script>
+{% endblock %}
+
+{% block branding %}
+    <div class="admin-branding">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">
+                Керування меморіальним сайтом
+            </a>
+        </h1>
+
+        {% block content_language_switcher %}
+        <div
+            class="admin-language-switcher"
+            data-admin-language-switcher
+        >
+            <span class="admin-language-switcher__label">
+                Мова контенту
+            </span>
+
+            <div
+                class="admin-language-switcher__options"
+                role="group"
+                aria-label="Мова редагованого контенту"
+            >
+                <button
+                    type="button"
+                    data-admin-content-language="uk"
+                >
+                    UA
+                </button>
+
+                <button
+                    type="button"
+                    data-admin-content-language="en"
+                >
+                    EN
+                </button>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+{% endblock %}

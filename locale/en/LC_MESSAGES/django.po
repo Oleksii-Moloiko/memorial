@@ -1,0 +1,215 @@
+# English interface translations for Memorial.
+msgid ""
+msgstr "Language: en\nContent-Type: text/plain; charset=UTF-8\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Інтерв’ю"
+msgstr "Interviews"
+
+msgid "Інше"
+msgstr "Other"
+
+msgid "Ваш браузер не підтримує відео."
+msgstr "Your browser does not support video."
+
+msgid "Вшанування"
+msgstr "Remembrance"
+
+msgid "Відкрити джерело:"
+msgstr "Open source:"
+
+msgid "Відкрити меню"
+msgstr "Open menu"
+
+msgid "Відкрити фото:"
+msgstr "Open photo:"
+
+msgid "Відтворити відео"
+msgstr "Play video"
+
+msgid "Головна навігація"
+msgstr "Main navigation"
+
+msgid "Дата запису"
+msgstr "Recording date"
+
+msgid "Дата не вказана"
+msgstr "Date not specified"
+
+msgid "Дата указу"
+msgstr "Decree date"
+
+msgid "Джерело"
+msgstr "Source"
+
+msgid "Дивитись більше"
+msgstr "Read more"
+
+msgid "Дивитися відео"
+msgstr "Watch video"
+
+msgid "Закрити фото"
+msgstr "Close photo"
+
+msgid "Згорнути"
+msgstr "Show less"
+
+msgid "Категорія"
+msgstr "Category"
+
+msgid "Матеріали ЗМІ"
+msgstr "Media coverage"
+
+msgid "Матеріали та джерела"
+msgstr "Publications and sources"
+
+msgid "Матеріалів поки немає"
+msgstr "No publications yet"
+
+msgid "Місце для головного портрета"
+msgstr "Main portrait placeholder"
+
+msgid "На головну"
+msgstr "Home"
+
+msgid "На сторінці"
+msgstr "On this page"
+
+msgid "Навчання"
+msgstr "Education"
+
+msgid "Навігація в підвалі"
+msgstr "Footer navigation"
+
+msgid "Нагороди"
+msgstr "Awards"
+
+msgid "Нагороди та відзнаки"
+msgstr "Awards and honours"
+
+msgid "Наступне фото"
+msgstr "Next photo"
+
+msgid "Номер"
+msgstr "Number"
+
+msgid "Офіційно узгоджений розділ"
+msgstr "Officially approved section"
+
+msgid "ПАМ’ЯТЬ"
+msgstr "REMEMBRANCE"
+
+msgid "Перейти до наступного розділу"
+msgstr "Go to the next section"
+
+msgid "Перейти до основного вмісту"
+msgstr "Skip to main content"
+
+msgid "Перейти до цитат"
+msgstr "Go to quotes"
+
+msgid "Подвиг і служба"
+msgstr "Service and heroism"
+
+msgid "Попереднє фото"
+msgstr "Previous photo"
+
+msgid "Портрет"
+msgstr "Portrait of"
+
+msgid "Посилання"
+msgstr "Sources"
+
+msgid "Родина Назара Боровицького"
+msgstr "The family of Nazar Borovytskyi"
+
+msgid "Слова, що залишилися"
+msgstr "Words that remain"
+
+msgid "Служба"
+msgstr "Service"
+
+msgid "Служба та побратими"
+msgstr "Service and comrades"
+
+msgid "Сторінка розроблена в світлу пам*ять Назара Боровицького"
+msgstr "Created in loving memory of Nazar Borovytskyi"
+
+msgid "Сімейний архів"
+msgstr "Family archive"
+
+msgid "Сім’я та дитинство"
+msgstr "Family and childhood"
+
+msgid "Тривалість"
+msgstr "Duration"
+
+msgid "Усі фото"
+msgstr "All photos"
+
+msgid "Фільтр категорій фото"
+msgstr "Photo category filter"
+
+msgid "Цитати"
+msgstr "Quotes"
+
+msgid "без підпису"
+msgstr "Untitled"
+
+msgid "джерел"
+msgstr "sources"
+
+msgid "Досягнуто ліміт в 15 000 символів. Надішліть цей спогад, а продовження — ще однією формою."
+msgstr "You have reached the 15,000-character limit. Submit this memory and use another form to continue."
+
+msgid "Погоджуюся на публікацію після перевірки модератором."
+msgstr "I agree to publication after moderator review."
+
+msgid "Ім’я або підпис"
+msgstr "Name or signature"
+
+msgid "Ким ви були знайомі"
+msgstr "Your relationship"
+
+msgid "Текст спогаду"
+msgstr "Your memory"
+
+msgid "Наприклад: Іван або позивний «Сокіл»"
+msgstr "For example: Ivan or the call sign “Falcon”"
+
+msgid "Напишіть спогад"
+msgstr "Write your memory"
+
+msgid "Оберіть варіант"
+msgstr "Choose an option"
+
+msgid "Не вдалося надіслати форму."
+msgstr "The form could not be submitted."
+
+msgid "Спогад має містити щонайменше 10 символів."
+msgstr "Your memory must contain at least 10 characters."
+
+msgid "Вкажіть ім’я або підпис щонайменше з двох символів."
+msgstr "Enter a name or signature with at least two characters."
+
+msgid "Фільтр спогадів за категорією"
+msgstr "Filter memories by category"
+
+msgid "Довгі спогади у стрічці показуються скорочено — повний текст відкривається кнопкою «Дивитись більше»."
+msgstr "Long memories are shortened in the feed. Select “Read more” to read the full text."
+
+msgid "Сторінку не знайдено"
+msgstr "Page not found"
+
+msgid "Схоже, такої сторінки не існує або її адресу було змінено."
+msgstr "It looks like this page does not exist or its address has changed."
+
+msgid "Повернутися на головну"
+msgstr "Return to home"
+msgid "Сторінки спогадів"
+msgstr "Memory pages"
+
+msgid "Попередня"
+msgstr "Previous"
+
+msgid "Наступна"
+msgstr "Next"

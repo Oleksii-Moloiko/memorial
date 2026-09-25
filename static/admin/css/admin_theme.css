@@ -1,0 +1,2337 @@
+@font-face {
+    font-family: Inter;
+    src: url("../../fonts/inter-normal.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+@font-face {
+    font-family: Inter;
+    src: url("../../fonts/inter-italic.ttf") format("truetype");
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+/* =========================================================
+   MEMORIAL ADMIN THEME
+   ========================================================= */
+
+:root,
+html[data-theme] {
+    --font-family-primary: Inter, "Noto Sans", Arial, sans-serif;
+    --admin-ink: #4E635E;
+    --admin-ink-dark: #3d4e4a;
+    --admin-paper: #E2E0C8;
+    --admin-paper-light: #eceadb;
+    --admin-stone: #A6B49E;
+    --admin-olive: #6f786b;
+    --admin-bronze: #818C78;
+    --admin-line: rgba(78, 99, 94, .18);
+    --admin-white: #f8f7ef;
+    --admin-button-bg: #4e635e;
+    --admin-button-hover: #354a44;
+    /* Form controls */
+    --admin-control-bg: #f7f5e9;
+    --admin-control-text: #3d4e4a;
+    --admin-control-muted: #6f786b;
+    --admin-control-border: rgba(78, 99, 94, .28);
+    --admin-control-disabled-bg: #e8e6d8;
+}
+
+
+/* Map Django's components to the same palette, in every theme mode. */
+:root, html[data-theme="light"], html[data-theme="dark"] {
+    --primary: var(--admin-button-bg);
+    --primary-fg: var(--admin-white);
+    --secondary: var(--admin-button-bg);
+    --body-fg: var(--admin-ink);
+    --body-bg: var(--admin-paper);
+    --body-quiet-color: var(--admin-olive);
+    --body-medium-color: var(--admin-ink);
+    --body-loud-color: var(--admin-ink-dark);
+    --header-bg: var(--admin-button-bg);
+    --header-color: var(--admin-white);
+    --header-link-color: var(--admin-white);
+    --link-fg: var(--admin-ink);
+    --link-hover-color: var(--admin-ink-dark);
+    --link-selected-fg: var(--admin-ink-dark);
+    --hairline-color: var(--admin-line);
+    --border-color: var(--admin-control-border);
+    --darkened-bg: var(--admin-paper-light);
+    --selected-bg: var(--admin-control-disabled-bg);
+    --selected-row: var(--admin-control-disabled-bg);
+    --button-fg: var(--admin-white);
+    --button-bg: var(--admin-button-bg);
+    --button-hover-bg: var(--admin-button-hover);
+    --default-button-bg: var(--admin-button-bg);
+    --default-button-hover-bg: var(--admin-button-hover);
+    --object-tools-fg: var(--admin-white);
+    --object-tools-bg: var(--admin-button-bg);
+    --object-tools-hover-bg: var(--admin-button-hover);
+    color-scheme: light;
+}
+
+html[data-theme="dark"] {
+    --admin-ink: #d6dfd3;
+    --admin-ink-dark: #f1f2e6;
+    --admin-paper: #1d2724;
+    --admin-paper-light: #28342f;
+    --admin-stone: #9eae97;
+    --admin-olive: #b4c0ad;
+    --admin-bronze: #a6b49e;
+    --admin-line: rgba(200, 218, 192, .2);
+    --admin-control-bg: #202d27;
+    --admin-control-text: #eef1e5;
+    --admin-control-muted: #b4c0ad;
+    --admin-control-border: #71816e;
+    --admin-control-disabled-bg: #354239;
+    color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"], html:not([data-theme]) {
+    --admin-ink: #d6dfd3;
+    --admin-ink-dark: #f1f2e6;
+    --admin-paper: #1d2724;
+    --admin-paper-light: #28342f;
+    --admin-stone: #9eae97;
+    --admin-olive: #b4c0ad;
+    --admin-bronze: #a6b49e;
+    --admin-line: rgba(200, 218, 192, .2);
+    --admin-control-bg: #202d27;
+    --admin-control-text: #eef1e5;
+    --admin-control-muted: #b4c0ad;
+    --admin-control-border: #71816e;
+    --admin-control-disabled-bg: #354239;
+    color-scheme: dark;
+    }
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+html,
+body {
+    font-family: var(--font-family-primary);
+    background: var(--admin-paper) !important;
+}
+
+body {
+    color: var(--admin-ink) !important;
+    font-family: var(--font-family-primary) !important;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+#header {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 0 32px;
+
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+#branding h1,
+#branding h1 a {
+    color: var(--admin-white) !important;
+
+    font-family: var(--font-family-primary);
+
+    font-size: 20px;
+    font-weight: 500;
+
+    letter-spacing: -.02em;
+}
+
+#branding h1 {
+    margin: 0;
+}
+
+#branding {
+    min-width: 0;
+}
+
+#branding h1,
+#branding h1 a {
+    min-width: 0;
+}
+
+#branding h1 a {
+    overflow-wrap: anywhere;
+}
+
+/* user links */
+
+#user-tools {
+    color: rgba(226, 224, 200, .75) !important;
+
+    flex-shrink: 0;
+
+    font-size: 12px;
+    letter-spacing: .02em;
+}
+
+#user-tools a {
+    color: var(--admin-white) !important;
+
+    text-decoration: none;
+
+    border-bottom: 1px solid transparent;
+
+    transition: border-color .2s ease;
+}
+
+#user-tools a:hover {
+    color: white !important;
+    border-bottom-color: var(--admin-white);
+}
+
+
+/* =========================================================
+   CONTENT LANGUAGE SWITCHER
+   ========================================================= */
+
+#content label.admin-file-input-control {
+    display: inline-block;
+    float: none;
+    width: var(--admin-field-width, 520px);
+    max-width: 100%;
+    padding: 0;
+    cursor: pointer;
+}
+
+.admin-file-input-control > input[type="file"] {
+    width: 100%;
+    pointer-events: none;
+}
+
+.admin-branding {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    min-width: 0;
+}
+
+.admin-language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding-left: 20px;
+
+    border-left: 1px solid rgba(226, 224, 200, .25);
+}
+
+.admin-language-switcher__label {
+    color: rgba(226, 224, 200, .7);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.admin-language-switcher__options {
+    display: inline-flex;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(226, 224, 200, .5);
+    border-radius: 4px;
+}
+
+.admin-language-switcher__options button {
+    min-width: 44px;
+    height: 32px;
+
+    padding: 0 12px;
+
+    border: 0;
+    border-right: 1px solid rgba(226, 224, 200, .35);
+
+    background: transparent;
+    color: var(--admin-white);
+
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+
+    cursor: pointer;
+}
+
+.admin-language-switcher__options button:last-child {
+    border-right: 0;
+}
+
+.admin-language-switcher__options button:hover {
+    background: rgba(226, 224, 200, .1);
+}
+
+.admin-language-switcher__options button.is-active {
+    background: var(--admin-white);
+    color: #354a44;
+}
+
+@media (max-width: 767px) {
+    .admin-branding {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .admin-language-switcher {
+        padding-left: 0;
+
+        border-left: 0;
+    }
+
+    .admin-language-switcher__label {
+        display: none;
+    }
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+#content {
+    max-width: 1280px;
+
+    margin: 0 auto;
+
+    padding: 40px 42px 70px;
+}
+
+#content h1 {
+    color: var(--admin-ink-dark);
+
+    font-family: var(--font-family-primary);
+
+    font-size: 36px;
+    font-weight: 500;
+
+    letter-spacing: -.025em;
+
+    margin-bottom: 32px;
+}
+
+#content > h1 {
+    min-width: 0;
+    max-width: 100%;
+
+    overflow-wrap: anywhere;
+}
+
+.object-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    max-width: 100%;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
+.object-tools li {
+    float: none;
+    margin: 0;
+}
+
+.object-tools a {
+    display: block;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    white-space: normal;
+    text-align: center;
+}
+
+/* =========================================================
+   BREADCRUMBS
+   ========================================================= */
+
+div.breadcrumbs {
+    background: transparent !important;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    overflow-wrap: anywhere;
+
+    color: var(--admin-olive) !important;
+
+    padding: 18px 42px;
+
+    border-bottom: 1px solid var(--admin-line);
+
+    font-size: 12px;
+}
+
+div.breadcrumbs a {
+    color: var(--admin-ink) !important;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+    color: var(--admin-ink) !important;
+}
+
+a:hover {
+    color: var(--admin-ink-dark) !important;
+}
+/* =========================================================
+   DJANGO CALENDAR / CLOCK
+   ========================================================= */
+
+/* Normal calendar dates */
+.calendar td a,
+.timelist a {
+    color: var(--body-quiet-color) !important;
+}
+
+/* Selected date */
+.calendar td.selected a {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+/* Hover / focus / active states */
+.calendar td a:hover,
+.calendar td a:focus,
+.calendar td a:active,
+.timelist a:hover,
+.timelist a:focus,
+.timelist a:active {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+/* Calendar footer links */
+.calendar-shortcuts a {
+    color: var(--admin-ink) !important;
+}
+
+.calendar-shortcuts a:hover,
+.calendar-shortcuts a:focus {
+    color: var(--admin-ink-dark) !important;
+}
+
+/* Cancel button must stay readable on dark background */
+.calendar-cancel a,
+.calendar-cancel a:hover,
+.calendar-cancel a:focus {
+    color: var(--admin-white) !important;
+}
+/* =========================================================
+   MODULES / CARDS
+   ========================================================= */
+
+.module {
+    background: var(--admin-paper-light) !important;
+
+    border: 1px solid var(--admin-line) !important;
+
+    border-radius: 10px !important;
+
+    box-shadow: 0 8px 30px rgba(30, 40, 35, .05) !important;
+
+    overflow: hidden;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: var(--admin-button-bg) !important;
+
+    color: var(--admin-white) !important;
+
+    font-size: 12px !important;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+}
+.inline-group,
+.inline-related,
+.tabular,
+.tabular fieldset,
+.tabular .module {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.tabular {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabular table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+.tabular td,
+.tabular th {
+    box-sizing: border-box;
+}
+.inline-related input:not([type="checkbox"]):not([type="radio"]),
+.inline-related textarea,
+.inline-related select {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.inline-related .form-row {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.inline-related .form-row > div {
+    width: 100%;
+    min-width: 0;
+}
+.inline-related input[type="text"],
+.inline-related input[type="url"],
+.inline-related input[type="number"],
+.inline-related textarea,
+.inline-related select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.inline-related h3 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.inline-related h3 > * {
+    min-width: 0;
+}
+
+@media (max-width: 767px) {
+    .inline-group {
+        width: 100%;
+        overflow: hidden;
+    }
+    .inline-related {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .inline-related h3 {
+        display: grid;
+
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+
+        column-gap: 8px;
+
+        width: 100%;
+        min-width: 0;
+
+        box-sizing: border-box;
+    }
+    .inline-related h3 > b {
+        grid-column: 1;
+
+        min-width: 0;
+
+        white-space: nowrap;
+    }
+
+    .inline-related h3 .inline_label {
+        grid-column: 2;
+
+        min-width: 0;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .inline-related h3 span.delete {
+        grid-column: 3;
+
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        margin: 0 !important;
+
+        float: none !important;
+        white-space: nowrap;
+    }
+
+    .inline-related h3 span.delete input[type="checkbox"] {
+        margin: 0;
+    }
+
+    .tabular {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .tabular table {
+        min-width: 700px;
+    }
+}
+/* =========================================================
+   TABLES
+   ========================================================= */
+#changelist .results {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+#changelist table {
+    border: 0 !important;
+    width: 100%;
+    min-width: 900px;
+
+    background: var(--admin-paper-light) !important;
+}
+#changelist table th,
+#changelist table td {
+    white-space: nowrap;
+}
+
+#changelist table .field-title,
+#changelist table .field-description,
+#changelist table .field-short_description {
+    white-space: normal;
+    min-width: 220px;
+}
+
+#changelist table thead th {
+    background: rgba(78, 99, 94, .06) !important;
+
+    color: var(--admin-olive) !important;
+
+    border-bottom: 1px solid var(--admin-line) !important;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+#changelist table tbody tr {
+    transition: background-color .15s ease;
+}
+
+#changelist table tbody tr:hover {
+    background: rgba(129, 140, 120, .09) !important;
+}
+
+#changelist table td,
+#changelist table th {
+    border-bottom: 1px solid var(--admin-line) !important;
+}
+
+#changelist .field-order input {
+    width: 72px;
+    max-width: 72px;
+    box-sizing: border-box;
+}
+
+#changelist .field-is_featured,
+#changelist .field-is_published {
+    width: 90px;
+    text-align: center;
+}
+
+#changelist .field-external_link {
+    width: 100px;
+    white-space: nowrap;
+}
+#changelist .field-title {
+    min-width: 240px;
+    white-space: normal;
+}
+
+#changelist .field-source_name {
+    min-width: 150px;
+    white-space: normal;
+}
+
+.admin-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-table-scroll table {
+    width: 100%;
+    min-width: 1200px;
+    table-layout: auto;
+}
+
+.admin-table-scroll th,
+.admin-table-scroll td {
+    white-space: normal;
+}
+
+.admin-table-scroll th:last-child,
+.admin-table-scroll td:last-child {
+    width: 110px;
+    min-width: 110px;
+    white-space: nowrap;
+}
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+input,
+textarea,
+select,
+.vTextField,
+.vLargeTextField {
+    background: var(--admin-control-bg) !important;
+
+    color: var(--admin-control-text) !important;
+
+    border: 1px solid var(--admin-control-border) !important;
+
+    border-radius: 6px !important;
+
+    padding: 9px 11px !important;
+
+    box-shadow: none !important;
+}
+/*
+ * Native selects.
+ * Explicit colors are required because browsers may render
+ * the opened option list using their own default color scheme.
+ */
+select {
+    color: var(--admin-control-text) !important;
+    background-color: var(--admin-control-bg) !important;
+
+    color-scheme: inherit;
+}
+
+select option {
+    background-color: var(--admin-control-bg);
+    color: var(--admin-control-text);
+}
+
+select option:disabled {
+    color: var(--admin-control-muted);
+}
+input::placeholder,
+textarea::placeholder {
+    color: var(--admin-control-muted);
+    opacity: 1;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+    background: var(--admin-control-disabled-bg) !important;
+    color: var(--admin-control-muted) !important;
+
+    opacity: 1;
+
+    cursor: not-allowed;
+}
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--admin-bronze) !important;
+
+    outline: none !important;
+
+    box-shadow:
+        0 0 0 3px rgba(129, 140, 120, .15) !important;
+}
+
+.form-row,
+fieldset,
+fieldset.module,
+.aligned {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.form-row > div,
+.aligned .form-row > div {
+    min-width: 0;
+}
+
+.form-row input:not([type="checkbox"]):not([type="radio"]),
+.form-row textarea,
+.form-row select {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ADMIN FORM CONTROL SYSTEM
+   ========================================================= */
+
+:root {
+    --admin-field-width: 520px;
+    --admin-field-height: 58px;
+    --admin-field-padding-x: 16px;
+}
+
+/* ---------------------------------------------------------
+   Standard single-line fields
+   --------------------------------------------------------- */
+
+.aligned .form-row input:not([type="checkbox"])
+                       :not([type="radio"])
+                       :not([type="file"])
+                       :not([type="submit"])
+                       :not([type="button"])
+                       :not([type="number"]),
+
+.aligned .form-row select {
+    width: var(--admin-field-width) !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+/* Text-like inputs */
+
+.aligned .form-row input:not([type="checkbox"])
+                       :not([type="radio"])
+                       :not([type="file"])
+                       :not([type="submit"])
+                       :not([type="button"])
+                       :not([type="number"]) {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: var(--admin-field-padding-x) !important;
+}
+
+/* Select */
+
+.aligned .form-row select {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: 44px !important;
+}
+
+/* ---------------------------------------------------------
+   Django ForeignKey / related widget
+   select + edit/add/delete/view icons
+   --------------------------------------------------------- */
+
+.aligned .form-row .related-widget-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+.aligned .form-row .related-widget-wrapper > select {
+    flex: 0 1 var(--admin-field-width) !important;
+
+    width: var(--admin-field-width) !important;
+    min-width: 0 !important;
+    max-width: var(--admin-field-width) !important;
+}
+
+/* Keep Django action icons from shrinking */
+
+.aligned .form-row
+.related-widget-wrapper
+> .related-widget-wrapper-link {
+    flex: 0 0 auto;
+}
+
+/* ---------------------------------------------------------
+   Number fields
+   --------------------------------------------------------- */
+
+.aligned .form-row input[type="number"] {
+    width: 140px !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding: 0 var(--admin-field-padding-x) !important;
+
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   Textareas
+   --------------------------------------------------------- */
+
+.aligned .form-row textarea {
+    width: min(100%, 920px) !important;
+    max-width: 100% !important;
+
+    min-height: 180px;
+
+    padding: 16px !important;
+
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+    background: var(--admin-button-bg) !important;
+
+    color: var(--admin-white) !important;
+
+    border: 0 !important;
+
+    border-radius: 6px !important;
+
+    padding: 10px 18px !important;
+
+    font-weight: 600;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover {
+    background: var(--admin-button-hover) !important;
+
+    color: white !important;
+
+    transform: translateY(-1px);
+}
+
+/* Django object tools:
+   "Додати", "Історія" та інші кнопки у верхній частині сторінки */
+.object-tools a:link,
+.object-tools a:visited {
+    background-color: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+
+.object-tools a:focus,
+.object-tools a:hover,
+.object-tools a:active {
+    background-color: var(--admin-button-hover) !important;
+    color: #fff !important;
+}
+
+
+/* Destructive Django actions keep their red background,
+   but must always have readable light text. */
+.submit-row a.deletelink:link,
+.submit-row a.deletelink:visited {
+    color: #fff !important;
+}
+
+.submit-row a.deletelink:focus,
+.submit-row a.deletelink:hover,
+.submit-row a.deletelink:active {
+    color: #fff !important;
+}
+
+/* secondary buttons */
+
+.button.default,
+input[type="submit"].default {
+    background: var(--admin-bronze) !important;
+
+    color: #202522 !important;
+}
+
+/* =========================================================
+   FILTER SIDEBAR
+   ========================================================= */
+
+#changelist-filter {
+    background: var(--admin-paper-light) !important;
+    border-left: 1px solid var(--admin-line) !important;
+
+    width: 220px;
+    min-width: 220px;
+    box-sizing: border-box;
+
+    padding: 20px;
+}
+
+#changelist-filter h2 {
+    background: transparent !important;
+
+    color: var(--admin-ink) !important;
+
+    padding: 0 0 14px;
+
+    font-size: 12px;
+
+    letter-spacing: .08em;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+#toolbar {
+    background: transparent !important;
+
+    border: 0 !important;
+
+    padding: 0 0 20px;
+}
+
+#searchbar {
+    background: var(--admin-control-bg) !important;
+
+    border: 1px solid var(--admin-line) !important;
+
+    border-radius: 6px;
+}
+
+#changelist-search > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    width: 100%;
+    max-width: 100%;
+}
+
+#changelist-search label {
+    flex-shrink: 0;
+}
+
+#changelist-search #searchbar {
+    flex: 1 1 240px;
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
+}
+
+#changelist-search input[type="submit"] {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions {
+    background: rgba(78, 99, 94, .05) !important;
+
+    border: 1px solid var(--admin-line) !important;
+
+    border-radius: 6px;
+
+    padding: 10px !important;
+}
+
+#changelist .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#changelist .actions label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    min-width: 0;
+}
+
+#changelist .actions select {
+    max-width: 100%;
+    min-height: 42px;
+
+    background-color: var(--admin-control-bg) !important;
+    color: var(--admin-control-text) !important;
+}
+
+/* =========================================================
+   SAVE ROW
+   ========================================================= */
+
+.submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    background: transparent !important;
+
+    border-top: 1px solid var(--admin-line) !important;
+
+    padding: 20px 0 !important;
+}
+
+/* =========================================================
+   SUCCESS / ERROR
+   ========================================================= */
+
+ul.messagelist li {
+    border-radius: 6px !important;
+
+    border: 1px solid var(--admin-line) !important;
+
+    box-shadow: none !important;
+}
+
+ul.messagelist li.success {
+    background: rgba(129, 140, 120, .18) !important;
+
+    color: var(--admin-ink-dark) !important;
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+body.login {
+    background:
+        linear-gradient(
+            145deg,
+            var(--admin-paper),
+            var(--admin-paper-light)
+        ) !important;
+}
+
+.login #container {
+    max-width: 430px;
+
+    margin: 10vh auto;
+
+    background: var(--admin-paper-light);
+
+    border: 1px solid var(--admin-line);
+
+    border-radius: 12px;
+
+    box-shadow: 0 20px 60px rgba(30, 40, 35, .10);
+
+    overflow: hidden;
+}
+
+.login #header {
+    padding: 26px 30px;
+
+    display: block;
+}
+
+.login #content {
+    padding: 30px;
+}
+
+.login .form-row {
+    padding: 8px 0;
+}
+
+.login input {
+    width: 100%;
+}
+
+/* =========================================================
+   MEMORIAL SIDEBAR / MAIN LAYOUT
+   ========================================================= */
+
+#nav-sidebar.memorial-sidebar {
+    position: sticky;
+    top: 0;
+
+    width: 240px;
+    min-width: 240px;
+    height: calc(100vh - 64px);
+
+    box-sizing: border-box;
+    padding: 28px 16px;
+
+    background: var(--admin-paper-light);
+    border-right: 1px solid rgba(78, 99, 94, .16);
+
+    overflow-y: auto;
+}
+
+.memorial-sidebar__section {
+    margin-bottom: 32px;
+}
+
+.memorial-sidebar__title {
+    margin: 0 10px 10px;
+
+    color: var(--admin-bronze);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.memorial-sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 0;
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    box-sizing: border-box;
+    border-radius: 7px;
+
+    color: var(--admin-ink) !important;
+    text-decoration: none !important;
+
+    font-size: 13px;
+
+    transition:
+        background .18s ease,
+        transform .18s ease;
+}
+
+.memorial-sidebar__item span {
+    width: 22px;
+    min-width: 22px;
+    flex-shrink: 0;
+
+    color: var(--admin-bronze);
+
+    font-size: 17px;
+    text-align: center;
+}
+
+.memorial-sidebar__item:hover {
+    background: rgba(78, 99, 94, .08);
+    transform: translateX(2px);
+}
+
+#nav-sidebar .current-app,
+#nav-sidebar .module,
+#nav-sidebar .app-auth,
+#nav-sidebar .model-group {
+    display: none;
+}
+
+.main {
+    display: flex !important;
+
+    min-height: calc(100vh - 64px);
+
+    background: var(--admin-paper);
+}
+
+.main #content-start {
+    flex: 1;
+    min-width: 0;
+}
+
+.main #content {
+    width: 100%;
+    max-width: 1280px !important;
+
+    margin: 0 auto;
+    padding: 40px;
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ADMIN PAGE HELPERS
+   ========================================================= */
+
+.home-admin-section__header,
+.life-admin__section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.home-admin-section__header > div,
+.life-admin__section-header h2 {
+    min-width: 0;
+}
+
+.home-admin-section__header .button,
+.life-admin__section-action {
+    flex-shrink: 0;
+}
+
+.life-admin__section-header {
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.life-admin__section-header h2 {
+    margin: 0;
+}
+
+.life-admin,
+.life-admin section {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.life-admin p,
+.life-admin td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* =========================================================
+   LAYOUT CONTAINMENT
+   ========================================================= */
+
+#container,
+.main,
+#content,
+#content-main,
+#changelist,
+#changelist .changelist-form-container {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#user-tools {
+    min-width: 0;
+    white-space: normal;
+    text-align: right;
+    flex-shrink: 1;
+}
+
+.object-tools {
+    float: none !important;
+    position: static !important;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   RESPONSIVE: COMPACT DESKTOP / TABLET
+   ========================================================= */
+
+@media (min-width: 768px) and (max-width: 1100px) {
+    #header {
+        gap: 18px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .admin-branding {
+        flex: 1 1 auto;
+        gap: 18px;
+    }
+
+    #user-tools {
+        flex: 0 1 42%;
+        max-width: 42%;
+        line-height: 1.45;
+    }
+
+    #content,
+    .main #content {
+        padding: 32px 28px 56px;
+    }
+
+    #content h1 {
+        font-size: 32px;
+        line-height: 1.15;
+    }
+
+    .object-tools {
+        margin-top: 0;
+    }
+
+    #nav-sidebar.memorial-sidebar {
+        width: 190px;
+        min-width: 190px;
+        padding: 24px 12px;
+    }
+
+    .memorial-sidebar__item {
+        align-items: flex-start;
+        gap: 9px;
+
+        padding-left: 9px;
+        padding-right: 9px;
+
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+    }
+
+    .memorial-sidebar__item span {
+        width: 18px;
+        min-width: 18px;
+        line-height: 1.35;
+    }
+}
+
+@media (max-width: 1100px) {
+    #changelist .changelist-form-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    #changelist .changelist-form-container:has(#changelist-filter) > div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    #changelist-filter {
+        order: 2;
+
+        width: 100%;
+        min-width: 0;
+        flex: none;
+
+        margin: 0;
+
+        border-left: 0 !important;
+        border-top: 1px solid var(--admin-line) !important;
+
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 1024px) {
+    #changelist {
+        min-width: 0;
+    }
+
+    #changelist .results {
+        overflow-x: auto;
+    }
+
+    #changelist table {
+        min-width: 850px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE: MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
+    #container {
+        width: 100%;
+        min-width: 0;
+        overflow-x: clip;
+    }
+
+    /* Header */
+    #header {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 12px;
+
+        width: 100%;
+        height: auto;
+        min-height: 0;
+
+        padding: 16px 18px;
+
+        box-sizing: border-box;
+
+        overflow: visible;
+    }
+
+    #branding {
+        display: block;
+
+        width: 100%;
+        min-width: 0;
+
+        margin: 0;
+    }
+
+    .admin-branding {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+
+        width: 100%;
+        min-width: 0;
+    }
+
+    #site-name {
+        width: 100%;
+
+        margin: 0;
+
+        line-height: 1.25;
+    }
+
+    #site-name a {
+        display: block;
+
+        width: 100%;
+
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+
+    .admin-language-switcher {
+        width: 100%;
+
+        padding-left: 0;
+
+        border-left: 0;
+    }
+
+    .admin-language-switcher__label {
+        display: none;
+    }
+
+    #user-tools {
+        width: 100%;
+
+        margin: 0;
+
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    #content {
+        padding: 28px 18px 50px;
+    }
+
+    #content h1 {
+        font-size: 28px;
+    }
+
+    div.breadcrumbs {
+        padding: 14px 18px;
+    }
+
+    .main {
+        display: block !important;
+
+        width: 100%;
+        min-width: 0;
+    }
+
+    .main #content {
+        width: 100%;
+        max-width: none !important;
+
+        margin: 0;
+        padding: 28px 16px 112px !important;
+
+        box-sizing: border-box;
+    }
+
+    #content h1 {
+        max-width: 100%;
+
+        margin: 0 0 28px;
+
+        font-size: clamp(26px, 8vw, 32px);
+        line-height: 1.15;
+
+        overflow-wrap: anywhere;
+    }
+
+    /* Object tools */
+    .object-tools {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        width: 100%;
+        margin: 0 0 20px;
+    }
+
+    .object-tools li {
+        width: 100%;
+        margin: 0;
+    }
+
+    .object-tools a,
+    .object-tools a:link,
+    .object-tools a:visited {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        min-height: 44px;
+
+        padding: 10px 18px;
+
+        box-sizing: border-box;
+
+        line-height: 1.2;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Search */
+    #toolbar {
+        width: 100%;
+        padding: 14px !important;
+        box-sizing: border-box;
+    }
+
+    #changelist-search {
+        width: 100%;
+    }
+
+    #changelist-search > div {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+
+        gap: 10px !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist-search label {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        width: 44px !important;
+        min-width: 44px !important;
+        height: 44px !important;
+
+        flex: 0 0 44px !important;
+
+        margin: 0 !important;
+    }
+
+    #changelist-search #searchbar {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: 44px !important;
+
+        flex: 1 1 calc(100% - 54px) !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist-search input[type="submit"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+
+        flex: 1 0 100% !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box;
+    }
+
+    /* Actions */
+    #changelist .actions {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 10px;
+
+        width: 100%;
+        padding: 12px !important;
+
+        box-sizing: border-box;
+    }
+
+    #changelist .actions label {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 8px;
+
+        width: 100%;
+        margin: 0;
+    }
+
+    #changelist .actions select,
+    #changelist .actions .button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+
+        margin: 0;
+
+        box-sizing: border-box;
+    }
+
+    #changelist .actions .action-counter {
+        display: block;
+
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Tables */
+    #changelist .results,
+    .admin-table-scroll,
+    .tabular {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #changelist .results table,
+    .admin-table-scroll table,
+    .tabular table {
+        min-width: 720px;
+    }
+
+    /* Filter */
+    #changelist-filter {
+        width: 100%;
+        min-width: 0;
+
+        padding: 16px;
+
+        box-sizing: border-box;
+    }
+
+    /* Submit rows */
+    .submit-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .submit-row input,
+    .submit-row a,
+    .submit-row .button {
+        width: 100%;
+        min-height: 44px;
+
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .submit-row input {
+        height: auto;
+        line-height: 1.2;
+    }
+
+    .submit-row a,
+    .submit-row .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        height: auto;
+        line-height: 1.2;
+    }
+
+    /* Django gives the delete link a fixed 0.9375rem height,
+       which breaks with our admin font on mobile. */
+    .submit-row a.deletelink {
+        height: auto;
+        min-height: 44px;
+
+        margin: 0;
+        padding: 10px 18px;
+
+        line-height: 1.2;
+    }
+
+    /* Custom page section headers */
+    .home-admin-section__header,
+    .life-admin__section-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .home-admin-section__header .button,
+    .life-admin__section-action {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    /* Off-canvas navigation */
+    #nav-sidebar.memorial-sidebar {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+
+        width: min(300px, 86vw);
+        min-width: 0;
+        height: 100dvh;
+        max-height: 100dvh;
+
+        margin-left: 0;
+        padding: 24px 16px 80px;
+
+        overflow-y: auto;
+
+        visibility: hidden;
+        transform: translateX(-100%);
+
+        box-shadow: 10px 0 30px rgb(30 40 35 / 14%);
+
+        transition:
+            transform .2s ease,
+            visibility .2s ease;
+    }
+
+    .main.shifted > #nav-sidebar.memorial-sidebar {
+        margin-left: 0;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    #toggle-nav-sidebar {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
+        position: fixed !important;
+
+        top: auto !important;
+        left: auto !important;
+        right: 16px !important;
+        bottom: max(16px, env(safe-area-inset-bottom)) !important;
+
+        z-index: 1100 !important;
+
+        width: 48px !important;
+        height: 48px !important;
+        flex: 0 0 48px !important;
+
+        margin: 0 !important;
+
+        border: 1px solid var(--hairline-color);
+        border-radius: 50%;
+        background: var(--body-bg);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+    }
+
+    /* Paginator / save action */
+    .paginator {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    .paginator input[type="submit"] {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 360px) {
+    .paginator input[type="submit"] {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Native controls do not consistently inherit the document font. */
+input,
+select,
+textarea,
+button,
+.theme-toggle,
+.theme-toggle svg {
+    font-family: var(--font-family-primary);
+}
+
+/* Native checkbox/radio sizing must not inherit text-field padding. */
+input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--admin-button-bg);
+    padding: 0 !important;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+.module caption a.section:link, .module caption a.section:visited {
+    color: var(--admin-white) !important;
+}
+
+#nav-sidebar.memorial-sidebar {
+    flex: 0 0 240px;
+    left: -240px;
+    margin-left: -240px;
+}
+.main.shifted > #nav-sidebar.memorial-sidebar { margin-left: 0; }
+.main > #nav-sidebar + .content,
+.main.shifted > #nav-sidebar + .content { max-width: none; }
+
+#changelist .actions select {
+    height: auto;
+    text-overflow: ellipsis;
+}
+
+.home-admin-section__header, .life-admin__section-header {
+    flex-wrap: wrap;
+}
+.home-admin-section__header > div { flex: 1 1 240px; }
+.home-admin-section__header .button, .life-admin__section-action {
+    max-width: 100%;
+    white-space: normal;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+    #nav-sidebar.memorial-sidebar {
+        flex-basis: 190px;
+        left: -190px;
+        margin-left: -190px;
+    }
+}
+@media (max-width: 1100px) {
+    #changelist { flex-direction: column; }
+}
+@media (max-width: 767px) {
+    #nav-sidebar.memorial-sidebar { left: 0; margin-left: 0; }
+    .home-admin-section__header > div { flex-basis: auto; }
+    .aligned .flex-container { flex-wrap: wrap; }
+    .related-widget-wrapper {
+        display: grid !important;
+        grid-template-columns: repeat(4, 32px);
+        gap: 8px 10px;
+
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) {
+        display: grid !important;
+        grid-template-columns: repeat(4, 32px);
+        gap: 8px 10px;
+
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    /* Сам select займає весь перший рядок */
+    .related-widget-wrapper > select {
+        grid-column: 1 / -1;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > select {
+        grid-column: 1 / -1;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    /* Django action icons — окремий акуратний ряд */
+    .related-widget-wrapper > .related-widget-wrapper-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        align-self: auto !important;
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > .related-widget-wrapper-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        align-self: auto !important;
+        box-sizing: border-box;
+    }
+    .related-widget-wrapper:has(> select) > .related-widget-wrapper-link img {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+
+        margin: 0;
+    }
+
+    .related-widget-wrapper > .related-widget-wrapper-link img {
+        display: block;
+
+        width: 24px;
+        height: 24px;
+
+        margin: 0;
+    }
+    .selector { width: 100%; max-width: 100%; }
+    .selector-available, .selector-chosen { width: 100%; }
+    .selector select { width: 100%; }
+    .memories-admin-tabs { flex-wrap: wrap; }
+    .login #container { width: calc(100% - 32px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #nav-sidebar.memorial-sidebar, .memorial-sidebar__item { transition: none; }
+}
+
+/* Long admin forms must grow the document instead of compressing its header. */
+#container { height: auto; min-height: 100vh; }
+#header, #container > nav { flex-shrink: 0; }
+.login #container { min-height: 0; }
+
+.button.default, input[type="submit"].default {
+    background: var(--admin-button-bg) !important;
+    color: var(--admin-white) !important;
+}
+#changelist .actions .button { height: auto; min-height: 42px; }
+.aligned .flex-container > div { min-width: 0; max-width: 100%; }
+@media (max-width: 767px) {
+    .aligned .flex-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .aligned .checkbox-row .flex-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .form-row textarea {
+        width: 100%;
+    }
+
+    /* Keep selects inside the mobile viewport. */
+    .form-row select,
+    .inline-related select,
+    .related-widget-wrapper select {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+    }
+
+    .related-widget-wrapper {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* Django permissions selector */
+.related-widget-wrapper:has(> .selector) {
+    display: flex !important;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.related-widget-wrapper > .selector {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .related-widget-wrapper > .selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .selector-available,
+    .selector-chosen {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .selector select {
+        display: block;
+
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box;
+
+        overflow-x: auto;
+        overflow-y: auto;
+
+        white-space: nowrap;
+
+        -webkit-overflow-scrolling: touch;
+    }
+    .selector select option {
+        white-space: nowrap;
+    }
+}
+
+/* Memories admin — equal field widths */
+
+#id_author_name,
+#id_author_role {
+    width: 520px !important;
+    min-width: 520px !important;
+    max-width: 520px !important;
+    box-sizing: border-box;
+}
+
+#id_category {
+    width: 520px !important;
+    min-width: 520px !important;
+    max-width: 520px !important;
+
+    flex: 0 0 520px !important;
+
+    box-sizing: border-box;
+}
+
+.form-row.field-category .related-widget-wrapper {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    overflow: visible !important;
+}
+
+@media (max-width: 767px) {
+    #id_author_name,
+    #id_author_role,
+    #id_category {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    #id_category {
+        flex: 1 1 100% !important;
+    }
+
+    .form-row.field-category .related-widget-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Memories admin — equal control heights */
+
+body.app-memories.model-memory
+#id_author_name,
+
+body.app-memories.model-memory
+#id_author_role,
+
+body.app-memories.model-memory
+#id_category {
+    height: 58px !important;
+    min-height: 58px !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+body.app-memories.model-memory
+#id_author_name,
+
+body.app-memories.model-memory
+#id_author_role {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+body.app-memories.model-memory
+#id_category {
+    padding-left: 16px !important;
+    padding-right: 44px !important;
+}
+
+.aligned .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="number"]),
+.aligned .form-row select {
+    width: var(--admin-field-width) !important;
+    max-width: 100% !important;
+
+    height: var(--admin-field-height) !important;
+    min-height: var(--admin-field-height) !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+}
+
+.aligned .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="submit"]):not([type="button"]):not([type="number"]) {
+    padding-left: var(--admin-field-padding-x) !important;
+    padding-right: var(--admin-field-padding-x) !important;
+}
+
+/* Keep language and save controls accessible throughout long admin forms. */
+.admin-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+    background: var(--admin-paper);
+    box-shadow: 0 3px 8px rgb(30 40 35 / 8%);
+}
+
+.admin-sticky-header > nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 10px 32px;
+    border-bottom: 1px solid var(--admin-line);
+}
+
+.admin-sticky-header div.breadcrumbs {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 8px 0;
+    border-bottom: 0;
+}
+
+.admin-header-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-left: auto;
+    max-width: 100%;
+}
+
+.admin-header-actions input[type="submit"] {
+    max-width: 100%;
+    margin: 0;
+    white-space: normal;
+    cursor: pointer;
+}
+
+html {
+    scroll-padding-top: calc(var(--admin-sticky-header-height, 0px) + 16px);
+}
+
+@media (min-width: 768px) {
+    .admin-sticky-header ~ .main #nav-sidebar.memorial-sidebar,
+    .admin-sticky-header ~ .main #toggle-nav-sidebar {
+        top: var(--admin-sticky-header-height);
+        height: calc(100dvh - var(--admin-sticky-header-height));
+    }
+}
+
+@media (max-width: 767px) {
+    .admin-sticky-header > nav {
+        padding: 8px 18px;
+    }
+
+    .admin-header-actions {
+        width: 100%;
+    }
+
+    .admin-header-actions input[type="submit"] {
+        flex: 1 1 auto;
+        padding: 8px 10px !important;
+    }
+}

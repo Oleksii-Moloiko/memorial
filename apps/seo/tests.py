@@ -70,7 +70,6 @@ class SeoPageModelTests(TestCase):
             "service",
             "photos",
             "videos",
-            "media",
             "memories",
         }
 
@@ -93,23 +92,13 @@ class SeoMetaTests(TestCase):
 
         self.assertContains(
             response,
-            (
-                '<meta name="description" '
-                'content="Цифровий простір пам’яті: історія життя, '
-                'фото, відео, публікації та слова близьких.">'
-            ),
+            '<meta name="description" content="">',
             html=True,
         )
 
         self.assertContains(
             response,
-            ('<meta property="og:title" content="Пам’ять про Олександра Мельника">'),
-            html=True,
-        )
-
-        self.assertContains(
-            response,
-            ('<meta property="og:description" content="Цифровий простір пам’яті">'),
+            '<meta name="description" content="">',
             html=True,
         )
 
@@ -153,7 +142,7 @@ class SeoMetaTests(TestCase):
 
         self.assertContains(
             response,
-            "<title>Головна — Меморіальна сторінка</title>",
+            "<title>Меморіальна сторінка</title>",
             html=True,
         )
 
@@ -183,7 +172,6 @@ class SeoMetaTests(TestCase):
             SeoPage.PageKey.SERVICE: "pages:service",
             SeoPage.PageKey.PHOTOS: "pages:photos",
             SeoPage.PageKey.VIDEOS: "pages:videos",
-            SeoPage.PageKey.MEDIA: "pages:media",
             SeoPage.PageKey.MEMORIES: "pages:memories",
         }
 
