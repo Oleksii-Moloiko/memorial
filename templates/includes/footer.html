@@ -4,11 +4,7 @@
   <div class="container footer-grid">
     <div class="footer-branding">
       <a class="brand brand-footer" href="{% url 'pages:home' %}">
-        <span class="brand-mark" aria-hidden="true">{{ site_settings.brand_letter|default:"П" }}</span>
-        <span class="brand-copy">
-          <strong>{{ site_settings.site_name|default:_("ПАМ’ЯТЬ") }}</strong>
-          <small>{{ site_settings.subtitle }}</small>
-        </span>
+        {% include "includes/footer_brand.html" %}
       </a>
       <p>{{ site_settings.footer_text }}</p>
 
@@ -51,36 +47,52 @@
       </form>
 
     </div>
-    <div class="footer-nav" aria-label="{% translate "Навігація в підвалі" %}">
+        <div class="footer-column">
+          <div class="brand footer-spacer" aria-hidden="true">
+            {% include "includes/footer_brand.html" %}
+          </div>
 
-        <a href="{% url 'pages:home' %}">
-            {{ site_settings.home_title }}
-        </a> ·
+          <nav class="footer-nav" aria-label="{% translate 'Навігація в підвалі' %}">
+            <a href="{% url 'pages:home' %}">
+              {{ site_settings.home_title }}
+            </a>
+            <span class="footer-nav__separator" aria-hidden="true">·</span>
 
-        <a href="{% url 'pages:life' %}">
-            {{ site_settings.life_title }}
-        </a> ·
+            <a href="{% url 'pages:life' %}">
+              {{ site_settings.life_title }}
+            </a>
+            <span class="footer-nav__separator" aria-hidden="true">·</span>
 
-        <a href="{% url 'pages:service' %}">
-            {{ site_settings.service_title }}
-        </a> ·
+            <a href="{% url 'pages:service' %}">
+              {{ site_settings.service_title }}
+            </a>
+            <span class="footer-nav__separator" aria-hidden="true">·</span>
 
-        <a href="{% url 'pages:photos' %}">
-            {{ site_settings.photos_title }}
-        </a> ·
+            <a href="{% url 'pages:photos' %}">
+              {{ site_settings.photos_title }}
+            </a>
+            <span class="footer-nav__separator" aria-hidden="true">·</span>
 
-        <a href="{% url 'pages:videos' %}">
-            {{ site_settings.videos_title }}
-        </a> ·
+            <a href="{% url 'pages:videos' %}">
+              {{ site_settings.videos_title }}
+            </a>
+            <span class="footer-nav__separator" aria-hidden="true">·</span>
 
-        <a href="{% url 'pages:memories' %}">
-        {{ site_settings.memories_title }}
-        </a>
+            <a href="{% url 'pages:memories' %}">
+              {{ site_settings.memories_title }}
+            </a>
+          </nav>
+        </div>
 
-    </div>
-    <div class="footer-meta">
-      <p>© {% now "Y" %} {{ site_settings.copyright_holder|default:_("Родина Назара Боровицького") }}</p>
-      <p>{{ site_settings.footer_dedication }}</p>
-    </div>
-  </div>
-</footer>
+        <div class="footer-column">
+          <div class="brand footer-spacer" aria-hidden="true">
+            {% include "includes/footer_brand.html" %}
+          </div>
+
+          <div class="footer-meta">
+            <p>© {% now "Y" %} {{ site_settings.copyright_holder|default:_("Родина Назара Боровицького") }}</p>
+            <p>{{ site_settings.footer_dedication }}</p>
+          </div>
+        </div>
+      </div>
+    </footer>

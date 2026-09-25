@@ -6914,3 +6914,44 @@ body.app-memories.model-memory
   background: var(--ink);
   color: var(--paper);
 }
+
+@media (max-width: 1000px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 17px;
+  }
+
+  .footer-nav__separator {
+    display: none;
+  }
+
+  .footer-meta {
+    grid-column: auto;
+    margin: 0;
+    max-width: none;
+    text-align: left;
+  }
+}
+
+/* NZRQR-43: desktop footer alignment */
+.footer-spacer {
+  visibility: hidden;
+  margin-bottom: 22px;
+}
+
+.footer-meta > p:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 1000px) {
+  .footer-spacer {
+    display: none;
+  }
+}
