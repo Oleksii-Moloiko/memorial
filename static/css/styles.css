@@ -6834,44 +6834,6 @@ body[data-page="memories"] .memory-text,
   margin-left: 4px;
 }
 
-/* Memory banner — plus icon */
-
-.memory-banner .button {
-  gap: 14px;
-}
-
-.memory-banner__button-icon {
-  position: relative;
-
-  width: 18px;
-  height: 18px;
-
-  flex: 0 0 18px;
-}
-
-.memory-banner__button-icon::before,
-.memory-banner__button-icon::after {
-  content: "";
-
-  position: absolute;
-  left: 50%;
-  top: 50%;
-
-  background: #fff;
-  border-radius: 2px;
-
-  transform: translate(-50%, -50%);
-}
-
-.memory-banner__button-icon::before {
-  width: 18px;
-  height: 3px;
-}
-
-.memory-banner__button-icon::after {
-  width: 3px;
-  height: 18px;
-}
 
 /* Memories admin — author fields alignment */
 
