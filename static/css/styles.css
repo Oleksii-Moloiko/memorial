@@ -6957,3 +6957,18 @@ body.app-memories.model-memory
     display: none;
   }
 }
+
+/* NZRQR-49: photo category states */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-page .filter-chip:not(.active):hover {
+    background: var(--stone);
+    color: var(--ink);
+    border-color: var(--stone);
+  }
+}
+
+.gallery-page .filter-chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
