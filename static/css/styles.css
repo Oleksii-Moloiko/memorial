@@ -3708,7 +3708,7 @@ p {
 
   gap: clamp(32px, 5vw, 72px);
 
-  align-items: center;
+  align-items: start;
 }
 
 .featured-video-media,
@@ -3856,7 +3856,6 @@ p {
 .video-transcript {
   margin-top: 20px;
   padding-top: 14px;
-  border-top: 1px solid rgba(30, 35, 32, 0.16);
 }
 
 .video-transcript summary {
