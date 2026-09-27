@@ -330,9 +330,14 @@
       </a>
 
       <div class="media-feature-card__body">
-        <p class="media-feature-card__eyebrow">
+        <a
+          class="media-feature-card__eyebrow media-feature-card__category"
+          href="{% url 'pages:videos' %}#video-archive"
+          aria-label="{% blocktranslate with section=home_page.video_eyebrow %}Усі матеріали розділу {{ section }}{% endblocktranslate %}"
+        >
           {{ home_page.video_eyebrow }}
-        </p>
+          <span aria-hidden="true">→</span>
+        </a>
 
         {% if featured_video %}
           <h3 class="media-feature-card__title">
@@ -418,9 +423,14 @@
       </div>
 
       <div class="media-feature-card__body">
-        <p class="media-feature-card__eyebrow">
+        <a
+          class="media-feature-card__eyebrow media-feature-card__category"
+          href="{% url 'pages:service' %}#links"
+          aria-label="{% blocktranslate with section=home_page.links_eyebrow %}Усі матеріали розділу {{ section }}{% endblocktranslate %}"
+        >
           {{ home_page.links_eyebrow }}
-        </p>
+          <span aria-hidden="true">→</span>
+        </a>
 
         {% if featured_mention %}
           <h3 class="media-feature-card__title">
