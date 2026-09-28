@@ -2335,3 +2335,27 @@ html {
         padding: 8px 10px !important;
     }
 }
+
+/* NZRQR-61: visible validation errors */
+.admin-language-error-link {
+    display: block;
+    margin-top: 8px;
+    color: inherit;
+    text-decoration: underline;
+}
+
+.admin-language-error-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+.admin-language-switcher__options button.has-errors {
+    box-shadow: inset 0 -3px 0 var(--error-fg);
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    outline: 2px solid var(--error-fg);
+    outline-offset: 2px;
+}

@@ -13,6 +13,8 @@ from .models import (
 
 @register(HomePage)
 class HomePageTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "quote_jump_label",
         "hero_eyebrow",
@@ -47,6 +49,8 @@ class HomePageTranslationOptions(TranslationOptions):
 
 @register(ServicePage)
 class ServicePageTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "quotes_description",
         "quote_less_label",
@@ -98,6 +102,8 @@ class ServiceQuoteTranslationOptions(TranslationOptions):
 
 @register(LifePage)
 class LifePageTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "hero_eyebrow",
         "hero_description",
@@ -126,6 +132,8 @@ class LifePageTranslationOptions(TranslationOptions):
 
 @register(PhotoPage)
 class PhotoPageTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "hero_eyebrow",
         "hero_description",
@@ -138,6 +146,8 @@ class PhotoPageTranslationOptions(TranslationOptions):
 
 @register(VideoPage)
 class VideoPageTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "hero_eyebrow",
         "hero_description",

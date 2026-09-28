@@ -6,6 +6,7 @@ from .models import SiteSettings
 
 @register(SiteSettings)
 class SiteSettingsTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
     fields = tuple(
         field.name
         for field in SiteSettings._meta.fields

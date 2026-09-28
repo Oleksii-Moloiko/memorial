@@ -61,13 +61,28 @@
 
     const updateButtons = (language) => {
         buttons.forEach((button) => {
-            const isActive =
-                button.dataset.adminContentLanguage === language;
+            const buttonLanguage =
+                button.dataset.adminContentLanguage;
+            const isActive = buttonLanguage === language;
+            const label = buttonLanguage === "uk" ? "UA" : "EN";
+
+            const errorCount = invalidFields.filter(
+                (field) => getInputLanguage(field) === buttonLanguage
+            ).length;
+
+            button.textContent = errorCount
+                ? `${label} (${errorCount})`
+                : label;
 
             button.classList.toggle("is-active", isActive);
+            button.classList.toggle("has-errors", errorCount > 0);
+
+            button.setAttribute("aria-pressed", String(isActive));
             button.setAttribute(
-                "aria-pressed",
-                isActive ? "true" : "false"
+                "aria-label",
+                errorCount
+                    ? `${label}: полів із помилками — ${errorCount}`
+                    : label
             );
         });
     };
@@ -94,5 +109,101 @@
         });
     });
 
-    setLanguage(getStoredLanguage());
+    const invalidFields = Array.from(
+        document.querySelectorAll(
+            'input[aria-invalid="true"], ' +
+            'select[aria-invalid="true"], ' +
+            'textarea[aria-invalid="true"]'
+        )
+    );
+
+    const getInputLanguage = (field) => {
+        for (const language of SUPPORTED_LANGUAGES) {
+            if (field.name.endsWith(`_${language}`)) {
+                return language;
+            }
+        }
+
+        return null;
+    };
+
+    // Якщо помилки є в обох мовах, першою відкриваємо українську.
+    const errorLanguage = SUPPORTED_LANGUAGES.find((language) =>
+        invalidFields.some(
+            (field) => getInputLanguage(field) === language
+        )
+    );
+
+    const initialLanguage = errorLanguage || getStoredLanguage();
+    setLanguage(initialLanguage);
+
+    const firstInvalidField = invalidFields.find((field) => {
+        const language = getInputLanguage(field);
+        return !language || language === initialLanguage;
+    });
+
+    const revealError = (field) => {
+        const language = getInputLanguage(field);
+
+        if (language) {
+            setLanguage(language);
+        }
+
+        let parent = field.parentElement;
+
+        while (parent) {
+            if (parent.tagName === "DETAILS") {
+                parent.open = true;
+            }
+
+            parent = parent.parentElement;
+        }
+
+        requestAnimationFrame(() => {
+            field.scrollIntoView({
+                block: "center",
+                behavior: "instant",
+            });
+            field.focus({ preventScroll: true });
+        });
+    };
+
+    const errorNote = document.querySelector(".errornote");
+
+    if (errorNote) {
+        const languageNames = {
+            uk: "української",
+            en: "англійської",
+        };
+
+        SUPPORTED_LANGUAGES.forEach((language) => {
+            const fields = invalidFields.filter(
+                (field) => getInputLanguage(field) === language
+            );
+
+            if (!fields.length) {
+                return;
+            }
+
+            const firstField = fields[0];
+            const link = document.createElement("a");
+
+            link.className = "admin-language-error-link";
+            link.href = `#${firstField.id}`;
+            link.textContent =
+                `Помилки ${languageNames[language]} версії ` +
+                `(${fields.length}) — перейти до поля`;
+
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                revealError(firstField);
+            });
+
+            errorNote.appendChild(link);
+        });
+    }
+
+    if (firstInvalidField) {
+        revealError(firstInvalidField);
+    }
 })();

@@ -5,6 +5,8 @@ from .models import Biography, TimelineEvent
 
 @register(Biography)
 class BiographyTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "full_name",
         "rank",
@@ -18,6 +20,8 @@ class BiographyTranslationOptions(TranslationOptions):
 
 @register(TimelineEvent)
 class TimelineEventTranslationOptions(TranslationOptions):
+    required_languages = ("uk", "en")
+
     fields = (
         "date_label",
         "title",
