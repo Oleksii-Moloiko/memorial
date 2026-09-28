@@ -216,7 +216,10 @@ class SiteSettingsAdmin(TranslationAdmin):
         if "_continue" in request.POST:
             return super().response_change(request, obj)
 
-        return redirect("admin:index")
+        return redirect(
+            "admin:core_sitesettings_change",
+            obj.pk,
+        )
 
     def has_delete_permission(
         self,
