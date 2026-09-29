@@ -228,18 +228,42 @@
     {% if mentions %}
       <div class="service-links">
         {% for mention in mentions %}
-          <article class="service-link-item">
+          <a
+            class="service-link-item"
+            href="{{ mention.url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {% with preview=mention.effective_preview %}
+              {% if preview %}
+                <span class="service-link-item__thumb">
+                  <img
+                    src="{{ preview.url }}"
+                    alt=""
+                    width="116"
+                    height="74"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                </span>
+              {% else %}
+                <span
+                  class="service-link-item__thumb service-link-item__thumb--empty"
+                  aria-hidden="true"
+                >✦</span>
+              {% endif %}
+            {% endwith %}
 
             <div class="service-link-item__date">
-              {% if mention.published_date %}
-                <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
-                  {{ mention.published_date|date:"d.m.Y" }}
-                </time>
-              {% else %}
-                <span>
+              <span class="service-link-item__date-value">
+                {% if mention.published_date %}
+                  <time datetime="{{ mention.published_date|date:'Y-m-d' }}">
+                    {{ mention.published_date|date:"d.m.Y" }}
+                  </time>
+                {% else %}
                   {{ service_page.links_missing_date_label|default:_("Дата не вказана") }}
-                </span>
-              {% endif %}
+                {% endif %}
+              </span>
 
               {% if mention.source_name %}
                 <span class="service-link-item__source">
@@ -252,17 +276,10 @@
               <h3>{{ mention.title }}</h3>
             </div>
 
-            <a
-              class="service-link-item__link"
-              href="{{ mention.url }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="{{ service_page.source_open_label }}: {{ mention.title }}"
-            >
+            <span class="service-link-item__arrow" aria-hidden="true">
               &#x2197;&#xFE0E;
-            </a>
-
-          </article>
+            </span>
+          </a>
         {% endfor %}
       </div>
 
