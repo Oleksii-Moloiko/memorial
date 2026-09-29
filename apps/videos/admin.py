@@ -138,6 +138,7 @@ class VideoAdmin(TranslationAdmin):
 
         js = (
             "admin/js/video_upload.js",
+            "admin/js/thumbnail_preview.js",
         )
 
     def get_urls(self):
@@ -287,6 +288,11 @@ class VideoAdmin(TranslationAdmin):
                         "1"
                         if obj and obj.video_file
                         else "0"
+                    ),
+                    "data-existing-file-name": (
+                        obj.video_file.name.rsplit("/", 1)[-1]
+                        if obj and obj.video_file
+                        else ""
                     ),
                 }
             )

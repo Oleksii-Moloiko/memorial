@@ -116,20 +116,36 @@
             });
         };
 
+        const setUploadState = (state) => {
+            statusContainer.dataset.state = state;
+
+            videoInput.dataset.uploadFileName =
+                selectedFile?.name || uploadedFileName || "";
+
+            videoInput.dataset.uploadState = state;
+
+            videoInput.dispatchEvent(
+                new CustomEvent("admin:upload-state")
+            );
+        };
+
         const showIdle = () => {
+            setUploadState(
+                verified || hasExistingVideo ? "success" : "idle"
+            );
             progress.hidden = true;
             cancelButton.hidden = true;
             retryButton.hidden = true;
 
             if (verified) {
-                statusText.textContent = "Відео завантажено.";
+                statusText.textContent = "✓ Відео завантажено.";
                 setSaveEnabled(true);
                 return;
             }
 
             if (hasExistingVideo) {
                 statusText.textContent =
-                    "Поточне відео залишиться без змін.";
+                    "✓ Поточне відео збережене й залишиться без змін.";
                 setSaveEnabled(true);
                 return;
             }
@@ -141,6 +157,7 @@
         };
 
         const showStarting = () => {
+            setUploadState("uploading");
             statusText.textContent =
                 "Підготовка завантаження…";
 
@@ -154,6 +171,7 @@
         };
 
         const showProgress = (percent) => {
+            setUploadState("uploading");
             const rounded = Math.round(percent);
 
             progress.hidden = false;
@@ -169,6 +187,7 @@
         };
 
         const showConfirming = () => {
+            setUploadState("uploading");
             progress.hidden = false;
             progress.value = 100;
 
@@ -182,12 +201,13 @@
         };
 
         const showSuccess = () => {
+            setUploadState("success");
             progress.hidden = false;
             progress.value = 100;
 
             statusText.textContent = uploadedFileName
-                ? `Відео завантажено: ${uploadedFileName}`
-                : "Відео завантажено.";
+                ? `✓ Відео завантажено: ${uploadedFileName}`
+                : "✓ Відео завантажено.";
 
             cancelButton.hidden = true;
             retryButton.hidden = true;
@@ -196,6 +216,7 @@
         };
 
         const showError = (message) => {
+            setUploadState("error");
             progress.hidden = true;
 
             statusText.textContent =
@@ -208,6 +229,7 @@
         };
 
         const showCancelled = () => {
+            setUploadState("cancelled");
             progress.hidden = true;
 
             statusText.textContent =

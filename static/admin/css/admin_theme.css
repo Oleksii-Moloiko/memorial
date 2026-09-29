@@ -205,7 +205,12 @@ body {
    ========================================================= */
 
 #content label.admin-file-input-control {
-    display: inline-block;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
     float: none;
     width: var(--admin-field-width, 520px);
     max-width: 100%;
@@ -214,8 +219,56 @@ body {
 }
 
 .admin-file-input-control > input[type="file"] {
-    width: 100%;
+    position: absolute;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    border: 0 !important;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
     pointer-events: none;
+}
+
+.admin-file-input-button {
+    display: inline-block;
+    padding: 9px 14px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+}
+
+.admin-file-input-control[data-state="success"]
+.admin-file-input-button {
+    background: #22c55e;
+    color: #102b19;
+}
+
+.admin-file-input-control:focus-within {
+    outline: 2px solid var(--body-fg);
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
+.admin-file-input-control.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.admin-file-input-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--body-fg);
+}
+
+.admin-file-input-status {
+    display: block;
+    margin-top: 8px;
+    color: var(--body-fg);
+    font-size: 12px;
 }
 
 .admin-branding {

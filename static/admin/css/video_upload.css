@@ -35,3 +35,40 @@
     margin-top: 8px;
     line-height: 1.4;
 }
+
+/* NZRQR-58: upload progress states */
+.video-upload-status {
+    --upload-progress-color: #2563eb;
+}
+
+.video-upload-status[data-state="success"] {
+    --upload-progress-color: #22c55e;
+}
+
+.video-upload-status progress {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #d1d5db;
+}
+
+.video-upload-status progress::-webkit-progress-bar {
+    background: #d1d5db;
+    border-radius: 4px;
+}
+
+.video-upload-status progress::-webkit-progress-value {
+    background: var(--upload-progress-color);
+    border-radius: 4px;
+}
+
+.video-upload-status progress::-moz-progress-bar {
+    background: var(--upload-progress-color);
+    border-radius: 4px;
+}
+
+.video-upload-status progress[hidden] {
+    display: none;
+}
