@@ -112,6 +112,20 @@
                 </div>
             </a>
 
+            {% if perms.seo.view_seopage or perms.seo.change_seopage %}
+                <a
+                    href="{% url 'admin:seo_seopage_changelist' %}"
+                    class="memorial-admin-card"
+                >
+                    <div class="memorial-admin-card__icon">◎</div>
+
+                    <div>
+                        <h3>SEO</h3>
+                        <p>Заголовки, описи та зображення сторінок</p>
+                    </div>
+                </a>
+            {% endif %}
+
 
             <a
                 href="{% url 'admin:core_sitesettings_changelist' %}"
@@ -121,7 +135,7 @@
 
                 <div>
                     <h3>Налаштування</h3>
-                    <p>Загальні параметри сайту та SEO</p>
+                    <p>Загальні параметри сайту</p>
                 </div>
             </a>
 

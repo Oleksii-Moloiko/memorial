@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import SafeString
 from modeltranslation.admin import TranslationAdmin
@@ -31,27 +32,64 @@ class SeoPageAdmin(TranslationAdmin):
         ),
     )
 
-    def response_add(self, request, obj, post_url_continue=None):
-        if "_continue" in request.POST:
-            return super().response_add(
-                request,
-                obj,
-                post_url_continue=post_url_continue,
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+
+        if obj is not None:
+            return tuple(
+                (name, options)
+                for name, options in fieldsets
+                if "page_key" not in options.get("fields", ())
             )
 
-        return redirect("admin:core_sitesettings_changelist")
+        return fieldsets
+
+    def response_add(self, request, obj, post_url_continue=None):
+        response = super().response_add(
+            request,
+            obj,
+            post_url_continue=post_url_continue,
+        )
+
+        if "_save" in request.POST and "_popup" not in request.POST:
+            return redirect(
+                reverse("admin:seo_seopage_change", args=[obj.pk])
+            )
+
+        return response
 
     def response_change(self, request, obj):
-        if "_continue" in request.POST:
-            return super().response_change(request, obj)
+        response = super().response_change(request, obj)
 
-        return redirect("admin:core_sitesettings_changelist")
+        if "_save" in request.POST and "_popup" not in request.POST:
+            return redirect(
+                reverse("admin:seo_seopage_change", args=[obj.pk])
+            )
 
-    def response_delete(self, request, obj_display, obj_id):
-        return redirect("admin:core_sitesettings_changelist")
+        return response
 
-    def get_model_perms(self, request):
-        return {}
+
+
+    def changeform_view(
+        self,
+        request,
+        object_id=None,
+        form_url="",
+        extra_context=None,
+    ):
+        extra_context = {
+            **(extra_context or {}),
+            "show_save_and_add_another": False,
+        }
+
+        return super().changeform_view(
+            request,
+            object_id,
+            form_url,
+            extra_context=extra_context,
+        )
+
+
 
     @admin.display(description="Символів в описі")
     def description_length(self, obj: SeoPage) -> int:

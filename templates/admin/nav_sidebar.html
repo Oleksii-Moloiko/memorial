@@ -64,6 +64,16 @@
             СИСТЕМА
         </div>
 
+        {% if perms.seo.view_seopage or perms.seo.change_seopage %}
+            <a
+                href="{% url 'admin:seo_seopage_changelist' %}"
+                class="memorial-sidebar__item"
+            >
+                <span aria-hidden="true">◎</span>
+                SEO
+            </a>
+        {% endif %}
+
         <a href="{% url 'admin:core_sitesettings_changelist' %}" class="memorial-sidebar__item">
             <span aria-hidden="true">⚙</span>
             Налаштування
