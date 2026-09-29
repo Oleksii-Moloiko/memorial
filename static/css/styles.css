@@ -6973,19 +6973,38 @@ body.app-memories.model-memory
   }
 }
 
-/* NZRQR-49: photo category states */
+/* NZRQR-49: shared photo and memory filter states */
+.filter-bar .filter-chip[aria-pressed] {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+  text-decoration: none;
+  transform: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .gallery-page .filter-chip:not(.active):hover {
+  .filter-bar .filter-chip[aria-pressed="false"]:hover {
     background: var(--stone);
     color: var(--ink);
     border-color: var(--stone);
   }
 }
 
-.gallery-page .filter-chip[aria-pressed="true"] {
+.filter-bar .filter-chip[aria-pressed="true"],
+.filter-bar .filter-chip[aria-pressed]:active {
   background: var(--ink);
   color: var(--paper);
   border-color: var(--ink);
+}
+
+.filter-bar .filter-chip[aria-pressed] .filter-chip__n {
+  color: inherit;
+  opacity: 0.7;
 }
 
 /* NZRQR-67: category links on home cards */

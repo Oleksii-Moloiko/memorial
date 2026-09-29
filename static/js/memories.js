@@ -1,25 +1,34 @@
 (() => {
-  const cards = Array.from(
-    document.querySelectorAll(
-      'body[data-page="memories"] .memory-card'
-    )
-  );
-
-  if (!cards.length) {
+  if (document.body.dataset.page !== "memories") {
     return;
   }
 
   const mobile = window.matchMedia("(max-width: 760px)");
-  const previews = cards.map((card) => ({
-    card,
-    box: card.querySelector(".memory-text"),
-    teaser: card.querySelector(".memory-text").textContent,
-  }));
-  const renderPreviews = () => previews.forEach(({ card, box, teaser }) => {
-    box.textContent = mobile.matches ? card.dataset.memoryFull : teaser;
-  });
+  let previews = [];
+
+  const renderPreviews = () => {
+    previews.forEach(({ card, box, teaser }) => {
+      box.textContent = mobile.matches
+        ? card.dataset.memoryFull
+        : teaser;
+    });
+  };
+
+  const collectPreviews = () => {
+    previews = Array.from(
+      document.querySelectorAll(".memories-grid .memory-card")
+    ).map((card) => ({
+      card,
+      box: card.querySelector(".memory-text"),
+      teaser: card.querySelector(".memory-text").textContent,
+    }));
+
+    renderPreviews();
+  };
+
   mobile.addEventListener("change", renderPreviews);
-  renderPreviews();
+  window.addEventListener("memory-results-updated", collectPreviews);
+  collectPreviews();
 
   const labels = document.querySelector("[data-memory-labels]").dataset;
 
@@ -524,5 +533,183 @@
     }
   );
 
+  window.addEventListener(
+    "memory-results-updated",
+    scheduleCarouselUpdate
+  );
+
   scheduleCarouselUpdate();
+})();
+// Оновлюємо спогади без перезавантаження сторінки.
+(() => {
+  const grid = document.querySelector(
+    'body[data-page="memories"] .memories-grid'
+  );
+  const container = grid?.parentElement;
+  const bar = container?.querySelector(".filter-bar");
+
+  if (!grid || !container || !bar) return;
+
+  let currentRequest = null;
+
+  const loadResults = async (url, pushHistory = true) => {
+    currentRequest?.abort();
+
+    const request = new AbortController();
+    currentRequest = request;
+    grid.setAttribute("aria-busy", "true");
+
+    try {
+      const response = await fetch(url, {
+        signal: request.signal,
+        headers: { Accept: "text/html" },
+      });
+
+      if (!response.ok) {
+        throw new Error("Не вдалося завантажити спогади");
+      }
+
+      const html = await response.text();
+
+      if (request !== currentRequest || request.signal.aborted) return;
+
+      const page = new DOMParser().parseFromString(html, "text/html");
+      const nextGrid = page.querySelector(
+        'body[data-page="memories"] .memories-grid'
+      );
+      const nextBar = nextGrid?.parentElement.querySelector(".filter-bar");
+      const nextPagination = nextGrid?.parentElement.querySelector(
+        ".memories-pagination"
+      );
+
+      if (!nextGrid || !nextBar) {
+        throw new Error("Неочікувана відповідь сервера");
+      }
+
+      const links = Array.from(
+        bar.querySelectorAll("a[data-memory-filter]")
+      );
+      const nextLinks = new Map(
+        Array.from(
+          nextBar.querySelectorAll("a[data-memory-filter]")
+        ).map((link) => [link.dataset.memoryFilter, link])
+      );
+
+      if (
+        links.length !== nextLinks.size ||
+        links.some((link) => !nextLinks.has(link.dataset.memoryFilter))
+      ) {
+        throw new Error("Список категорій змінився");
+      }
+
+      const pagination = container.querySelector(".memories-pagination");
+      const focusWasInPagination =
+        pagination?.contains(document.activeElement);
+      const barTop = bar.getBoundingClientRect().top;
+      const barLeft = bar.scrollLeft;
+
+      if (pushHistory && url.href !== window.location.href) {
+        history.pushState(null, "", url.href);
+      }
+
+      // Зберігаємо самі кнопки, тому їхній фокус не втрачається.
+      links.forEach((link) => {
+        const nextLink = nextLinks.get(link.dataset.memoryFilter);
+
+        link.setAttribute("href", nextLink.getAttribute("href"));
+        link.setAttribute(
+          "aria-pressed",
+          nextLink.getAttribute("aria-pressed")
+        );
+
+        const count = link.querySelector(".filter-chip__n");
+        const nextCount = nextLink.querySelector(".filter-chip__n");
+
+        if (count && nextCount) {
+          count.textContent = nextCount.textContent;
+        }
+      });
+
+      grid.replaceChildren(
+        ...Array.from(nextGrid.childNodes).map((node) =>
+          document.importNode(node, true)
+        )
+      );
+
+      if (nextPagination) {
+        const replacement = document.importNode(nextPagination, true);
+
+        if (pagination) {
+          pagination.replaceWith(replacement);
+        } else {
+          grid.after(replacement);
+        }
+      } else {
+        pagination?.remove();
+      }
+
+      grid.scrollTo({ left: 0, behavior: "instant" });
+
+      window.dispatchEvent(new Event("memory-results-updated"));
+
+      if (focusWasInPagination) {
+        grid.setAttribute("tabindex", "-1");
+        grid.focus({ preventScroll: true });
+      }
+
+      bar.scrollTo({ left: barLeft, behavior: "instant" });
+
+      window.scrollTo({
+        top: window.scrollY + bar.getBoundingClientRect().top - barTop,
+        behavior: "instant",
+      });
+    } catch (error) {
+      if (request.signal.aborted || request !== currentRequest) return;
+
+      // Якщо фоновий запит не спрацював, відкриваємо звичайну сторінку.
+      window.location.assign(url.href);
+    } finally {
+      if (request === currentRequest) {
+        grid.removeAttribute("aria-busy");
+        currentRequest = null;
+      }
+    }
+  };
+
+  container.addEventListener("click", (event) => {
+    const link = event.target.closest(
+      "a[data-memory-filter], .memories-pagination a"
+    );
+
+    if (
+      !link ||
+      !container.contains(link) ||
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.altKey ||
+      link.hasAttribute("download") ||
+      (link.target && link.target !== "_self")
+    ) {
+      return;
+    }
+
+    const url = new URL(link.href, window.location.href);
+
+    if (
+      url.origin !== window.location.origin ||
+      url.pathname !== window.location.pathname
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    loadResults(url);
+  });
+
+  window.addEventListener("popstate", () => {
+    loadResults(new URL(window.location.href), false);
+  });
 })();
