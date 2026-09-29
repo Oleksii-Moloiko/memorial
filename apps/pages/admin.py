@@ -80,6 +80,7 @@ class ServiceAwardInline(
 ):
     model = ServiceAward
     extra = 0
+    classes = ("collapse",)
     verbose_name = "нагорода"
     verbose_name_plural = "Список нагород"
     client_field_labels = {
@@ -115,6 +116,7 @@ class ServiceQuoteInline(
 ):
     model = ServiceQuote
     extra = 0
+    classes = ("collapse",)
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         field = super().formfield_for_dbfield(db_field, request, **kwargs)
@@ -162,6 +164,7 @@ class MediaMentionInline(
 ):
     model = MediaMention
     extra = 0
+    classes = ("collapse",)
     verbose_name = "посилання"
     verbose_name_plural = "Список посилань"
     client_field_labels = {
