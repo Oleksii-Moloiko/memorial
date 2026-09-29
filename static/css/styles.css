@@ -7059,3 +7059,103 @@ body.app-memories.model-memory
     padding-bottom: 5px;
   }
 }
+
+/* NZRQR-47: expandable memory on the home page */
+.home-memory {
+  min-width: 0;
+}
+
+.home-memory__summary {
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-memory__summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-memory__teaser {
+  display: block;
+  font-size: clamp(22px, 2.1vw, 32px);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.home-memory__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  margin-top: 20px;
+  padding: 10px 18px;
+
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-memory__toggle:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+}
+
+.home-memory__less {
+  display: none;
+}
+
+.home-memory__details[open] .home-memory__teaser,
+.home-memory__details[open] .home-memory__more {
+  display: none;
+}
+
+.home-memory__details[open] .home-memory__less {
+  display: inline-flex;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.memory-banner .home-memory__full,
+.memory-banner .home-memory__short {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow-wrap: anywhere;
+}
+
+.memory-banner .home-memory__full {
+  max-height: 60vh;
+  max-height: 60svh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  padding-inline-end: 12px;
+}
+
+.home-memory__summary:focus-visible,
+.home-memory__full:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .home-memory__teaser {
+    font-size: 19px;
+    line-height: 1.5;
+  }
+}

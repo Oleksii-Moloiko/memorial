@@ -213,3 +213,6 @@ msgstr "Previous"
 
 msgid "Наступна"
 msgstr "Next"
+
+msgid "Читати повністю"
+msgstr "Read in full"

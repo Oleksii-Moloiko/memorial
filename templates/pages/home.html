@@ -483,7 +483,34 @@
 <section class="section memory-banner section-dark">
   <div class="container memory-banner-grid">
     <p class="eyebrow">{{ home_page.memories_eyebrow }}</p>
-    <blockquote>«{{ featured_memory.text }}»</blockquote>
+    <div class="home-memory">
+      {% if featured_memory.is_long %}
+        <details class="home-memory__details">
+          <summary class="home-memory__summary">
+            <span class="home-memory__teaser">
+              «{{ featured_memory.teaser }}…»
+            </span>
+
+            <span class="home-memory__toggle home-memory__more">
+              {% translate "Читати повністю" %}
+            </span>
+
+            <span class="home-memory__toggle home-memory__less">
+              {% translate "Згорнути" %}
+            </span>
+          </summary>
+
+          <blockquote
+            class="home-memory__full"
+            tabindex="0"
+          >«{{ featured_memory.text }}»</blockquote>
+        </details>
+      {% else %}
+        <blockquote class="home-memory__short">
+          «{{ featured_memory.text }}»
+        </blockquote>
+      {% endif %}
+    </div>
     <p class="memory-author">
       — {% if featured_memory.author_role %}{{ featured_memory.author_role }}, {% endif %}«{{ featured_memory.author_name }}»
     </p>

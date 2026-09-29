@@ -51,6 +51,20 @@ def _seo_context(page_key):
 
 def home(request):
     home_page = HomePage.objects.first() or HomePage()
+
+    featured_memory = Memory.objects.filter(
+        status=Memory.Status.APPROVED,
+        featured=True,
+    ).first()
+
+    if featured_memory:
+        featured_memory.is_long = (
+            len(featured_memory.text) > MEMORY_TEASER_LIMIT
+        )
+        featured_memory.teaser = make_memory_teaser(
+            featured_memory.text
+        )
+
     context = {
         "home_page": home_page,
         "biography": Biography.objects.first(),
@@ -58,10 +72,7 @@ def home(request):
         "gallery_preview": Photo.objects.filter(
             is_published=True,
         )[:4],
-        "featured_memory": Memory.objects.filter(
-            status=Memory.Status.APPROVED,
-            featured=True,
-        ).first(),
+        "featured_memory": featured_memory,
         "featured_video": Video.objects.filter(
             is_published=True,
             is_featured=True,
