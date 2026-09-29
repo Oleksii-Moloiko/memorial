@@ -204,17 +204,30 @@ body {
    CONTENT LANGUAGE SWITCHER
    ========================================================= */
 
-#content label.admin-file-input-control {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+.admin-file-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
-    float: none;
     width: var(--admin-field-width, 520px);
     max-width: 100%;
-    padding: 0;
+    min-width: 0;
+    flex: 0 1 var(--admin-field-width, 520px);
+}
+
+#content label.admin-file-input-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 4px 0;
     cursor: pointer;
 }
 
@@ -266,9 +279,23 @@ body {
 
 .admin-file-input-status {
     display: block;
-    margin-top: 8px;
+    margin: 0;
     color: var(--body-fg);
     font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.admin-file-input-button {
+    flex-shrink: 0;
+}
+
+.admin-file-input-name {
+    flex: 1 1 160px;
+}
+
+form .aligned .form-row:has(.admin-file-input-wrapper) .help {
+    margin-top: 12px;
 }
 
 .admin-branding {

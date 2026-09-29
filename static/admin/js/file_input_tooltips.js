@@ -42,9 +42,12 @@
             status.id = `admin-file-status-${++counter}`;
             status.setAttribute("role", "status");
 
-            input.before(control);
+            const wrapper = document.createElement("span");
+            wrapper.className = "admin-file-input-wrapper";
+
+            input.before(wrapper);
+            wrapper.append(control, status);
             control.append(input, button, name);
-            control.after(status);
 
             input.setAttribute(
                 "aria-describedby",
