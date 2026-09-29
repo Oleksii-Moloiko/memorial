@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import JsonResponse
 from django.urls import path, reverse
 from django.utils.html import format_html
+from django.utils.translation import override
 from django.utils.safestring import SafeString
 from modeltranslation.admin import TranslationAdmin
 
@@ -301,6 +302,22 @@ class VideoAdmin(TranslationAdmin):
             def __init__(self, *args, **form_kwargs):
                 form_kwargs["request_user"] = request.user
                 super().__init__(*args, **form_kwargs)
+
+                category_field = self.fields.get("category")
+
+                if category_field:
+                    labels = {}
+
+                    for language in ("uk", "en"):
+                        with override(language):
+                            labels[language] = {
+                                value: str(label)
+                                for value, label in Video.Category.choices
+                            }
+
+                    category_field.widget.attrs[
+                        "data-content-choice-labels"
+                    ] = json.dumps(labels, ensure_ascii=False)
 
         return RequestAwareVideoAdminForm
 

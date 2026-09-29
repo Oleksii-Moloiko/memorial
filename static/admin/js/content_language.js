@@ -87,6 +87,30 @@
         });
     };
 
+    const updateChoiceLabels = (language) => {
+        document.querySelectorAll(
+            "select[data-content-choice-labels]"
+        ).forEach((select) => {
+            let labels;
+
+            try {
+                labels = JSON.parse(
+                    select.dataset.contentChoiceLabels
+                )[language];
+            } catch {
+                return;
+            }
+
+            if (!labels) return;
+
+            Array.from(select.options).forEach((option) => {
+                if (Object.hasOwn(labels, option.value)) {
+                    option.textContent = labels[option.value];
+                }
+            });
+        });
+    };
+
     const setLanguage = (language) => {
         if (!SUPPORTED_LANGUAGES.includes(language)) {
             language = DEFAULT_LANGUAGE;
@@ -99,6 +123,7 @@
 
         updateButtons(language);
         updateFields(language);
+        updateChoiceLabels(language);
     };
 
     buttons.forEach((button) => {
