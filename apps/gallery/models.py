@@ -1,17 +1,19 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Photo(models.Model):
     class Category(models.TextChoices):
-        FAMILY = "family", "Сім’я та дитинство"
-        STUDY = "study", "Навчання"
-        SERVICE = "service", "Служба та побратими"
-        MEMORY = "memory", "Вшанування"
+        FAMILY = "family", _("Сім’я та дитинство")
+        STUDY = "study", _("Навчання")
+        SERVICE = "service", _("Служба та побратими")
+        MEMORY = "memory", _("Вшанування")
 
     class LayoutSize(models.TextChoices):
-        NORMAL = "", "Звичайний"
-        TALL = "span-tall", "Високий"
-        WIDE = "span-wide", "Широкий"
+        NORMAL = "", "Автоматично"
+        TALL = "span-tall", "Вертикальне 9:16"
+        WIDE = "span-wide", "Горизонтальне 16:9"
 
     image = models.ImageField(
         "Фото",
@@ -36,29 +38,64 @@ class Photo(models.Model):
         max_length=20,
         choices=Category.choices,
         default=Category.FAMILY,
+        help_text=("Визначає, у якій категорії фото буде показане на сторінці."),
     )
 
     layout_size = models.CharField(
-        "Розмір у сітці",
+        "Формат у галереї",
         max_length=20,
         choices=LayoutSize.choices,
         blank=True,
+        help_text=(
+            "Визначає форму прев’ю фото в галереї. "
+            "У більшості випадків залишайте «Автоматично»."
+        ),
+    )
+
+    preview_focus_x = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по горизонталі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — лівий край, 100 — правий край.",
+    )
+
+    preview_focus_y = models.PositiveSmallIntegerField(
+        "Фокус прев’ю по вертикалі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="0 — верхній край, 100 — нижній край.",
+    )
+
+    portrait_focus_x = models.PositiveSmallIntegerField(
+        "Фокус вертикального прев’ю по горизонталі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
+
+    portrait_focus_y = models.PositiveSmallIntegerField(
+        "Фокус вертикального прев’ю по вертикалі",
+        default=50,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
 
     is_published = models.BooleanField(
-        "Опубліковано",
+        "Показувати фото на сайті",
         default=False,
-        help_text="Неопубліковане фото не відображається на сайті.",
+        help_text=(
+            "Якщо вимкнено, фото зберігається в адмінці, "
+            "але не відображається на сайті."
+        ),
     )
 
     order = models.PositiveIntegerField(
-        "Порядок",
+        "Порядок відображення",
         default=0,
+        help_text="Менше число — фото буде показане раніше.",
     )
 
     class Meta:
         verbose_name = "Фото"
-        verbose_name_plural = "Фотогалерея"
+        verbose_name_plural = "Фото"
         ordering = ["order", "id"]
 
     def __str__(self):

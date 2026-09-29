@@ -1,0 +1,47 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'admin/css/memories_admin.css' %}"
+    >
+{% endblock %}
+
+
+{% block content_title %}
+
+<div class="memories-header">
+
+    <div>
+        <h1>🕯️ Спогади</h1>
+
+        <p class="memories-all-reviewed">
+            Керування категоріями спогадів
+        </p>
+    </div>
+
+</div>
+
+
+<div class="memories-admin-tabs">
+
+    <a
+        href="{% url 'admin:memories_memory_changelist' %}"
+        class="memories-admin-tab"
+    >
+        Спогади
+    </a>
+
+    <a
+        href="{% url 'admin:memories_memorycategory_changelist' %}"
+        class="memories-admin-tab memories-admin-tab--active"
+    >
+        Категорії
+    </a>
+
+</div>
+
+{% endblock %}

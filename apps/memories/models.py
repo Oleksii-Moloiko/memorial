@@ -1,6 +1,30 @@
 from django.db import models
 
 
+MEMORY_TEXT_MAX_LENGTH = 15_000
+
+class MemoryCategory(models.Model):
+    name = models.CharField(
+        "Назва",
+        max_length=255,
+    )
+    sort_order = models.PositiveSmallIntegerField(
+        "Порядок",
+        default=0,
+    )
+    is_active = models.BooleanField(
+        "Активна",
+        default=True,
+    )
+
+    class Meta:
+        verbose_name = "Категорія спогадів"
+        verbose_name_plural = "Категорії спогадів"
+        ordering = ("sort_order", "id")
+
+    def __str__(self):
+        return self.name
+
 class Memory(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", "На модерації"
@@ -14,9 +38,17 @@ class Memory(models.Model):
         blank=True,
         help_text="Наприклад: «побратим, позивний «Сокіл»»",
     )
+    category = models.ForeignKey(
+        MemoryCategory,
+        verbose_name="Категорія",
+        on_delete=models.PROTECT,
+        related_name="memories",
+        null=True,
+        blank=True,
+    )
     text = models.TextField(
         "Текст спогаду",
-        max_length=500,
+        max_length=MEMORY_TEXT_MAX_LENGTH,
     )
     featured = models.BooleanField(
         "Показувати на головній",
