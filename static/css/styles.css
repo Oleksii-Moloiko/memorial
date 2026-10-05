@@ -7185,3 +7185,11 @@ body.app-memories.model-memory
     flex-shrink: 0;
   }
 }
+
+/* NZRQR-47: video preview without downloading the video */
+.video-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #161a17;
+}

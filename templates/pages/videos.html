@@ -49,13 +49,10 @@
                 alt="{{ featured_video.title }}"
               >
             {% else %}
-              <video
-                preload="metadata"
-                muted
-                playsinline
-              >
-                <source src="{{ featured_video.video_file.url }}">
-              </video>
+              <span
+                class="video-placeholder"
+                aria-hidden="true"
+              ></span>
             {% endif %}
 
             <span class="video-play" aria-hidden="true"></span>
@@ -148,13 +145,10 @@
                       loading="lazy"
                     >
                   {% else %}
-                    <video
-                      preload="metadata"
-                      muted
-                      playsinline
-                    >
-                      <source src="{{ video.video_file.url }}">
-                    </video>
+                    <span
+                      class="video-placeholder"
+                      aria-hidden="true"
+                    ></span>
                   {% endif %}
 
                   <span class="video-play" aria-hidden="true"></span>
@@ -244,7 +238,7 @@
         class="video-dialog-player"
         controls
         playsinline
-        preload="metadata"
+        preload="none"
       ></video>
 
       <button
