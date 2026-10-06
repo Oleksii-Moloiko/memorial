@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Q
 from django.http import JsonResponse
+from django.urls import reverse
 from django.shortcuts import redirect, render
 from django_ratelimit.decorators import ratelimit
 
@@ -227,7 +228,10 @@ def videos(request):
 
 
 def media(request):
-    return redirect("/service/#links")
+    return redirect(
+        f"{reverse('pages:service')}#links",
+        permanent=True,
+    )
 
 
 @ratelimit(
