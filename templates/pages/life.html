@@ -33,14 +33,7 @@
  
     <aside class="biography-aside">
       {% if biography and biography.portrait %}
-        <img
-          class="portrait-secondary"
-          src="{{ biography.portrait.url }}"
-          alt="{% translate "Портрет" %} {{ biography.full_name }}"
-          loading="lazy"
-          width="{{ biography.portrait.width }}"
-          height="{{ biography.portrait.height }}"
-        >
+        {% include "includes/biography_portrait.html" with biography=biography image_class="portrait-secondary" image_sizes="(max-width: 760px) 100vw, 40vw" only %}
       {% else %}
         <div class="media-placeholder portrait-secondary">
           <span>{{ life_page.portrait_empty_label }}</span>
@@ -188,15 +181,7 @@
           href="{% url 'pages:photos' %}?category=family"
           aria-label="{{ life_page.photos_childhood_label }} — {{ life_page.photos_more_label }}"
         >
-          <img
-            class="story-tile__img"
-            src="{{ childhood_photo.image.url }}"
-            alt="{{ childhood_photo.alt_text|default:life_page.photos_childhood_label }}"
-            loading="lazy"
-            width="{{ childhood_photo.image.width }}"
-            height="{{ childhood_photo.image.height }}"
-            style="object-position: {{ childhood_photo.preview_focus_x }}% {{ childhood_photo.preview_focus_y }}%;"
-          >
+          {% include "includes/story_photo.html" with photo=childhood_photo fallback_alt=life_page.photos_childhood_label only %}
 
           <span class="story-tile__veil" aria-hidden="true">
             <span class="story-tile__button">
@@ -221,15 +206,7 @@
           href="{% url 'pages:photos' %}?category=study"
           aria-label="{{ life_page.photos_study_label }} — {{ life_page.photos_more_label }}"
         >
-          <img
-            class="story-tile__img"
-            src="{{ study_photo.image.url }}"
-            alt="{{ study_photo.alt_text|default:life_page.photos_study_label }}"
-            loading="lazy"
-            width="{{ study_photo.image.width }}"
-            height="{{ study_photo.image.height }}"
-            style="object-position: {{ study_photo.preview_focus_x }}% {{ study_photo.preview_focus_y }}%;"
-          >
+          {% include "includes/story_photo.html" with photo=study_photo fallback_alt=life_page.photos_study_label only %}
 
           <span class="story-tile__veil" aria-hidden="true">
             <span class="story-tile__button">
@@ -254,15 +231,7 @@
           href="{% url 'pages:photos' %}?category=family"
           aria-label="{{ life_page.photos_family_label }} — {{ life_page.photos_more_label }}"
         >
-          <img
-            class="story-tile__img"
-            src="{{ family_photo.image.url }}"
-            alt="{{ family_photo.alt_text|default:life_page.photos_family_label }}"
-            loading="lazy"
-            width="{{ family_photo.image.width }}"
-            height="{{ family_photo.image.height }}"
-            style="object-position: {{ family_photo.preview_focus_x }}% {{ family_photo.preview_focus_y }}%;"
-          >
+          {% include "includes/story_photo.html" with photo=family_photo fallback_alt=life_page.photos_family_label only %}
 
           <span class="story-tile__veil" aria-hidden="true">
             <span class="story-tile__button">

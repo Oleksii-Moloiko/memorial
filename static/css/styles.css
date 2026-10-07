@@ -7193,3 +7193,46 @@ body.app-memories.model-memory
   height: 100%;
   background: #161a17;
 }
+
+.gallery-open picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-photo-mosaic__item picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.video-thumbnail-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mention-preview-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.story-photo-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.biography-portrait-picture {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.hero .hero-portrait {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: auto;
+  object-fit: contain;
+}

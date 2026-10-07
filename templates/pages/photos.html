@@ -67,23 +67,47 @@
             data-layout-size="{{ photo.layout_size }}"
             data-gallery-index="{{ forloop.counter0 }}"
           >
-            <button
-              class="gallery-open"
-              type="button"
-              data-image="{{ photo.image.url }}"
-              data-caption="{{ photo.caption }}"
-              data-alt="{{ photo.alt_text|default:photo.caption }}"
-              aria-label="{% translate "Відкрити фото:" %} {{ photo.caption|default:_("без підпису") }}"
-            >
-              <img
-                src="{{ photo.image.url }}"
-                alt="{{ photo.alt_text|default:photo.caption }}"
-                loading="lazy"
-                width="900"
-                height="700"
-                style="--photo-landscape-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%; --photo-portrait-position: {{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%;"
+            {% with responsive=photo.responsive_image %}
+              <button
+                class="gallery-open"
+                type="button"
+                data-image="{{ responsive.src|default:photo.image.url }}"
+                data-caption="{{ photo.caption }}"
+                data-alt="{{ photo.alt_text|default:photo.caption }}"
+                aria-label="{% translate 'Відкрити фото:' %} {{ photo.caption|default:_('без підпису') }}"
               >
-            </button>
+                {% if responsive %}
+                  <picture>
+                    <source
+                      type="image/webp"
+                      srcset="{{ responsive.webp_srcset }}"
+                      sizes="100vw"
+                    >
+                    <img
+                      src="{{ responsive.src }}"
+                      srcset="{{ responsive.jpeg_srcset }}"
+                      sizes="100vw"
+                      alt="{{ photo.alt_text|default:photo.caption }}"
+                      loading="lazy"
+                      decoding="async"
+                      width="{{ responsive.width }}"
+                      height="{{ responsive.height }}"
+                      style="--photo-landscape-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%; --photo-portrait-position: {{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%;"
+                    >
+                  </picture>
+                {% else %}
+                  <img
+                    src="{{ photo.image.url }}"
+                    alt="{{ photo.alt_text|default:photo.caption }}"
+                    loading="lazy"
+                    decoding="async"
+                    width="{{ photo.image.width }}"
+                    height="{{ photo.image.height }}"
+                    style="--photo-landscape-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%; --photo-portrait-position: {{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%;"
+                  >
+                {% endif %}
+              </button>
+            {% endwith %}
 
             {% if photo.caption %}
               <figcaption>

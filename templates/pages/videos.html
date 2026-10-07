@@ -40,14 +40,11 @@
             type="button"
             data-video="{{ featured_video.video_file.url }}"
             data-title="{{ featured_video.title }}"
-            data-poster="{% if featured_video.thumbnail %}{{ featured_video.thumbnail.url }}{% endif %}"
+            data-poster="{% if featured_video.thumbnail %}{{ featured_video.responsive_thumbnail.src|default:featured_video.thumbnail.url }}{% endif %}"
             aria-label="{% translate 'Відкрити відео:' %} {{ featured_video.title }}"
           >
             {% if featured_video.thumbnail %}
-              <img
-                src="{{ featured_video.thumbnail.url }}"
-                alt="{{ featured_video.title }}"
-              >
+              {% include "includes/video_thumbnail.html" with video=featured_video image_loading="eager" only %}
             {% else %}
               <span
                 class="video-placeholder"
@@ -135,15 +132,11 @@
                   type="button"
                   data-video="{{ video.video_file.url }}"
                   data-title="{{ video.title }}"
-                  data-poster="{% if video.thumbnail %}{{ video.thumbnail.url }}{% endif %}"
+                  data-poster="{% if video.thumbnail %}{{ video.responsive_thumbnail.src|default:video.thumbnail.url }}{% endif %}"
                   aria-label="{% translate 'Відкрити відео:' %} {{ video.title }}"
                 >
                   {% if video.thumbnail %}
-                    <img
-                      src="{{ video.thumbnail.url }}"
-                      alt="{{ video.title }}"
-                      loading="lazy"
-                    >
+                    {% include "includes/video_thumbnail.html" with video=video image_sizes="(max-width: 760px) 100vw, 50vw" only %}
                   {% else %}
                     <span
                       class="video-placeholder"

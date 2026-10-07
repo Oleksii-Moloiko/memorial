@@ -32,14 +32,7 @@
 <section class="hero section-dark">
   <div class="container hero-grid grid-guide">
     {% if biography and biography.portrait %}
-      <img
-        class="hero-portrait"
-        src="{{ biography.portrait.url }}"
-        alt="{% translate "Портрет" %} {{ biography.full_name }}"
-        width="{{ biography.portrait.width }}"
-        height="{{ biography.portrait.height }}"
-        fetchpriority="high"
-      >
+      {% include "includes/biography_portrait.html" with biography=biography image_class="hero-portrait" image_sizes="(max-width: 960px) 100vw, 50vw" priority=True only %}
     {% else %}
       <div
         class="hero-portrait media-placeholder portrait-placeholder"
@@ -270,14 +263,33 @@
               {% endif %}"
             href="{% url 'pages:photos' %}"
           >
-            <img
-              src="{{ photo.image.url }}"
-              alt="{{ photo.alt_text|default:photo.caption }}"
-              loading="lazy"
-              width="{{ photo.image.width }}"
-              height="{{ photo.image.height }}"
-              style="object-position: {% if forloop.first %}{{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%{% else %}{{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%{% endif %};"
-            >
+            {% with responsive=photo.responsive_image %}
+              <picture>
+                {% if responsive %}
+                  <source
+                    type="image/webp"
+                    srcset="{{ responsive.webp_srcset }}"
+                    sizes="(max-width: 760px) 100vw, 50vw"
+                  >
+                {% endif %}
+                <img
+                  src="{{ responsive.src|default:photo.image.url }}"
+                  {% if responsive %}
+                    srcset="{{ responsive.jpeg_srcset }}"
+                    sizes="(max-width: 760px) 100vw, 50vw"
+                    width="{{ responsive.width }}"
+                    height="{{ responsive.height }}"
+                  {% else %}
+                    width="{{ photo.image.width }}"
+                    height="{{ photo.image.height }}"
+                  {% endif %}
+                  alt="{{ photo.alt_text|default:photo.caption }}"
+                  loading="lazy"
+                  decoding="async"
+                  style="object-position: {% if forloop.first %}{{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%{% else %}{{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%{% endif %};"
+                >
+              </picture>
+            {% endwith %}
             {% if photo.caption %}
               <span>{{ photo.caption }}</span>
             {% endif %}
@@ -310,13 +322,7 @@
         aria-label="{% translate "Дивитися відео" %}"
       >
         {% if featured_video and featured_video.thumbnail %}
-          <img
-            src="{{ featured_video.thumbnail.url }}"
-            alt="{{ featured_video.title }}"
-            loading="lazy"
-            width="{{ featured_video.thumbnail.width }}"
-            height="{{ featured_video.thumbnail.height }}"
-          >
+          {% include "includes/video_thumbnail.html" with video=featured_video image_sizes="(max-width: 760px) 100vw, 50vw" only %}
         {% endif %}
 
         <span class="media-feature-card__play" aria-hidden="true">
@@ -387,11 +393,7 @@
       <div class="media-feature-card__visual media-feature-card__visual--publication">
 
         {% if featured_mention and featured_mention.effective_preview %}
-          <img
-            src="{{ featured_mention.effective_preview.url }}"
-            alt="{{ featured_mention.title }}"
-            loading="lazy"
-          >
+          {% include "includes/mention_preview.html" with mention=featured_mention image_sizes="(max-width: 760px) 100vw, 50vw" only %}
         {% else %}
 
           <span class="media-feature-card__publication-icon" aria-hidden="true">

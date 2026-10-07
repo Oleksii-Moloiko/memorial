@@ -237,14 +237,7 @@
             {% with preview=mention.effective_preview %}
               {% if preview %}
                 <span class="service-link-item__thumb">
-                  <img
-                    src="{{ preview.url }}"
-                    alt=""
-                    width="116"
-                    height="74"
-                    loading="lazy"
-                    decoding="async"
-                  >
+                  {% include "includes/mention_preview.html" with mention=mention image_sizes="116px" decorative=True only %}
                 </span>
               {% else %}
                 <span
