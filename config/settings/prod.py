@@ -24,7 +24,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
+        "BACKEND": "config.storage.MediaStorage",
         "OPTIONS": {
             "access_key": R2_ACCESS_KEY_ID,
             "secret_key": R2_SECRET_ACCESS_KEY,
