@@ -33,6 +33,6 @@ class ContentSecurityPolicyMiddleware:
             response.status_code == 304
             or response.get("Content-Type", "").startswith("text/html")
         ):
-            response["Content-Security-Policy-Report-Only"] = self.policy
+            response["Content-Security-Policy"] = self.policy
 
         return response
