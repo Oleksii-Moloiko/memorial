@@ -17,6 +17,7 @@ from apps.media_mentions.models import MediaMention
 from apps.memories.forms import MemoryForm
 from apps.memories.models import Memory, MemoryCategory
 from apps.seo.models import SeoPage
+from apps.seo.structured_data import build_image_gallery, build_person, build_videos
 from apps.videos.models import Video
 
 from .constants import (
@@ -52,6 +53,7 @@ def _seo_context(page_key):
 
 def home(request):
     home_page = HomePage.objects.first() or HomePage()
+    biography = Biography.objects.first()
 
     featured_memory = Memory.objects.filter(
         status=Memory.Status.APPROVED,
@@ -68,7 +70,8 @@ def home(request):
 
     context = {
         "home_page": home_page,
-        "biography": Biography.objects.first(),
+        "biography": biography,
+        "person_schema": build_person(request, biography),
         "timeline_preview": TimelineEvent.objects.all(),
         "gallery_preview": Photo.objects.filter(
             is_published=True,
@@ -186,12 +189,20 @@ def photos(request):
         for value, _label in Photo.Category.choices
     ]
 
+    seo = _seo_context("photos")
+
     context = {
         "photo_page": photo_page,
         "photos": published_photos,
         "category_counts": category_counts,
         "photo_filters": photo_filters,
-        **_seo_context("photos"),
+        "gallery_schema": build_image_gallery(
+            request,
+            published_photos,
+            name=seo.get("seo_title") or settings.photos_title,
+            description=seo.get("seo_description", ""),
+        ),
+        **seo,
     }
 
     return render(request, "pages/photos.html", context)
@@ -217,6 +228,7 @@ def videos(request):
             if featured_video else ""
         ),
         "videos": regular_videos,
+        "videos_schema": build_videos(request, published_videos),
         **_seo_context("videos"),
     }
 

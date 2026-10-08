@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n structured_data %}
 {% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
@@ -59,7 +59,7 @@
     >
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=NZRQR-13">
-
+    {% breadcrumbs_json_ld %}
     {% block extra_head %}{% endblock %}
 </head>
 

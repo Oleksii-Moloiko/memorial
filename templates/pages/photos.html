@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load structured_data %}
 
 {% block page_key %}photos{% endblock %}
 
@@ -9,6 +10,10 @@
   {% else %}
     {{ site_settings.photos_title }} — {{ site_settings.site_title }}
   {% endif %}
+{% endblock %}
+
+{% block extra_head %}
+  {% json_ld gallery_schema %}
 {% endblock %}
 
 {% block content %}
