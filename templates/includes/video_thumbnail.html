@@ -1,0 +1,28 @@
+{% if video.thumbnail %}
+  {% with responsive=video.responsive_thumbnail %}
+    <picture class="video-thumbnail-picture">
+      {% if responsive %}
+        <source
+          type="image/webp"
+          srcset="{{ responsive.webp_srcset }}"
+          sizes="{{ image_sizes|default:'100vw' }}"
+        >
+      {% endif %}
+      <img
+        src="{{ responsive.src|default:video.thumbnail.url }}"
+        {% if responsive %}
+          srcset="{{ responsive.jpeg_srcset }}"
+          sizes="{{ image_sizes|default:'100vw' }}"
+          width="{{ responsive.width }}"
+          height="{{ responsive.height }}"
+        {% else %}
+          width="{{ video.thumbnail.width }}"
+          height="{{ video.thumbnail.height }}"
+        {% endif %}
+        alt="{{ video.title }}"
+        loading="{{ image_loading|default:'lazy' }}"
+        decoding="async"
+      >
+    </picture>
+  {% endwith %}
+{% endif %}

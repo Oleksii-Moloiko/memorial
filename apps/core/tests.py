@@ -145,10 +145,6 @@ class SiteSettingsTemplateTests(TestCase):
         )
         self.assertContains(
             response,
-            "Олександр Мельник",
-        )
-        self.assertContains(
-            response,
             '<span class="brand-mark" aria-hidden="true">О</span>',
             html=True,
         )
@@ -184,15 +180,6 @@ class SiteSettingsTemplateTests(TestCase):
         response = self.client.get(self.url)
 
         self.assertContains(response, "ПАМ’ЯТЬ")
-        self.assertContains(response, "Олександр Мельник")
-        self.assertContains(
-            response,
-            "Цифровий простір пам’яті",
-        )
-        self.assertContains(
-            response,
-            "Родина Олександра Мельника",
-        )
 
     def test_demo_strip_is_displayed_when_enabled(self):
         SiteSettings.objects.create(

@@ -1,0 +1,33 @@
+{% load i18n %}
+{% with responsive=biography.responsive_portrait %}
+  <picture class="biography-portrait-picture">
+    {% if responsive %}
+      <source
+        type="image/webp"
+        srcset="{{ responsive.webp_srcset }}"
+        sizes="{{ image_sizes|default:'100vw' }}"
+      >
+    {% endif %}
+    <img
+      class="{{ image_class }}"
+      src="{{ responsive.src|default:biography.portrait.url }}"
+      {% if responsive %}
+        srcset="{{ responsive.jpeg_srcset }}"
+        sizes="{{ image_sizes|default:'100vw' }}"
+        width="{{ responsive.width }}"
+        height="{{ responsive.height }}"
+      {% else %}
+        width="{{ biography.portrait.width }}"
+        height="{{ biography.portrait.height }}"
+      {% endif %}
+      alt="{% translate 'Портрет' %} {{ biography.full_name }}"
+      {% if priority %}
+        loading="eager"
+        fetchpriority="high"
+      {% else %}
+        loading="lazy"
+      {% endif %}
+      decoding="async"
+    >
+  </picture>
+{% endwith %}

@@ -1,0 +1,28 @@
+{% with preview=mention.effective_preview responsive=mention.responsive_preview %}
+  {% if preview %}
+    <picture class="mention-preview-picture">
+      {% if responsive %}
+        <source
+          type="image/webp"
+          srcset="{{ responsive.webp_srcset }}"
+          sizes="{{ image_sizes|default:'100vw' }}"
+        >
+      {% endif %}
+      <img
+        src="{{ responsive.src|default:preview.url }}"
+        {% if responsive %}
+          srcset="{{ responsive.jpeg_srcset }}"
+          sizes="{{ image_sizes|default:'100vw' }}"
+          width="{{ responsive.width }}"
+          height="{{ responsive.height }}"
+        {% else %}
+          width="{{ preview.width }}"
+          height="{{ preview.height }}"
+        {% endif %}
+        alt="{% if not decorative %}{{ mention.title }}{% endif %}"
+        loading="lazy"
+        decoding="async"
+      >
+    </picture>
+  {% endif %}
+{% endwith %}

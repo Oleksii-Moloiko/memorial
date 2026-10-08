@@ -1,0 +1,28 @@
+{% with responsive=photo.responsive_image %}
+  <picture class="story-photo-picture">
+    {% if responsive %}
+      <source
+        type="image/webp"
+        srcset="{{ responsive.webp_srcset }}"
+        sizes="(max-width: 760px) 100vw, 33vw"
+      >
+    {% endif %}
+    <img
+      class="story-tile__img"
+      src="{{ responsive.src|default:photo.image.url }}"
+      {% if responsive %}
+        srcset="{{ responsive.jpeg_srcset }}"
+        sizes="(max-width: 760px) 100vw, 33vw"
+        width="{{ responsive.width }}"
+        height="{{ responsive.height }}"
+      {% else %}
+        width="{{ photo.image.width }}"
+        height="{{ photo.image.height }}"
+      {% endif %}
+      alt="{{ photo.alt_text|default:fallback_alt }}"
+      loading="lazy"
+      decoding="async"
+      style="object-position: {{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%;"
+    >
+  </picture>
+{% endwith %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_key %}404{% endblock %}
+
+{% block title %}
+    {% translate "Сторінку не знайдено" %} — {{ site_settings.site_title }}
+{% endblock %}
+
+{% block extra_head %}
+    <meta name="robots" content="noindex, follow">
+{% endblock %}
+
+{% block content %}
+<section class="page-hero section-paper">
+    <div class="container page-hero-grid grid-guide">
+        <div>
+            <p class="eyebrow">404</p>
+
+            <h1>
+                {% translate "Сторінку не знайдено" %}
+            </h1>
+        </div>
+
+        <div class="page-lead">
+            <p>
+                {% translate "Схоже, такої сторінки не існує або її адресу було змінено." %}
+            </p>
+
+            <div class="button-row">
+                <a
+                    class="button button-primary"
+                    href="{% url 'pages:home' %}"
+                >
+                    {% translate "Повернутися на головну" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
