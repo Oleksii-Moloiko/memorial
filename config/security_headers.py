@@ -34,5 +34,8 @@ class ContentSecurityPolicyMiddleware:
             or response.get("Content-Type", "").startswith("text/html")
         ):
             response["Content-Security-Policy"] = self.policy
+            response["Permissions-Policy"] = (
+                "camera=(), microphone=(), geolocation=(), payment=()"
+            )
 
         return response
