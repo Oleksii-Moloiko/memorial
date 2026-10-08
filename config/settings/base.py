@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "config.middleware.CanonicalHostMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "config.security_headers.ContentSecurityPolicyMiddleware",
     "config.html_cache.PublicHtmlCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
