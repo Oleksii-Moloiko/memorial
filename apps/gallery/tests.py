@@ -1,5 +1,5 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 
 from apps.pages.models import PhotoPage
@@ -206,3 +206,16 @@ class PhotosPageTests(TestCase):
             response,
             "Фотографії будуть додані пізніше.",
         )
+
+class PhotoDisplayAltTests(SimpleTestCase):
+    def test_prefers_alt_text(self):
+        photo = Photo(alt_text=" Опис ", caption="Підпис")
+        self.assertEqual(photo.display_alt, "Опис")
+
+    def test_falls_back_to_caption(self):
+        photo = Photo(alt_text="", caption="Підпис")
+        self.assertEqual(photo.display_alt, "Підпис")
+
+    def test_falls_back_to_category_label(self):
+        photo = Photo(category=Photo.Category.STUDY)
+        self.assertEqual(photo.display_alt, str(Photo.Category.STUDY.label))

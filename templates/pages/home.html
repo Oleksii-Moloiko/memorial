@@ -274,7 +274,7 @@
                     width="{{ photo.image.width }}"
                     height="{{ photo.image.height }}"
                   {% endif %}
-                  alt="{{ photo.alt_text|default:photo.caption }}"
+                  alt="{{ photo.display_alt }}"
                   loading="lazy"
                   decoding="async"
                   style="object-position: {% if forloop.first %}{{ photo.portrait_focus_x }}% {{ photo.portrait_focus_y }}%{% else %}{{ photo.preview_focus_x }}% {{ photo.preview_focus_y }}%{% endif %};"

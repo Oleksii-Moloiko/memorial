@@ -78,7 +78,7 @@
                 type="button"
                 data-image="{{ responsive.src|default:photo.image.url }}"
                 data-caption="{{ photo.caption }}"
-                data-alt="{{ photo.alt_text|default:photo.caption }}"
+                data-alt="{{ photo.display_alt }}"
                 aria-label="{% translate 'Відкрити фото:' %} {{ photo.caption|default:_('без підпису') }}"
               >
                 {% if responsive %}
@@ -92,7 +92,7 @@
                       src="{{ responsive.src }}"
                       srcset="{{ responsive.jpeg_srcset }}"
                       sizes="100vw"
-                      alt="{{ photo.alt_text|default:photo.caption }}"
+                      alt="{{ photo.display_alt }}"
                       loading="lazy"
                       decoding="async"
                       width="{{ responsive.width }}"
@@ -103,7 +103,7 @@
                 {% else %}
                   <img
                     src="{{ photo.image.url }}"
-                    alt="{{ photo.alt_text|default:photo.caption }}"
+                    alt="{{ photo.display_alt }}"
                     loading="lazy"
                     decoding="async"
                     width="{{ photo.image.width }}"
@@ -175,7 +175,7 @@
         aria-label="{% translate "Попереднє фото" %}"
       ></button>
 
-      <img src="" alt="" data-dialog-image>
+      <img alt="" data-dialog-image>
 
       <button
         class="dialog-nav next"

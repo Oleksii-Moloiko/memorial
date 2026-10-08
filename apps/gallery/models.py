@@ -153,6 +153,15 @@ class Photo(models.Model):
             ),
         }
 
+    @property
+    def display_alt(self):
+        """Alt для <img>: опис → підпис → назва категорії (ніколи не порожній)."""
+        return (
+            (self.alt_text or "").strip()
+            or (self.caption or "").strip()
+            or str(self.get_category_display())
+        )
+
     class Meta:
         verbose_name = "Фото"
         verbose_name_plural = "Фото"

@@ -999,7 +999,7 @@
       unlockDialogScroll();
 
       if (dialogImage) {
-        dialogImage.src = "";
+        dialogImage.removeAttribute("src");
         dialogImage.alt = "";
       }
 
